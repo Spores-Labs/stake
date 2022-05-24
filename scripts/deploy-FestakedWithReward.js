@@ -17,23 +17,24 @@ async function main() {
   const FestakedWithReward = await hre.ethers.getContractFactory("FestakedWithReward",{
     libraries: {
       // FestakedLib: "0x4a82768Db3cB87aF402F5882566AbD31cB8d901f", // Rinkeby Lib
-      // FestakedLib: "0x5480516E1393D45cc1ADeD2Eb2d7fC30429E4F7f", // bscTestnet Lib
-      FestakedLib: "0x1178CA4D6306fa364660F490c5ca95d0fbF86608", // BSC Mainnet Lib
+      FestakedLib: "0x5480516E1393D45cc1ADeD2Eb2d7fC30429E4F7f", // bscTestnet Lib
+      // FestakedLib: "0x1178CA4D6306fa364660F490c5ca95d0fbF86608", // BSC Mainnet Lib
     },
   });
   const stakingContract = await FestakedWithReward.deploy(
-    "SPO staking pool May 2022", //Name
-    // "0x476f7BcbC4058d4a0E8C0f9a6Df1fdcF675FAC83", //Testnet token address
-    "0x8357c604c5533fa0053BeAaA1494Da552ceA38f7", //Mainnet token address
-    // "0x476f7BcbC4058d4a0E8C0f9a6Df1fdcF675FAC83", //Testnet rewardTokenAddress_
-    "0x8357c604c5533fa0053BeAaA1494Da552ceA38f7", //Mainnet rewardTokenAddress_
-    "1652950800", //stakingStarts_
-    "1655542800", //stakingEnds_
-    "1658134800", //withdrawStarts_
-    "1663318800", //withdrawEnds_
+    "SPO traditional staking test 5", //Name
+    "0x476f7BcbC4058d4a0E8C0f9a6Df1fdcF675FAC83", //Testnet token address
+    // "0x8357c604c5533fa0053BeAaA1494Da552ceA38f7", //Mainnet token address
+    "0x476f7BcbC4058d4a0E8C0f9a6Df1fdcF675FAC83", //Testnet rewardTokenAddress_
+    // "0x8357c604c5533fa0053BeAaA1494Da552ceA38f7", //Mainnet rewardTokenAddress_
+    "1652858723", //stakingStarts_
+    "1652859923", //stakingEnds_
+    "1652859924", //withdrawStarts_
+    "1653119123", //withdrawEnds_
     "100000000000000000000000000", //stakingCap_
     //{gasLimit: 10000000}    //rinkeby
-    {gasLimit: 10000000}    //bscTestnet
+    //{gasLimit: 10000000}    //bsc
+    {gasLimit: 15000000}    //bscTest
     );
 
   await stakingContract.deployed();
