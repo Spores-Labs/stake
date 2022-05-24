@@ -3,6 +3,8 @@ import "./Stake.css";
 import BigNumber from "bignumber.js";
 import MessageBoard from "../overlayMessageBoard/messageBoard";
 import withWallet from "../HOC/hoc";
+import EarlyRewardCalculator from "../rewardCalculator/earlyRewardCalculator";
+import MaturityReward from "../rewardCalculator/maturityRewardCalculator";
 
 function Stake(props) {
   // Call from HOC - Reuse functions/code fro Higher Order Component
@@ -100,12 +102,51 @@ function Stake(props) {
       alert("Please input a positive amount"); // user has to input amount before click on stake button
       setMessageVisibility(false);
     } else {
-      setMessageVisibility(true);
       // handle amount (number bigint)
       amount = BigNumber(amount * 1e18).toFixed(0);
-      setMessage(
-        "Waiting for WITHDRAW confirmation, please confirm it on your Metamask extension"
+      console.log(
+        props.maturityAt,
+        props.stakingEnds,
+        props.stakedBalance,
+        Date.now() / 1000,
+        props.rewardState.earlyWithdrawReward,
+        amount
       );
+      if (
+        Date.now() > props.earlyWithdraw * 1000 &&
+        Date.now() < props.maturityAt * 1000
+      ) {
+        setMessageVisibility(true);
+        setMessage(
+          `You are doing early withdraw, you will get ~${EarlyRewardCalculator(
+            props.maturityAt,
+            props.stakingEnds,
+            props.stakedTotal,
+            Date.now() / 1000,
+            props.rewardState.earlyWithdrawReward,
+            amount
+          )} SPO as the reward.
+            You could get ~${MaturityReward(
+              props.rewardState.rewardBalance,
+              amount,
+              props.stakedTotal
+            )} SPO, if you withdraw after ${new Date(
+            props.maturityAt * 1000
+          ).toLocaleString()}. 
+
+          If you still want to do the early withdraw, please confirm it on your Metamask extension`
+        );
+      } else if (Date.now() > props.maturityAt * 1000) {
+        setMessageVisibility(true);
+        setMessage(`
+          You will get ~${MaturityReward(
+            props.rewardState.rewardBalance,
+            amount,
+            props.stakedTotal
+          )} SPO as the reward.
+          Stay with Spores and earn more. Thank you!
+        `);
+      }
 
       await props.stakingContract.methods
         .withdraw(amount)
