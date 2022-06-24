@@ -28,7 +28,7 @@ function PoolInfor(props) {
             Maturity reward <span className="boldText">30% APR</span>
           </li>
           <li>
-            Early rewards <span className="boldText">8% APR</span>{" "}
+            Early reward <span className="boldText">8% APR</span>{" "}
           </li>
           <li>
             Staking starts at{" "}
