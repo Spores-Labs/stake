@@ -32,8 +32,10 @@ function PoolInfor(props) {
           </li>
           <li>
             Staking starts at{" "}
+      {props.stakingStarts}
             <span className="boldText">
-              {new Date(props.stakingStart * 1000).toLocaleString()}
+              {/* {new Date(props.stakingStart * 1000).toLocaleString()} */}
+              {new Date(1660208400 * 1000).toLocaleString()}
             </span>
           </li>
           <li>
