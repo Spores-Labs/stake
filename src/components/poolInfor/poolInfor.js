@@ -18,9 +18,10 @@ const GroupInfo = ({ title, value, icon }) => (
 const PoolInfor = (props) => {
   props.onAccountChange();
   const lockDays = Duration.fromObject({ seconds: props.earlyWithdraw * 1 - props.stakingEnds * 1 }).toFormat('d');
-  const apr = (((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / (lockDays * 1)) * 365 * 100).toFixed(
-    2,
-  );
+  const apr =
+    !props.stakedTotal || Number(props.stakedTotal) < 100000
+      ? 4055
+      : (((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / (lockDays * 1)) * 365 * 100).toFixed(2);
 
   return (
     <div className='px-8 grid grid-cols-3 gap-7 items-center' style={{ background: '#3F281CE5', borderRadius: 10 }}>
