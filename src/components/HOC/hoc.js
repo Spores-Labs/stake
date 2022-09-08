@@ -1,63 +1,51 @@
-import React, { useState } from "react";
-import Web3 from "web3/dist/web3.min";
-import FestakedWithReward from "../../artifacts/contracts/FestakedWithReward.sol/FestakedWithReward.json";
-import tokenContract from "../../artifacts/contracts/tokenContract/tokenContract.json";
+import React, { useEffect, useState } from 'react';
+import Web3 from 'web3/dist/web3.min';
+import FestakedWithReward from '../../artifacts/contracts/FestakedWithReward.sol/FestakedWithReward.json';
+import tokenContract from '../../artifacts/contracts/tokenContract/tokenContract.json';
 
 const withWallet = (OriginalComponent) => {
   function NewComponent(props) {
     // Check Chain
-    let chain = "";
-    if (typeof window.ethereum === "undefined") {
-      alert("Please install Metamask extension first!");
+    let chain = '';
+    if (typeof window.ethereum === 'undefined') {
+      alert('Please install Metamask extension first!');
     } else {
-      if (
-        window.ethereum.networkVersion === process.env.REACT_APP_NETWORK_VERSION
-      ) {
-        chain = "You are connected to BSC";
+      if (window.ethereum.networkVersion === process.env.REACT_APP_NETWORK_VERSION) {
+        chain = 'You are connected to BSC';
       } else {
-        chain = (
-          <span className="boldText">Please connect your Wallet to BSC!!!</span>
-        );
+        chain = <span className='boldText'>Please connect your Wallet to BSC!!!</span>;
       }
     }
 
-    const formVisibility =
-      window.ethereum.networkVersion === process.env.REACT_APP_NETWORK_VERSION;
+    const formVisibility = window.ethereum.networkVersion === process.env.REACT_APP_NETWORK_VERSION;
 
     // Get/Set Wallet Address
-    const [account, setAccount] = useState(
-      "0x0000000000000000000000000000000000000000"
-    );
+    const [account, setAccount] = useState('0x0000000000000000000000000000000000000000');
     connectMM();
     async function connectMM() {
-      const accounts = await window.ethereum.request(
-        { method: "eth_requestAccounts" },
-        (error) => {
-          if (error) {
-            console.log(error);
-          }
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }, (error) => {
+        if (error) {
+          console.log(error);
         }
-      );
+      });
       setAccount(accounts[0]);
     }
 
     // On Account Changed
     function onAccountChange() {
-      window.ethereum.on("accountsChanged", async () => {
+      window.ethereum.on('accountsChanged', async () => {
         setAccount(window.ethereum.selectedAddress);
       });
     }
 
-    window.ethereum.on("chainChanged", (chainID) => {
+    window.ethereum.on('chainChanged', (chainID) => {
       // Handle the new chain.
       // Correctly handling chain changes can be complicated.
       // We recommend reloading the page unless you have good reason not to.
-      if (
-        parseInt(chainID).toString === process.env.REACT_APP_NETWORK_VERSION
-      ) {
-        chain = "You are connected to BSC";
+      if (parseInt(chainID).toString === process.env.REACT_APP_NETWORK_VERSION) {
+        chain = 'You are connected to BSC';
       } else {
-        chain = "Please connect to BSC!!!";
+        chain = 'Please connect to BSC!!!';
       }
       window.location.reload();
     });
@@ -72,14 +60,11 @@ const withWallet = (OriginalComponent) => {
     const web3 = new Web3(process.env.REACT_APP_BSC_PROVIDER_LINK);
     // const web3 = new Web3("https://bsc-dataseed.binance.org/")
     web3.eth.setProvider(Web3.givenProvider); // chuyen sang MM provider, neu khong se gap loi Returned error: unknown account
-    const stakingContract = new web3.eth.Contract(
-      FestakedWithReward.abi,
-      stakingContractAddr
-    );
+    const stakingContract = new web3.eth.Contract(FestakedWithReward.abi, stakingContractAddr);
 
     // Your staked balance
-    const [yourStakedBalance, setYourStakedBalance] = useState("");
-    getyourStakedBalance();
+    const [yourStakedBalance, setYourStakedBalance] = useState('');
+
     function getyourStakedBalance() {
       stakingContract.methods.stakeOf(account).call((error, result) => {
         setYourStakedBalance(result / 1e18);
@@ -87,64 +72,68 @@ const withWallet = (OriginalComponent) => {
     }
 
     // Pool Name
-    const [poolName, setPoolName] = useState("");
-    stakingContract.methods.name().call((error, result) => {
-      setPoolName(result);
-    });
+    const [poolName, setPoolName] = useState('');
 
     // Get staking cap
-    const [stakingCap, setStakingCap] = useState("");
-    stakingContract.methods.stakingCap().call((error, result) => {
-      setStakingCap((result / 1e18).toLocaleString("en-EN"));
-    });
+    const [stakingCap, setStakingCap] = useState('');
 
     // Current Staked balance
-    const [stakedBalance, setStakedBalance] = useState("");
-    stakingContract.methods.stakedBalance().call((error, result) => {
-      setStakedBalance(result);
-    });
+    const [stakedBalance, setStakedBalance] = useState('');
 
     // Staked Total
-    const [stakedTotal, setStakedTotal] = useState("");
-    stakingContract.methods.stakedTotal().call((error, result) => {
-      setStakedTotal(result);
-    });
+    const [stakedTotal, setStakedTotal] = useState('');
 
     // Early Withdraw open
-    const [earlyWithdraw, setEarlyWithdraw] = useState("");
-    stakingContract.methods.withdrawStarts().call((error, result) => {
-      // setEarlyWithdraw(new Date(result * 1000).toLocaleString())
-      setEarlyWithdraw(result);
-    });
+    const [earlyWithdraw, setEarlyWithdraw] = useState('');
 
     // Staking start
-    const [stakingStart, setstakingStart] = useState("");
-    stakingContract.methods.stakingStarts().call((error, result) => {
-      setstakingStart(result);
-    });
+    const [stakingStart, setstakingStart] = useState('');
 
     // Contribution close
-    const [stakingEnds, setstakingEnds] = useState("");
-    stakingContract.methods.stakingEnds().call((error, result) => {
-      setstakingEnds(result);
-    });
+    const [stakingEnds, setstakingEnds] = useState('');
 
     // Maturity at
-    const [maturityAt, setMaturityAt] = useState("");
-    stakingContract.methods.withdrawEnds().call((error, result) => {
-      setMaturityAt(result);
-    });
+    const [maturityAt, setMaturityAt] = useState('');
 
     // Reward State
-    const [rewardState, setRewardState] = useState("");
-    stakingContract.methods.rewardState().call((error, result) => {
-      setRewardState(result);
-    });
+    const [rewardState, setRewardState] = useState('');
 
     // Control token contract
     const tokenAddr = process.env.REACT_APP_TKN_CONTRACT;
     // const tokenAddr = "0x8357c604c5533fa0053BeAaA1494Da552ceA38f7"
     const tokenNPO = new web3.eth.Contract(tokenContract.abi, tokenAddr);
+
+    useEffect(() => {
+      getyourStakedBalance();
+      stakingContract.methods.name().call((error, result) => {
+        setPoolName(result);
+      });
+      stakingContract.methods.stakingCap().call((error, result) => {
+        setStakingCap((result / 1e18).toLocaleString('en-EN'));
+      });
+      stakingContract.methods.stakedBalance().call((error, result) => {
+        setStakedBalance(result);
+      });
+      stakingContract.methods.stakedTotal().call((error, result) => {
+        setStakedTotal(result);
+      });
+      stakingContract.methods.withdrawStarts().call((error, result) => {
+        // setEarlyWithdraw(new Date(result * 1000).toLocaleString())
+        setEarlyWithdraw(result);
+      });
+      stakingContract.methods.stakingStarts().call((error, result) => {
+        setstakingStart(result);
+      });
+      stakingContract.methods.stakingEnds().call((error, result) => {
+        setstakingEnds(result);
+      });
+      stakingContract.methods.withdrawEnds().call((error, result) => {
+        setMaturityAt(result);
+      });
+      stakingContract.methods.rewardState().call((error, result) => {
+        setRewardState(result);
+      });
+    }, [account]);
 
     return (
       <OriginalComponent

@@ -1,10 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: Avenir, Roboto, sans-serif !important;
+  font-size: 1rem;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: black;
+}
+
+@font-face {
+  font-family: 'Skranji';
+  src: url('/public/assets/fonts/Skranji-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Skranji';
+  src: url('/public/assets/fonts/Skranji-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('/public/assets/fonts/AvenirLTStd-Roman.otf') format('truetype');
+  font-weight: 400;
 }
 
 code {
@@ -15,14 +38,15 @@ code {
 .wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
-.container {
-  margin: auto;
-  padding: 10px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 920px;
+.container-app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.MuiButton-root {
+  text-transform: none !important;
+  font-family: Avenir;
 }
