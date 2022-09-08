@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './Stake.css';
 import BigNumber from 'bignumber.js';
 import withWallet from '../HOC/hoc';
-import EarlyRewardCalculator from '../rewardCalculator/earlyRewardCalculator';
-import MaturityReward from '../rewardCalculator/maturityRewardCalculator';
 import { TextField, styled, Button, Dialog, Divider, CircularProgress } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import DesignButton from '../common/DesignButton';
 import { useSnackbar } from 'notistack';
 import CloseButton from '../common/CloseButton';
 import { useMutation } from 'react-query';
-import { Close, Done, WarningAmberRounded, WarningRounded } from '@mui/icons-material';
+import { Close, Done, WarningRounded } from '@mui/icons-material';
 import { DateTime } from 'luxon';
 import { tierList } from '../StakeView/StakeView';
+import { useMemo } from 'react';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
@@ -37,6 +36,8 @@ const CustomDialog = styled(Dialog)`
     padding: 45px 60px 40px 60px;
   }
 `;
+
+const statuses = ['live', 'lock', 'expired'];
 
 const StakingStage = ({ title, description, loading, success, error }) => (
   <div className='flex gap-8 mb-6'>
@@ -64,30 +65,70 @@ const GroupInfo = ({ title, value, border }) => (
   </div>
 );
 
-const Stake = (props) => {
-  const { enqueueSnackbar } = useSnackbar();
-  const now = DateTime.now().toSeconds();
-  const isLive = now < props.stakingEnds * 1;
-  const isLockPeriod = now > props.stakingEnds * 1 && now < props.earlyWithdraw * 1;
-  const isExpired = now > props.earlyWithdraw * 1;
+const getChangeTime = (nextTime) => {
+  return (nextTime - DateTime.now().toSeconds()) * 1000;
+};
 
+const Stake = (props) => {
   // Call from HOC - Reuse functions/code fro Higher Order Component
   props.onAccountChange();
 
+  const { enqueueSnackbar } = useSnackbar();
   const { control, watch, setValue, handleSubmit } = useForm({ mode: 'onChange' });
   const { amount } = watch();
+  const timerRef = useRef();
   const [balance, setBalance] = useState(0);
   const [openPopupStake, setOpenPopupStake] = useState(false);
   const [openPopupUnstake, setOpenPopupUnstake] = useState(false);
+  const [poolStatus, setPoolStatus] = useState(statuses[0]);
 
-  const getBalance = async () => {
+  const [triggerRender, setTriggerRender] = useState({});
+
+  const getBalance = useCallback(async () => {
     const res = await props.tokenNPO.methods.balanceOf(props.account).call();
     setBalance(res);
+  }, [props.account, props.tokenNPO.methods]);
+
+  const getPoolStatus = () => {
+    const now = DateTime.now().toSeconds();
+    let status = statuses[0];
+    if (now > props.stakingEnds * 1 && now <= props.earlyWithdraw * 1) {
+      status = statuses[1];
+    } else if (now > props.earlyWithdraw * 1) {
+      status = statuses[2];
+    }
+    setPoolStatus(status);
+    setTriggerRender({});
   };
 
   useEffect(() => {
     getBalance();
-  }, [props.account]);
+  }, [getBalance]);
+
+  const tasks = useMemo(() => {
+    const tasksTmp = [[getPoolStatus, 0]];
+
+    if (getChangeTime(Number(props.stakingEnds)) > 0) {
+      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.stakingEnds))]);
+    }
+    if (getChangeTime(Number(props.earlyWithdraw)) > 0) {
+      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.earlyWithdraw))]);
+    }
+
+    return tasksTmp;
+  }, [props.stakingEnds, props.earlyWithdraw]);
+
+  useEffect(() => {
+    const task = tasks.shift();
+    if (!task) return;
+
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(...task);
+
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, [tasks, triggerRender]);
 
   const {
     mutate: approve,
@@ -177,7 +218,6 @@ const Stake = (props) => {
       } else {
         // handle amount (number bigint)
         handleAmount = BigNumber(handleAmount * 1e18).toFixed(0);
-        console.log(handleAmount, props, 'shittttt');
         await props.stakingContract.methods.withdraw(handleAmount).send({ from: props.account });
       }
     },
@@ -195,7 +235,7 @@ const Stake = (props) => {
 
   const getTierReward = () => {
     let tierName = tierList[0].name;
-    tierList.map((tier) => {
+    tierList.forEach((tier) => {
       if (props.yourStakedBalance * 1 >= tier.reward) {
         tierName = tier.name;
       }
@@ -209,7 +249,7 @@ const Stake = (props) => {
 
   return (
     <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10 }}>
-      {isLive && (
+      {poolStatus === statuses[0] && (
         <>
           <Controller
             name='amount'
@@ -272,7 +312,7 @@ const Stake = (props) => {
           </div>
         </>
       )}
-      {isLockPeriod && (
+      {poolStatus === statuses[1] && (
         <>
           <div className='grid grid-cols-3 gap-5 mb-4'>
             <GroupInfo title='Staked Amount (OKG)' value='-' border />
@@ -284,7 +324,7 @@ const Stake = (props) => {
           </DesignButton>
         </>
       )}
-      {isExpired && (
+      {poolStatus === statuses[2] && (
         <>
           <div className='grid grid-cols-3 gap-5 mb-4'>
             <GroupInfo title='Staked Amount (OKG)' value={props.yourStakedBalance} border />

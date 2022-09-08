@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import './StakeView.css';
 import withWallet from '../HOC/hoc';
 import { Container, Button, Tooltip, styled, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
