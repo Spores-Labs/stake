@@ -19,7 +19,7 @@ const PoolInfor = (props) => {
   props.onAccountChange();
   const lockDays = Duration.fromObject({ seconds: props.earlyWithdraw * 1 - props.stakingEnds * 1 }).toFormat('d');
   const apr =
-    !props.stakedTotal || Number(props.stakedTotal) < 100000
+    !props.stakedTotal || Number(props.stakedTotal) < 100000 * 1e18
       ? 4055
       : (((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / (lockDays * 1)) * 365 * 100).toFixed(2);
 
