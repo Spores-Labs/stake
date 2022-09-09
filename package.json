@@ -27,6 +27,7 @@
     "react-hook-form": "^7.34.2",
     "react-query": "^3.39.2",
     "react-scripts": "5.0.1",
+    "swiper": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

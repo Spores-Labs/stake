@@ -2,3 +2,23 @@
   background: #f1e9dc !important;
   padding: 17px !important
 }
+
+.swiper-wrapper {
+  padding-bottom: 40px!important;
+}
+
+.swiper-pagination-bullet {
+  width: 35px;
+  height: 8px;
+  background: #B7A2844D;
+  border-radius: 16px;
+  opacity: 1
+}
+
+.swiper-pagination-bullet-active {
+  background: #F1E9DC;
+}
+
+.swiper-pagination {
+  bottom: 0px!important;
+}

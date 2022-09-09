@@ -1,10 +1,12 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import './StakeView.css';
 import withWallet from '../HOC/hoc';
 import { Container, Button, Tooltip, styled, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { QuestionMark, ExpandMore } from '@mui/icons-material';
 import Stake from '../stake/Stake';
 import PoolInfor from '../poolInfor/poolInfor';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper';
 
 export const tierList = [
   { code: 'tier-1', name: 'TIER 1', reward: 5000, image: '/assets/images/bonus-tier-1.png' },
@@ -38,6 +40,18 @@ const StakeView = (props) => {
   useLayoutEffect(() => {
     getTierReward();
   }, [props.yourStakedBalance]);
+
+  const sliderRef = useRef(null);
+
+  const handlePrev = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slidePrev();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slideNext();
+  }, []);
 
   return (
     <div style={{ background: `url('/assets/images/background-staking.png') no-repeat center top / 100%` }}>
@@ -130,6 +144,37 @@ const StakeView = (props) => {
         <div className='text-color-primary mb-20'>
           <span style={{ color: '#FF613F' }}>*</span> Item rewards will be transferred into your game account at
           mm/dd/yyyy. Don’t forget to link game account into wallet.
+        </div>
+        <div className='relative w-full h-full mb-32'>
+          <Swiper
+            ref={sliderRef}
+            pagination={{
+              clickable: true,
+            }}
+            mousewheel
+            keyboard
+            loop
+            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+          >
+            <SwiperSlide>
+              <img src='/assets/images/slide-image-1.png' alt='slide' />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img src='/assets/images/slide-image-1.png' alt='slide' />
+            </SwiperSlide>
+          </Swiper>
+          <img
+            src='/assets/images/prev-arrow.png'
+            alt='prev-arrow'
+            className='absolute top-1/2 -translate-y-1/2 -left-14 cursor-pointer'
+            onClick={handlePrev}
+          />
+          <img
+            src='/assets/images/next-arrow.png'
+            alt='next-arrow'
+            className='absolute top-1/2 -translate-y-1/2 -right-14 cursor-pointer'
+            onClick={handleNext}
+          />
         </div>
         <div className='font-skadi mb-8' style={{ fontSize: 32 }}>
           FAQs
