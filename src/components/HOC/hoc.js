@@ -77,7 +77,7 @@ const withWallet = (OriginalComponent) => {
 
     const getyourStakedBalance = async () => {
       if (!!account) {
-        stakingContract.methods.stakeOf(account).call((error, result) => {
+        await stakingContract.methods.stakeOf(account).call((error, result) => {
           setYourStakedBalance((result ?? 0) / 1e18);
         });
       }
@@ -117,7 +117,7 @@ const withWallet = (OriginalComponent) => {
 
     const getBalance = async () => {
       if (!!account) {
-        tokenNPO.methods.balanceOf(account).call((error, result) => {
+        await tokenNPO.methods.balanceOf(account).call((error, result) => {
           setBalance(result);
         });
       }
@@ -129,32 +129,32 @@ const withWallet = (OriginalComponent) => {
       if (formVisibility) {
         getyourStakedBalance();
         getBalance();
-        stakingContract.methods.name().call((error, result) => {
+        await stakingContract.methods.name().call((error, result) => {
           setPoolName(result);
         });
-        stakingContract.methods.stakingCap().call((error, result) => {
+        await stakingContract.methods.stakingCap().call((error, result) => {
           setStakingCap(result / 1e18);
         });
-        stakingContract.methods.stakedBalance().call((error, result) => {
+        await stakingContract.methods.stakedBalance().call((error, result) => {
           setStakedBalance(result);
         });
-        stakingContract.methods.stakedTotal().call((error, result) => {
+        await stakingContract.methods.stakedTotal().call((error, result) => {
           setStakedTotal(result);
         });
-        stakingContract.methods.withdrawStarts().call((error, result) => {
+        await stakingContract.methods.withdrawStarts().call((error, result) => {
           // setEarlyWithdraw(new Date(result * 1000).toLocaleString())
           setEarlyWithdraw(result);
         });
-        stakingContract.methods.stakingStarts().call((error, result) => {
+        await stakingContract.methods.stakingStarts().call((error, result) => {
           setstakingStart(result);
         });
-        stakingContract.methods.stakingEnds().call((error, result) => {
+        await stakingContract.methods.stakingEnds().call((error, result) => {
           setstakingEnds(result);
         });
-        stakingContract.methods.withdrawEnds().call((error, result) => {
+        await stakingContract.methods.withdrawEnds().call((error, result) => {
           setMaturityAt(result);
         });
-        stakingContract.methods.rewardState().call((error, result) => {
+        await stakingContract.methods.rewardState().call((error, result) => {
           setRewardState(result);
         });
       }

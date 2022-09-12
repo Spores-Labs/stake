@@ -88,6 +88,7 @@ const Stake = (props) => {
   const timerRef = useRef();
   const [openPopupStake, setOpenPopupStake] = useState(false);
   const [openPopupUnstake, setOpenPopupUnstake] = useState(false);
+  const [openPopupUnstakeSuccess, setOpenPopupUnstakeSuccess] = useState(false);
   const [poolStatus, setPoolStatus] = useState(statuses[0]);
 
   const [triggerRender, setTriggerRender] = useState({});
@@ -196,11 +197,7 @@ const Stake = (props) => {
     },
   );
 
-  const {
-    mutate: unstake,
-    isSuccess: isSuccessUnstake,
-    reset: resetUnstake,
-  } = useMutation(
+  const { mutate: unstake } = useMutation(
     async () => {
       let handleAmount = props.yourStakedBalance;
 
@@ -225,6 +222,7 @@ const Stake = (props) => {
     {
       onSuccess: () => {
         enqueueSnackbar('Unstake successfully!', { variant: 'success' });
+        setOpenPopupUnstakeSuccess(true);
       },
       onError: () => {
         enqueueSnackbar('Unstake failed!', { variant: 'error' });
@@ -274,7 +272,6 @@ const Stake = (props) => {
 
   const onClosePopupUnstake = () => {
     setOpenPopupUnstake(false);
-    resetUnstake();
   };
 
   return (
@@ -373,7 +370,11 @@ const Stake = (props) => {
         <>
           <div className='grid grid-cols-3 gap-5 mb-4'>
             <GroupInfo title='Staked Amount (OKG)' value={props.yourStakedBalance.toLocaleString('en-EN')} border />
-            <GroupInfo title='Pending Rewards (OKG)' value={Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))} border />
+            <GroupInfo
+              title='Pending Rewards (OKG)'
+              value={Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))}
+              border
+            />
             <GroupInfo title='Reward to receive' value={getTierReward()} />
           </div>
           {isLoggedIn ? (
@@ -436,66 +437,66 @@ const Stake = (props) => {
       </CustomDialog>
       <CustomDialog fullWidth open={openPopupUnstake}>
         <div className='text-color-secondary'>
-          {isSuccessUnstake ? (
-            <>
-              <div className='flex justify-center'>
-                <img src='/assets/icons/icon-success.png' alt='Success' className='mb-8' />
-              </div>
-              <div className='font-skadi text-center text-3xl mb-3'>STAKING SUCCEEDED</div>
-              <div className='text-center text-xl mb-12'>You have successfull staked 10,000 OKG</div>
-              <DesignButton
-                fullWidth
-                design='yellow'
-                size='large'
-                imageSize='large'
-                onClick={() => {
-                  onClosePopupUnstake();
-                }}
-              >
-                DONE
-              </DesignButton>
-            </>
-          ) : (
-            <>
-              <div className='text-color-caption font-skadi text-center mb-2' style={{ fontSize: 32 }}>
-                UNSTAKE
-              </div>
-              <Divider className='mb-6' style={{ borderTop: '1px solid #7B593A' }} />
-              <div className='text-xl mb-6'>Are you sure you want to unstake OKG?</div>
-              <div
-                className='flex flex-col gap-4 p-5 text-xl mb-6'
-                style={{ background: '#523527', border: '1px solid #7B593A', borderRadius: 8 }}
-              >
-                <div className='flex justify-between'>
-                  <div className='text-color-primary'>Unstake amount</div>
-                  <div className='font-extrabold'>{`${props.yourStakedBalance} OKG`}</div>
-                </div>
-                <div className='flex justify-between'>
-                  <div className='text-color-primary'>Rewards</div>
-                  <div className='font-extrabold'>{`${getOKGReward()} OKG`}</div>
-                </div>
-              </div>
-              <div className='text-color-primary flex gap-2.5 mb-6'>
-                <WarningRounded style={{ color: '#FFA108' }} />
-                Item rewards will be transferred into your game account. Please make sure you have linked your wallet to
-                the game account.
-              </div>
-              <div className='flex gap-2'>
-                <DesignButton fullWidth design='yellow' size='large' imageSize='small' onClick={() => unstake()}>
-                  UNSTAKE
-                </DesignButton>
-                <DesignButton
-                  fullWidth
-                  design='gray'
-                  size='large'
-                  imageSize='small'
-                  onClick={() => onClosePopupUnstake()}
-                >
-                  CANCEL
-                </DesignButton>
-              </div>
-            </>
-          )}
+          <div className='text-color-caption font-skadi text-center mb-2' style={{ fontSize: 32 }}>
+            UNSTAKE
+          </div>
+          <Divider className='mb-6' style={{ borderTop: '1px solid #7B593A' }} />
+          <div className='text-xl mb-6'>Are you sure you want to unstake OKG?</div>
+          <div
+            className='flex flex-col gap-4 p-5 text-xl mb-6'
+            style={{ background: '#523527', border: '1px solid #7B593A', borderRadius: 8 }}
+          >
+            <div className='flex justify-between'>
+              <div className='text-color-primary'>Unstake amount</div>
+              <div className='font-extrabold'>{`${props.yourStakedBalance} OKG`}</div>
+            </div>
+            <div className='flex justify-between'>
+              <div className='text-color-primary'>Rewards</div>
+              <div className='font-extrabold'>{`${getOKGReward()} OKG`}</div>
+            </div>
+          </div>
+          <div className='text-color-primary flex gap-2.5 mb-6'>
+            <WarningRounded style={{ color: '#FFA108' }} />
+            Item rewards will be transferred into your game account. Please make sure you have linked your wallet to the
+            game account.
+          </div>
+          <div className='flex gap-2'>
+            <DesignButton
+              fullWidth
+              design='yellow'
+              size='large'
+              imageSize='small'
+              onClick={() => {
+                unstake();
+                onClosePopupUnstake();
+              }}
+            >
+              UNSTAKE
+            </DesignButton>
+            <DesignButton fullWidth design='gray' size='large' imageSize='small' onClick={() => onClosePopupUnstake()}>
+              CANCEL
+            </DesignButton>
+          </div>
+        </div>
+      </CustomDialog>
+      <CustomDialog fullWidth open={openPopupUnstakeSuccess}>
+        <div className='text-color-secondary'>
+          <div className='flex justify-center'>
+            <img src='/assets/icons/icon-success.png' alt='Success' className='mb-8' />
+          </div>
+          <div className='font-skadi text-center text-3xl mb-3'>UNSTAKING SUCCEEDED</div>
+          <div className='text-center text-xl mb-12'>You have successfull unstaked OKG token</div>
+          <DesignButton
+            fullWidth
+            design='yellow'
+            size='large'
+            imageSize='large'
+            onClick={() => {
+              setOpenPopupUnstakeSuccess(false);
+            }}
+          >
+            DONE
+          </DesignButton>
         </div>
       </CustomDialog>
     </div>
