@@ -321,6 +321,7 @@ const Stake = (props) => {
                           OKG
                         </div>
                       ),
+                      type: 'number',
                     }}
                   />
                   {invalid && <div className='text-red-500 text-tiny md:text-sm mt-1'>{mes}</div>}
