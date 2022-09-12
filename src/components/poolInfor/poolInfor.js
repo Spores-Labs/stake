@@ -16,7 +16,7 @@ const GroupInfo = ({ title, value, icon }) => (
 );
 
 const PoolInfor = (props) => {
-  props.onAccountChange();
+  // props.onAccountChange();
   const lockDays = Duration.fromObject({ seconds: props.earlyWithdraw * 1 - props.stakingEnds * 1 }).toFormat('d');
   const apr =
     !props.stakedTotal || Number(props.stakedTotal) < 100000 * 1e18

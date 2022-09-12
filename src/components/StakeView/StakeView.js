@@ -24,7 +24,7 @@ const CustomAccord = styled(Accordion)`
 `;
 
 const StakeView = (props) => {
-  props.onAccountChange();
+  // props.onAccountChange();
   const [activeTier, setActiveTier] = useState(tierList[0].code);
 
   const getTierReward = () => {

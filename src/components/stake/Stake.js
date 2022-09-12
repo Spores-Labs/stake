@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Stake.css';
 import BigNumber from 'bignumber.js';
 import withWallet from '../HOC/hoc';
@@ -71,23 +71,17 @@ const getChangeTime = (nextTime) => {
 
 const Stake = (props) => {
   // Call from HOC - Reuse functions/code fro Higher Order Component
-  props.onAccountChange();
-
+  // props.onAccountChange();
+  const isLoggedIn = !!props.account;
   const { enqueueSnackbar } = useSnackbar();
   const { control, watch, setValue, handleSubmit } = useForm({ mode: 'onChange' });
   const { amount } = watch();
   const timerRef = useRef();
-  const [balance, setBalance] = useState(0);
   const [openPopupStake, setOpenPopupStake] = useState(false);
   const [openPopupUnstake, setOpenPopupUnstake] = useState(false);
   const [poolStatus, setPoolStatus] = useState(statuses[0]);
 
   const [triggerRender, setTriggerRender] = useState({});
-
-  const getBalance = useCallback(async () => {
-    const res = await props.tokenNPO.methods.balanceOf(props.account).call();
-    setBalance(res);
-  }, [props.account, props.tokenNPO.methods]);
 
   const getPoolStatus = () => {
     const now = DateTime.now().toSeconds();
@@ -100,10 +94,6 @@ const Stake = (props) => {
     setPoolStatus(status);
     setTriggerRender({});
   };
-
-  useEffect(() => {
-    getBalance();
-  }, [getBalance]);
 
   const tasks = useMemo(() => {
     const tasksTmp = [[getPoolStatus, 0]];
@@ -151,7 +141,7 @@ const Stake = (props) => {
           variant: 'error',
         });
         throw new Error();
-      } else if (amount > balance / 1e18) {
+      } else if (amount > props.balance / 1e18) {
         enqueueSnackbar('Not enough OKG balance', { variant: 'error' }); // check wallet balance
         throw new Error();
       } else if (props.stakingCap === props.stakedBalance) {
@@ -247,6 +237,12 @@ const Stake = (props) => {
     return (process.env.REACT_APP_TOTAL_REWARD / (props.stakedTotal / 1e18)) * (props.yourStakedBalance * 1);
   };
 
+  const ButtonLogin = () => (
+    <DesignButton fullWidth design='yellow' size='large' imageSize='small' className='w-56' onClick={props.connectMM}>
+      CONNECT WALLET
+    </DesignButton>
+  );
+
   return (
     <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10 }}>
       {poolStatus === statuses[0] && (
@@ -259,7 +255,7 @@ const Stake = (props) => {
               required: true,
               pattern: /^\d*\.?\d*$/,
               min: 0,
-              max: balance / 1e18,
+              max: props.balance / 1e18,
             }}
             render={({ field, fieldState: { invalid, error } }) => (
               <div className='mb-4'>
@@ -281,7 +277,7 @@ const Stake = (props) => {
                           variant='contained'
                           className='font-bold text-color-secondary text-sm'
                           style={{ background: '#6FAF51', borderRadius: 8 }}
-                          onClick={() => setValue('amount', balance / 1e18, { shouldValidate: true })}
+                          onClick={() => setValue('amount', props.balance / 1e18, { shouldValidate: true })}
                         >
                           Max
                         </Button>
@@ -295,18 +291,22 @@ const Stake = (props) => {
             )}
           />
           <div className='flex justify-between items-center'>
-            <DesignButton
-              fullWidth
-              design='yellow'
-              size='large'
-              imageSize='small'
-              className='w-44'
-              onClick={() => handleSubmit(() => stakeToken())()}
-            >
-              STAKE NOW
-            </DesignButton>
+            {isLoggedIn ? (
+              <DesignButton
+                fullWidth
+                design='yellow'
+                size='large'
+                imageSize='small'
+                className='w-44'
+                onClick={() => handleSubmit(() => stakeToken())()}
+              >
+                STAKE NOW
+              </DesignButton>
+            ) : (
+              <ButtonLogin />
+            )}
             <div className='font-black text-color-greyish'>
-              <div>{`Wallet Balance: ${balance / 1e18} OKG`}</div>
+              <div>{`Wallet Balance: ${props.balance / 1e18} OKG`}</div>
               <div>{`Current staked: ${props.yourStakedBalance} OKG`}</div>
             </div>
           </div>
@@ -319,9 +319,13 @@ const Stake = (props) => {
             <GroupInfo title='Pending Rewards (OKG)' value='-' border />
             <GroupInfo title='Reward to receive' value='-' />
           </div>
-          <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
-            UNSTAKE
-          </DesignButton>
+          {isLoggedIn ? (
+            <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
+              UNSTAKE
+            </DesignButton>
+          ) : (
+            <ButtonLogin />
+          )}
         </>
       )}
       {poolStatus === statuses[2] && (
@@ -331,16 +335,20 @@ const Stake = (props) => {
             <GroupInfo title='Pending Rewards (OKG)' value={getOKGReward()} border />
             <GroupInfo title='Reward to receive' value={getTierReward()} />
           </div>
-          <DesignButton
-            fullWidth
-            design='yellow'
-            size='large'
-            imageSize='small'
-            className='w-44'
-            onClick={() => setOpenPopupUnstake(true)}
-          >
-            UNSTAKE
-          </DesignButton>
+          {isLoggedIn ? (
+            <DesignButton
+              fullWidth
+              design='yellow'
+              size='large'
+              imageSize='small'
+              className='w-44'
+              onClick={() => setOpenPopupUnstake(true)}
+            >
+              UNSTAKE
+            </DesignButton>
+          ) : (
+            <ButtonLogin />
+          )}
         </>
       )}
       <CustomDialog fullWidth open={openPopupStake}>
