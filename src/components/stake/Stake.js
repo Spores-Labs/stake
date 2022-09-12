@@ -372,8 +372,8 @@ const Stake = (props) => {
       {poolStatus === statuses[2] && (
         <>
           <div className='grid grid-cols-3 gap-5 mb-4'>
-            <GroupInfo title='Staked Amount (OKG)' value={props.yourStakedBalance} border />
-            <GroupInfo title='Pending Rewards (OKG)' value={getOKGReward()} border />
+            <GroupInfo title='Staked Amount (OKG)' value={props.yourStakedBalance.toLocaleString('en-EN')} border />
+            <GroupInfo title='Pending Rewards (OKG)' value={Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))} border />
             <GroupInfo title='Reward to receive' value={getTierReward()} />
           </div>
           {isLoggedIn ? (
