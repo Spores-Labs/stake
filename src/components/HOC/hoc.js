@@ -124,7 +124,7 @@ const withWallet = (OriginalComponent) => {
           setPoolName(result);
         });
         await stakingContract.methods.stakingCap().call((error, result) => {
-          setStakingCap((result / 1e18).toLocaleString('en-EN'));
+          setStakingCap(result / 1e18);
         });
         await stakingContract.methods.stakedBalance().call((error, result) => {
           setStakedBalance(result);

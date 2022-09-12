@@ -243,6 +243,18 @@ const Stake = (props) => {
     </DesignButton>
   );
 
+  const getRemainingStakingCap = () => Number(props.stakingCap) - Number(props.stakedTotal) / 1e18;
+
+  const getMaxLimit = () => {
+    const capLimit = getRemainingStakingCap();
+    return props.balance / 1e18 > capLimit ? capLimit : props.balance / 1e18;
+  };
+
+  const getMaxLimitErrorMessage = () => {
+    const capLimit = getRemainingStakingCap();
+    return props.balance / 1e18 > capLimit ? `The maximum amount is ${capLimit}` : 'Insufficient balance.';
+  };
+
   return (
     <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10 }}>
       {poolStatus === statuses[0] && (
@@ -254,41 +266,48 @@ const Stake = (props) => {
             rules={{
               required: true,
               pattern: /^\d*\.?\d*$/,
-              min: 0,
-              max: props.balance / 1e18,
+              min: 1,
+              max: getMaxLimit(),
             }}
-            render={({ field, fieldState: { invalid, error } }) => (
-              <div className='mb-4'>
-                <div className='text-xl font-black mb-1'>AMOUNT TO STAKE*</div>
-                <AmountField
-                  {...field}
-                  fullWidth
-                  variant='outlined'
-                  placeholder='0'
-                  size='medium'
-                  error={invalid}
-                  InputProps={{
-                    endAdornment: (
-                      <div
-                        className='flex gap-2 pr-5 text-xl font-avenir font-bold items-center '
-                        style={{ color: '#392609' }}
-                      >
-                        <Button
-                          variant='contained'
-                          className='font-bold text-color-secondary text-sm'
-                          style={{ background: '#6FAF51', borderRadius: 8 }}
-                          onClick={() => setValue('amount', props.balance / 1e18, { shouldValidate: true })}
+            render={({ field, fieldState: { invalid, error } }) => {
+              let mes = 'Please enter a positive number';
+              if (error?.type === 'max') {
+                mes = getMaxLimitErrorMessage();
+              }
+
+              return (
+                <div className='mb-4'>
+                  <div className='text-xl font-black mb-1'>AMOUNT TO STAKE*</div>
+                  <AmountField
+                    {...field}
+                    fullWidth
+                    variant='outlined'
+                    placeholder='0'
+                    size='medium'
+                    error={invalid}
+                    InputProps={{
+                      endAdornment: (
+                        <div
+                          className='flex gap-2 pr-5 text-xl font-avenir font-bold items-center '
+                          style={{ color: '#392609' }}
                         >
-                          Max
-                        </Button>
-                        OKG
-                      </div>
-                    ),
-                  }}
-                />
-                {invalid && <div className='text-red-500 text-tiny md:text-sm mt-1'>Please enter stake number.</div>}
-              </div>
-            )}
+                          <Button
+                            variant='contained'
+                            className='font-bold text-color-secondary text-sm'
+                            style={{ background: '#6FAF51', borderRadius: 8 }}
+                            onClick={() => setValue('amount', getMaxLimit(), { shouldValidate: true })}
+                          >
+                            Max
+                          </Button>
+                          OKG
+                        </div>
+                      ),
+                    }}
+                  />
+                  {invalid && <div className='text-red-500 text-tiny md:text-sm mt-1'>{mes}</div>}
+                </div>
+              );
+            }}
           />
           <div className='flex justify-between items-center'>
             {isLoggedIn ? (

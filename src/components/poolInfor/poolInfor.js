@@ -26,7 +26,7 @@ const PoolInfor = (props) => {
   return (
     <div className='px-8 grid grid-cols-3 gap-7 items-center' style={{ background: '#3F281CE5', borderRadius: 10 }}>
       <div className='flex flex-col gap-6' style={{ borderRight: '1px solid #B7A284' }}>
-        <GroupInfo title='Staking Cap' value={`${props.stakingCap} OKG`} icon={<Layers />} />
+        <GroupInfo title='Staking Cap' value={`${props.stakingCap?.toLocaleString('en-EN')} OKG`} icon={<Layers />} />
         <GroupInfo title='Lock period' value={`${lockDays} days`} icon={<Lock />} />
       </div>
       <div className='flex flex-col gap-6' style={{ borderRight: '1px solid #B7A284' }}>
