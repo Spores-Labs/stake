@@ -6,7 +6,7 @@ import { QuestionMark, ExpandMore } from '@mui/icons-material';
 import Stake from '../stake/Stake';
 import PoolInfor from '../poolInfor/poolInfor';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper';
+import { Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper';
 
 export const tierList = [
   { code: 'tier-1', name: 'TIER 1', reward: 5000, image: '/assets/images/bonus-tier-1.png' },
@@ -154,7 +154,8 @@ const StakeView = (props) => {
             mousewheel
             keyboard
             loop
-            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+            modules={[Pagination, Mousewheel, Keyboard, Autoplay]}
+            autoplay={{ delay: 10000, pauseOnMouseEnter: true, disableOnInteraction: false }}
           >
             <SwiperSlide>
               <img src='/assets/images/slide-image-1.png' alt='slide' />
