@@ -347,8 +347,8 @@ const Stake = (props) => {
               <ButtonLogin />
             )}
             <div className='font-black text-color-greyish'>
-              <div>{`Wallet Balance: ${props.balance / 1e18} OKG`}</div>
-              <div>{`Current staked: ${props.yourStakedBalance} OKG`}</div>
+              <div>{`Wallet Balance: ${(props.balance / 1e18).toLocaleString('en-EN')} OKG`}</div>
+              <div>{`Current staked: ${Math.round(props.yourStakedBalance).toLocaleString('en-EN')} OKG`}</div>
             </div>
           </div>
         </>
