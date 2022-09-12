@@ -188,6 +188,7 @@ const withWallet = (OriginalComponent) => {
         tokenNPO={tokenNPO}
         getyourStakedBalance={getyourStakedBalance}
         balance={balance}
+        getInfos={getInfos}
       />
     );
   }

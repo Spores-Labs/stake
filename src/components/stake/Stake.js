@@ -39,7 +39,7 @@ const CustomDialog = styled(Dialog)`
 
 const statuses = ['live', 'lock', 'expired'];
 
-const StakingStage = ({ title, description, loading, success, error }) => (
+const StakingStage = ({ title, description, loading, success, error, handleRetry }) => (
   <div className='flex gap-8 mb-6'>
     <div>
       {!loading && !success && !error && (
@@ -54,6 +54,15 @@ const StakingStage = ({ title, description, loading, success, error }) => (
       <div className='text-color-primary font-semibold' style={{ fontSize: 15 }}>
         {description}
       </div>
+      {error && (
+        <Button
+          variant='outlined'
+          className='w-20 text-xs text-color-secondary border-color-secondary px-3 mt-1'
+          onClick={handleRetry}
+        >
+          Try again
+        </Button>
+      )}
     </div>
   </div>
 );
@@ -125,6 +134,7 @@ const Stake = (props) => {
     isLoading: isLoadingApprove,
     isSuccess: isSuccessApprove,
     isError: isErrorApprove,
+    reset: resetApprove,
   } = useMutation(
     async () => {
       setOpenPopupStake(true);
@@ -170,6 +180,7 @@ const Stake = (props) => {
     isLoading: isLoadingStake,
     isSuccess: isSuccessStake,
     isError: isErrorStake,
+    reset: resetStake,
   } = useMutation(
     async () => {
       const handleAmount = BigNumber(amount * 1e18).toFixed(0);
@@ -253,6 +264,17 @@ const Stake = (props) => {
   const getMaxLimitErrorMessage = () => {
     const capLimit = getRemainingStakingCap();
     return props.balance / 1e18 > capLimit ? `The maximum amount is ${capLimit}` : 'Insufficient balance.';
+  };
+
+  const onClosePopupStake = () => {
+    setOpenPopupStake(false);
+    resetApprove();
+    resetStake();
+  };
+
+  const onClosePopupUnstake = () => {
+    setOpenPopupUnstake(false);
+    resetUnstake();
   };
 
   return (
@@ -382,6 +404,7 @@ const Stake = (props) => {
             loading={isLoadingApprove}
             success={isSuccessApprove}
             error={isErrorApprove}
+            handleRetry={approve}
           />
           <StakingStage
             title='Stake OKG'
@@ -389,9 +412,18 @@ const Stake = (props) => {
             loading={isLoadingStake}
             success={isSuccessStake}
             error={isErrorStake}
+            handleRetry={stake}
           />
           {isSuccessApprove && isSuccessStake ? (
-            <DesignButton fullWidth design='yellow' size='large' onClick={() => setOpenPopupStake(false)}>
+            <DesignButton
+              fullWidth
+              design='yellow'
+              size='large'
+              onClick={() => {
+                onClosePopupStake();
+                props.getInfos();
+              }}
+            >
               DONE
             </DesignButton>
           ) : (
@@ -399,7 +431,7 @@ const Stake = (props) => {
               DONE
             </DesignButton>
           )}
-          <CloseButton onClick={() => setOpenPopupStake(false)} />
+          <CloseButton onClick={() => onClosePopupStake()} />
         </div>
       </CustomDialog>
       <CustomDialog fullWidth open={openPopupUnstake}>
@@ -417,8 +449,7 @@ const Stake = (props) => {
                 size='large'
                 imageSize='large'
                 onClick={() => {
-                  setOpenPopupUnstake(false);
-                  resetUnstake();
+                  onClosePopupUnstake();
                 }}
               >
                 DONE
@@ -458,7 +489,7 @@ const Stake = (props) => {
                   design='gray'
                   size='large'
                   imageSize='small'
-                  onClick={() => setOpenPopupUnstake(false)}
+                  onClick={() => onClosePopupUnstake()}
                 >
                   CANCEL
                 </DesignButton>
