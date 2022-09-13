@@ -15,6 +15,8 @@ import { useSelector } from 'react-redux';
 import { profileSelector } from '../../reducers/profile';
 import { contractInfosSelector } from '../../reducers/contractInfos';
 import { connectWallet } from '../../services/wallet';
+import { updateInfosProfileService } from '../../services/profile';
+import { getContractInfos } from '../../services/contract';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
@@ -437,7 +439,8 @@ const Stake = () => {
               size='large'
               onClick={() => {
                 onClosePopupStake();
-                props.getInfos();
+                updateInfosProfileService(address);
+                getContractInfos();
               }}
             >
               DONE
