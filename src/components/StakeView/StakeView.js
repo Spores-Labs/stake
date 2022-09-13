@@ -1,7 +1,7 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './StakeView.css';
 import withWallet from '../HOC/hoc';
-import { Container, Button, Tooltip, styled, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Container, Tooltip, styled, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { QuestionMark, ExpandMore } from '@mui/icons-material';
 import Stake from '../stake/Stake';
 import PoolInfor from '../poolInfor/poolInfor';
@@ -23,23 +23,39 @@ const CustomAccord = styled(Accordion)`
   }
 `;
 
+const stakeStatuses = ['open', 'filled'];
+
 const StakeView = (props) => {
+  console.log(props)
   // props.onAccountChange();
   const [activeTier, setActiveTier] = useState(tierList[0].code);
+  const [stakeStatus, setStakeStatus] = useState();
 
-  const getTierReward = () => {
+  const getTierReward = useCallback(() => {
     let tierCode = tierList[0].code;
-    tierList.map((tier) => {
+    tierList.forEach((tier) => {
       if (props.yourStakedBalance * 1 >= tier.reward) {
         tierCode = tier.code;
       }
     });
     setActiveTier(tierCode);
-  };
+  }, [props.yourStakedBalance]);
+
+  const getStakeStatus = useCallback(() => {
+    if (props.stakingCap === props.stakedBalance) {
+      setStakeStatus(stakeStatuses[1]);
+    } else {
+      setStakeStatus(stakeStatuses[0]);
+    }
+  }, [props.stakedBalance, props.stakingCap]);
 
   useLayoutEffect(() => {
     getTierReward();
-  }, [props.yourStakedBalance]);
+  }, [getTierReward]);
+
+  useEffect(() => {
+    getStakeStatus();
+  }, [getStakeStatus]);
 
   const sliderRef = useRef(null);
 
@@ -57,13 +73,17 @@ const StakeView = (props) => {
     <div style={{ background: `url('/assets/images/background-staking.png') no-repeat center top / 100%` }}>
       <Container className='flex flex-col items-center py-28 text-color-secondary' style={{ maxWidth: 1364 }}>
         <div className='font-skadi text-giant'>OKG STAKING</div>
-        <Button
-          variant='contained'
-          className='font-bold mb-16'
-          style={{ background: '#6FAF51', width: 192, borderRadius: 16 }}
+        <div
+          className='flex justify-center items-center font-bold mb-16 capitalize'
+          style={{
+            background: stakeStatus === stakeStatuses[0] ? '#6FAF51' : '#615955',
+            width: 192,
+            height: 38,
+            borderRadius: 16,
+          }}
         >
-          Open
-        </Button>
+          {stakeStatus ?? ''}
+        </div>
         <div className='grid grid-cols-2 gap-5 mb-9 w-full'>
           <Stake />
           <PoolInfor />

@@ -2,7 +2,7 @@ import { LoadingButton } from '@mui/lab';
 import { CircularProgress } from '@mui/material';
 
 const DesignButton = (props) => {
-  const { design = 'orange', imageSize = 'medium' } = props;
+  const { design = 'orange', imageSize = 'medium', ...propsFiltered } = props;
   return (
     <LoadingButton
       sx={{
@@ -32,7 +32,7 @@ const DesignButton = (props) => {
           LOADING
         </div>
       }
-      {...props}
+      {...propsFiltered}
     />
   );
 };

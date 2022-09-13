@@ -129,34 +129,74 @@ const withWallet = (OriginalComponent) => {
       if (formVisibility) {
         getyourStakedBalance();
         getBalance();
-        await stakingContract.methods.name().call((error, result) => {
-          setPoolName(result);
-        });
-        await stakingContract.methods.stakingCap().call((error, result) => {
-          setStakingCap(result / 1e18);
-        });
-        await stakingContract.methods.stakedBalance().call((error, result) => {
-          setStakedBalance(result);
-        });
-        await stakingContract.methods.stakedTotal().call((error, result) => {
-          setStakedTotal(result);
-        });
-        await stakingContract.methods.withdrawStarts().call((error, result) => {
-          // setEarlyWithdraw(new Date(result * 1000).toLocaleString())
-          setEarlyWithdraw(result);
-        });
-        await stakingContract.methods.stakingStarts().call((error, result) => {
-          setstakingStart(result);
-        });
-        await stakingContract.methods.stakingEnds().call((error, result) => {
-          setstakingEnds(result);
-        });
-        await stakingContract.methods.withdrawEnds().call((error, result) => {
-          setMaturityAt(result);
-        });
-        await stakingContract.methods.rewardState().call((error, result) => {
-          setRewardState(result);
-        });
+        const [
+          poolNameRes,
+          stakingCap,
+          stakedBalanceRes,
+          stakedTotalRes,
+          withdrawStartsRes,
+          stakingStartRes,
+          stakingEndRes,
+          maturityAtRes,
+          rewardStateRes,
+        ] = await Promise.all([
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.name().call((error, result) => {
+              resolve(result);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.stakingCap().call((error, result) => {
+              resolve(result / 1e18);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.stakedBalance().call((error, result) => {
+              resolve(result);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.stakedTotal().call((error, result) => {
+              resolve(result);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.withdrawStarts().call((error, result) => {
+              // setEarlyWithdraw(new Date(result * 1000).toLocaleString())
+              resolve(result);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.stakingStarts().call((error, result) => {
+              resolve(result);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.stakingEnds().call((error, result) => {
+              resolve(result);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.withdrawEnds().call((error, result) => {
+              resolve(result);
+            });
+          }),
+          new Promise(function (resolve, reject) {
+            stakingContract.methods.rewardState().call((error, result) => {
+              resolve(result);
+            });
+          }),
+        ]);
+
+        setPoolName(poolNameRes);
+        setStakingCap(stakingCap);
+        setStakedBalance(stakedBalanceRes);
+        setStakedTotal(stakedTotalRes);
+        setEarlyWithdraw(withdrawStartsRes);
+        setstakingStart(stakingStartRes);
+        setstakingEnds(stakingEndRes);
+        setMaturityAt(maturityAtRes);
+        setRewardState(rewardStateRes);
       }
     };
 
@@ -176,17 +216,17 @@ const withWallet = (OriginalComponent) => {
     const APP_NETWORK =
       Number(process.env.REACT_APP_NETWORK_VERSION) === 97
         ? {
-            chainName: 'Binance Smart Chain',
+            chainName: 'BSC Testnet',
             chainId: '0x61',
             rpcUrls: ['https://data-seed-prebsc-2-s2.binance.org:8545'],
             blockExplorerUrls: ['https://testnet.bscscan.com/'],
             nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
           }
         : {
-            chainName: 'BSC Testnet',
+            chainName: 'Binance Smart Chain',
             chainId: '0x38',
             rpcUrls: ['https://bsc-dataseed.binance.org/'],
-            nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+            nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
           };
 
     const handleConnectBinance = async () => {
