@@ -39,13 +39,6 @@ const withWallet = (OriginalComponent) => {
       setAccount(accounts[0]);
     };
 
-    // On Account Changed
-    const onAccountChange = async () => {
-      await window.ethereum.on('accountsChanged', async () => {
-        setAccount(window.ethereum.selectedAddress);
-      });
-    };
-
     // Work with staking contract
     // const stakingContractAddr = "0x1FE470E4E533EeA525b2f2c34a9EbB995597C143"
     // const stakingContractAddr = "0xa49403Be3806eb19F27163D396f8A77b40b75C5f"
@@ -252,7 +245,6 @@ const withWallet = (OriginalComponent) => {
           stakingContractAddr={stakingContractAddr}
           account={account}
           connectMM={connectMM}
-          onAccountChange={onAccountChange}
           chain={chain}
           poolName={poolName}
           stakingCap={stakingCap}

@@ -3,7 +3,6 @@ import "./header.css"
 import withWallet from "../HOC/hoc"
 function Header (props) {
   const txLink = `https://bscscan.com/address/${props.account}#tokentxns`
-  // props.onAccountChange()
 
   return (
     <header className="header">

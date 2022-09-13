@@ -80,7 +80,6 @@ const getChangeTime = (nextTime) => {
 
 const Stake = (props) => {
   // Call from HOC - Reuse functions/code fro Higher Order Component
-  // props.onAccountChange();
   const isLoggedIn = !!props.account;
   const { enqueueSnackbar } = useSnackbar();
   const { control, watch, setValue, handleSubmit } = useForm({ mode: 'onChange' });

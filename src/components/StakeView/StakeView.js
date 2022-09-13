@@ -27,7 +27,6 @@ const stakeStatuses = ['open', 'filled'];
 
 const StakeView = (props) => {
   console.log(props)
-  // props.onAccountChange();
   const [activeTier, setActiveTier] = useState(tierList[0].code);
   const [stakeStatus, setStakeStatus] = useState();
 
