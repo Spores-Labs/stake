@@ -14,10 +14,13 @@
     "@mui/lab": "^5.0.0-alpha.97",
     "@mui/material": "^5.10.3",
     "@openzeppelin/contracts": "^4.5.0",
+    "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
     "@testing-library/user-event": "^13.5.0",
     "bignumber.js": "^9.0.2",
+    "craco": "0.0.3",
+    "craco-webpack-resolve": "^1.2.1",
     "luxon": "^3.0.3",
     "notistack": "^2.0.5",
     "prop-types": "^15.8.1",
@@ -26,14 +29,15 @@
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.34.2",
     "react-query": "^3.39.2",
+    "react-redux": "^8.0.2",
     "react-scripts": "5.0.1",
     "swiper": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

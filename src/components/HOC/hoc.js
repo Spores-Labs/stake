@@ -264,7 +264,7 @@ const withWallet = (OriginalComponent) => {
           balance={balance}
           getInfos={getInfos}
         />
-        <CustomDialog fullWidth maxWidth='xs' open={!formVisibility}>
+        {/* <CustomDialog fullWidth maxWidth='xs' open={!formVisibility}>
           <div className='flex flex-col items-center py-8'>
             <CircularProgress style={{ color: 'rgb(150, 103, 64)' }} />
             <Typography variant='h3' className='mt-4 mb-2'>
@@ -275,7 +275,7 @@ const withWallet = (OriginalComponent) => {
               BNB Chain
             </DesignButton>
           </div>
-        </CustomDialog>
+        </CustomDialog> */}
       </>
     );
   }

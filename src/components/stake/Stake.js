@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Stake.css';
 import BigNumber from 'bignumber.js';
-import withWallet from '../HOC/hoc';
 import { TextField, styled, Button, Dialog, Divider, CircularProgress } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import DesignButton from '../common/DesignButton';
@@ -12,6 +11,10 @@ import { Close, Done, WarningRounded } from '@mui/icons-material';
 import { DateTime } from 'luxon';
 import { tierList } from '../StakeView/StakeView';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { profileSelector } from '../../reducers/profile';
+import { contractInfosSelector } from '../../reducers/contractInfos';
+import { connectWallet } from '../../services/wallet';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
@@ -78,9 +81,9 @@ const getChangeTime = (nextTime) => {
   return (nextTime - DateTime.now().toSeconds()) * 1000;
 };
 
-const Stake = (props) => {
-  // Call from HOC - Reuse functions/code fro Higher Order Component
-  const isLoggedIn = !!props.account;
+const Stake = () => {
+  const { isLoggedIn, address, balance, yourStakedBalance } = useSelector(profileSelector);
+  const props = useSelector(contractInfosSelector);
   const { enqueueSnackbar } = useSnackbar();
   const { control, watch, setValue, handleSubmit } = useForm({ mode: 'onChange' });
   const { amount } = watch();
@@ -156,7 +159,7 @@ const Stake = (props) => {
           variant: 'error',
         });
         throw new Error();
-      } else if (amount > props.balance / 1e18) {
+      } else if (amount > balance / 1e18) {
         enqueueSnackbar('Not enough OKG balance', { variant: 'error' }); // check wallet balance
         throw new Error();
       } else if (props.stakingCap === props.stakedBalance) {
@@ -166,7 +169,7 @@ const Stake = (props) => {
         // handle amount (number bigint)
         const handleAmount = BigNumber(amount * 1e18).toFixed(0);
 
-        await props.tokenNPO.methods.approve(props.stakingContractAddr, handleAmount).send({ from: props.account });
+        await props.tokenNPO.methods.approve(props.stakingContractAddr, handleAmount).send({ from: address });
       }
     },
     {
@@ -189,7 +192,7 @@ const Stake = (props) => {
   } = useMutation(
     async () => {
       const handleAmount = BigNumber(amount * 1e18).toFixed(0);
-      await props.stakingContract.methods.stake(handleAmount).send({ from: props.account });
+      await props.stakingContract.methods.stake(handleAmount).send({ from: address });
     },
     {
       onSuccess: () => {
@@ -203,7 +206,7 @@ const Stake = (props) => {
 
   const { mutate: unstake } = useMutation(
     async () => {
-      let handleAmount = props.yourStakedBalance;
+      let handleAmount = yourStakedBalance;
 
       if (Date.now() < props.earlyWithdraw * 1000) {
         enqueueSnackbar(
@@ -211,7 +214,7 @@ const Stake = (props) => {
           { variant: 'error' },
         );
         throw new Error();
-      } else if (parseFloat(handleAmount) > parseFloat(props.yourStakedBalance)) {
+      } else if (parseFloat(handleAmount) > parseFloat(yourStakedBalance)) {
         enqueueSnackbar('You could not withdraw more than what you staked', { variant: 'error' });
         throw new Error();
       } else if (handleAmount === '' || handleAmount <= 0) {
@@ -220,7 +223,7 @@ const Stake = (props) => {
       } else {
         // handle amount (number bigint)
         handleAmount = BigNumber(handleAmount * 1e18).toFixed(0);
-        await props.stakingContract.methods.withdraw(handleAmount).send({ from: props.account });
+        await props.stakingContract.methods.withdraw(handleAmount).send({ from: address });
       }
     },
     {
@@ -239,7 +242,7 @@ const Stake = (props) => {
   const getTierReward = () => {
     let tierName = tierList[0].name;
     tierList.forEach((tier) => {
-      if (props.yourStakedBalance * 1 >= tier.reward) {
+      if (yourStakedBalance * 1 >= tier.reward) {
         tierName = tier.name;
       }
     });
@@ -247,11 +250,11 @@ const Stake = (props) => {
   };
 
   const getOKGReward = () => {
-    return (process.env.REACT_APP_TOTAL_REWARD / (props.stakedTotal / 1e18)) * (props.yourStakedBalance * 1);
+    return (process.env.REACT_APP_TOTAL_REWARD / (props.stakedTotal / 1e18)) * (yourStakedBalance * 1);
   };
 
   const ButtonLogin = () => (
-    <DesignButton fullWidth design='yellow' size='large' imageSize='small' className='w-56' onClick={props.connectMM}>
+    <DesignButton fullWidth design='yellow' size='large' imageSize='small' className='w-56' onClick={connectWallet}>
       CONNECT WALLET
     </DesignButton>
   );
@@ -260,12 +263,12 @@ const Stake = (props) => {
 
   const getMaxLimit = () => {
     const capLimit = getRemainingStakingCap();
-    return props.balance / 1e18 > capLimit ? capLimit : props.balance / 1e18;
+    return balance / 1e18 > capLimit ? capLimit : balance / 1e18;
   };
 
   const getMaxLimitErrorMessage = () => {
     const capLimit = getRemainingStakingCap();
-    return props.balance / 1e18 > capLimit ? `The maximum amount is ${capLimit}` : 'Insufficient balance.';
+    return balance / 1e18 > capLimit ? `The maximum amount is ${capLimit}` : 'Insufficient balance.';
   };
 
   const onClosePopupStake = () => {
@@ -353,8 +356,8 @@ const Stake = (props) => {
                   </DesignButton>
                 )}
                 <div className='font-black text-color-greyish'>
-                  <div>{`Wallet Balance: ${(props.balance / 1e18).toLocaleString('en-EN')} OKG`}</div>
-                  <div>{`Current staked: ${Math.round(props.yourStakedBalance).toLocaleString('en-EN')} OKG`}</div>
+                  <div>{`Wallet Balance: ${(balance / 1e18).toLocaleString('en-EN')} OKG`}</div>
+                  <div>{`Current staked: ${Math.round(yourStakedBalance).toLocaleString('en-EN')} OKG`}</div>
                 </div>
               </div>
             </>
@@ -374,7 +377,7 @@ const Stake = (props) => {
           {poolStatus === statuses[3] && (
             <>
               <div className='grid grid-cols-3 gap-5 mb-4'>
-                <GroupInfo title='Staked Amount (OKG)' value={props.yourStakedBalance.toLocaleString('en-EN')} border />
+                <GroupInfo title='Staked Amount (OKG)' value={yourStakedBalance.toLocaleString('en-EN')} border />
                 <GroupInfo
                   title='Pending Rewards (OKG)'
                   value={Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))}
@@ -456,7 +459,7 @@ const Stake = (props) => {
           >
             <div className='flex justify-between'>
               <div className='text-color-primary'>Unstake amount</div>
-              <div className='font-extrabold'>{`${props.yourStakedBalance} OKG`}</div>
+              <div className='font-extrabold'>{`${yourStakedBalance} OKG`}</div>
             </div>
             <div className='flex justify-between'>
               <div className='text-color-primary'>Rewards</div>
@@ -510,4 +513,4 @@ const Stake = (props) => {
     </div>
   );
 };
-export default withWallet(Stake);
+export default Stake;

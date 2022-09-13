@@ -1,9 +1,10 @@
 import React from 'react';
 import './poolInfor.css';
-import withWallet from '../HOC/hoc';
 import { AccessTime, HelpOutline, Layers, Lock } from '@mui/icons-material';
 import { DateTime, Duration } from 'luxon';
 import { Tooltip } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { contractInfosSelector } from '../../reducers/contractInfos';
 
 const GroupInfo = ({ title, value, icon }) => (
   <div>
@@ -15,12 +16,16 @@ const GroupInfo = ({ title, value, icon }) => (
   </div>
 );
 
-const PoolInfor = (props) => {
-  const lockDays = Duration.fromObject({ seconds: props.earlyWithdraw * 1 - props.stakingEnds * 1 }).toFormat('d');
+const PoolInfor = () => {
+  const props = useSelector(contractInfosSelector);
+  console.log(props);
+  const lockDays = Duration.fromObject({ seconds: Number(props.earlyWithdraw) - Number(props.stakingEnds) }).toFormat(
+    'd',
+  );
   const apr =
     !props.stakedTotal || Number(props.stakedTotal) < 100000 * 1e18
       ? 4055
-      : (((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / (lockDays * 1)) * 365 * 100).toFixed(2);
+      : (((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / Number(lockDays)) * 365 * 100).toFixed(2);
 
   return (
     <div className='px-8 grid grid-cols-3 gap-7 items-center' style={{ background: '#3F281CE5', borderRadius: 10 }}>
@@ -31,12 +36,12 @@ const PoolInfor = (props) => {
       <div className='flex flex-col gap-6' style={{ borderRight: '1px solid #B7A284' }}>
         <GroupInfo
           title='Open time'
-          value={DateTime.fromSeconds(props.stakingStart * 1).toFormat('MM/dd/yyyy')}
+          value={DateTime.fromSeconds(Number(props.stakingStart)).toFormat('MM/dd/yyyy')}
           icon={<AccessTime />}
         />
         <GroupInfo
           title='Close time'
-          value={DateTime.fromSeconds(props.stakingEnds * 1).toFormat('MM/dd/yyyy')}
+          value={DateTime.fromSeconds(Number(props.stakingEnds)).toFormat('MM/dd/yyyy')}
           icon={<AccessTime />}
         />
       </div>
@@ -68,4 +73,4 @@ const PoolInfor = (props) => {
     </div>
   );
 };
-export default withWallet(PoolInfor);
+export default PoolInfor;

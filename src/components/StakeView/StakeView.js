@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './StakeView.css';
-import withWallet from '../HOC/hoc';
 import { Container, Tooltip, styled, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { QuestionMark, ExpandMore } from '@mui/icons-material';
 import Stake from '../stake/Stake';
 import PoolInfor from '../poolInfor/poolInfor';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper';
+import { useSelector } from 'react-redux';
+import { profileSelector } from '../../reducers/profile';
+import { contractInfosSelector } from '../../reducers/contractInfos';
 
 export const tierList = [
   { code: 'tier-1', name: 'TIER 1', reward: 5000, image: '/assets/images/bonus-tier-1.png' },
@@ -25,20 +27,21 @@ const CustomAccord = styled(Accordion)`
 
 const stakeStatuses = ['open', 'filled'];
 
-const StakeView = (props) => {
-  console.log(props)
+const StakeView = () => {
+  const { yourStakedBalance } = useSelector(profileSelector);
+  const props = useSelector(contractInfosSelector);
   const [activeTier, setActiveTier] = useState(tierList[0].code);
   const [stakeStatus, setStakeStatus] = useState();
 
   const getTierReward = useCallback(() => {
     let tierCode = tierList[0].code;
     tierList.forEach((tier) => {
-      if (props.yourStakedBalance * 1 >= tier.reward) {
+      if (yourStakedBalance * 1 >= tier.reward) {
         tierCode = tier.code;
       }
     });
     setActiveTier(tierCode);
-  }, [props.yourStakedBalance]);
+  }, [yourStakedBalance]);
 
   const getStakeStatus = useCallback(() => {
     if (props.stakingCap === props.stakedBalance) {
@@ -220,4 +223,4 @@ const StakeView = (props) => {
     </div>
   );
 };
-export default withWallet(StakeView);
+export default StakeView;

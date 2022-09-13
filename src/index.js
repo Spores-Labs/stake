@@ -8,22 +8,27 @@ import StakeView from './components/StakeView/StakeView';
 import { SnackbarProvider } from 'notistack';
 import { QueryClientProvider } from 'react-query';
 import queryClient from './services/client';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from './reducers';
+import PublicLayout from './components/layout/PublicLayout';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <SnackbarProvider preventDuplicate={false} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-      <QueryClientProvider client={queryClient}>
-        <div className='wrapper'>
-          <Header />
-          <div className='container-app'>
-            <StakeView />
-          </div>
-          <Footer />
-        </div>
-      </QueryClientProvider>
-    </SnackbarProvider>
+    <ReduxProvider store={store}>
+      <SnackbarProvider preventDuplicate={false} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <QueryClientProvider client={queryClient}>
+          <PublicLayout>
+            <Header />
+            <div className='container-app'>
+              <StakeView />
+            </div>
+            <Footer />
+          </PublicLayout>
+        </QueryClientProvider>
+      </SnackbarProvider>
+    </ReduxProvider>
   </React.StrictMode>,
 );
 
