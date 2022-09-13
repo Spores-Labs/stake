@@ -18,7 +18,6 @@ const GroupInfo = ({ title, value, icon }) => (
 
 const PoolInfor = () => {
   const props = useSelector(contractInfosSelector);
-  console.log(props);
   const lockDays = Duration.fromObject({ seconds: Number(props.earlyWithdraw) - Number(props.stakingEnds) }).toFormat(
     'd',
   );

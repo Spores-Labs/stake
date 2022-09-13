@@ -17,6 +17,7 @@ import { contractInfosSelector } from '../../reducers/contractInfos';
 import { connectWallet } from '../../services/wallet';
 import { updateInfosProfileService } from '../../services/profile';
 import { getContractInfos } from '../../services/contract';
+import { stakingContract, tokenNPO } from '../../artifacts/contracts';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
@@ -171,7 +172,7 @@ const Stake = () => {
         // handle amount (number bigint)
         const handleAmount = BigNumber(amount * 1e18).toFixed(0);
 
-        await props.tokenNPO.methods.approve(props.stakingContractAddr, handleAmount).send({ from: address });
+        await tokenNPO.methods.approve(process.env.REACT_APP_STK_CONTRACT, handleAmount).send({ from: address });
       }
     },
     {
@@ -194,7 +195,7 @@ const Stake = () => {
   } = useMutation(
     async () => {
       const handleAmount = BigNumber(amount * 1e18).toFixed(0);
-      await props.stakingContract.methods.stake(handleAmount).send({ from: address });
+      await stakingContract.methods.stake(handleAmount).send({ from: address });
     },
     {
       onSuccess: () => {
@@ -225,7 +226,7 @@ const Stake = () => {
       } else {
         // handle amount (number bigint)
         handleAmount = BigNumber(handleAmount * 1e18).toFixed(0);
-        await props.stakingContract.methods.withdraw(handleAmount).send({ from: address });
+        await stakingContract.methods.withdraw(handleAmount).send({ from: address });
       }
     },
     {
