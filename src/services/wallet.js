@@ -31,6 +31,8 @@ export const connectWallet = async () => {
       [address] = await web3.eth.getAccounts();
     }
     address = web3.utils.toChecksumAddress(address);
+    const message = `Welcome to OKG Staking!\n\nClick "Sign" to sign in. No password needed!\n\nWallet address:\n${address}`;
+    await web3.eth.personal.sign(message, address, '');
 
     store.dispatch(signIn({ address }));
     updateInfosProfileService(address);
