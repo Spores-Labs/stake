@@ -9,6 +9,8 @@ import { Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper';
 import { useSelector } from 'react-redux';
 import { profileSelector } from '../../reducers/profile';
 import { contractInfosSelector } from '../../reducers/contractInfos';
+import { DateTime } from 'luxon';
+import { useMemo } from 'react';
 
 export const tierList = [
   { code: 'tier-1', name: 'TIER 1', reward: 5000, image: '/assets/images/bonus-tier-1.png' },
@@ -27,11 +29,55 @@ const CustomAccord = styled(Accordion)`
 
 const stakeStatuses = ['open', 'filled'];
 
+export const poolStatuses = ['waiting', 'live', 'lock', 'expired'];
+
+const getChangeTime = (nextTime, prevTime = DateTime.now().toSeconds()) => {
+  return (nextTime - prevTime) * 1000;
+};
+
 const StakeView = () => {
   const { yourStakedBalance } = useSelector(profileSelector);
   const props = useSelector(contractInfosSelector);
+  const timerRef = useRef();
   const [activeTier, setActiveTier] = useState(tierList[0].code);
   const [stakeStatus, setStakeStatus] = useState();
+  const [poolStatus, setPoolStatus] = useState();
+
+  const [triggerRender, setTriggerRender] = useState({});
+
+  const getPoolStatus = () => {
+    const now = DateTime.now().toSeconds();
+    let status = poolStatuses[0];
+    if (now > props.stakingStart * 1 && now <= props.stakingEnds * 1) {
+      status = poolStatuses[1];
+    } else if (now > props.stakingEnds * 1 && now <= props.earlyWithdraw * 1) {
+      status = poolStatuses[2];
+    } else if (now > props.earlyWithdraw * 1) {
+      status = poolStatuses[3];
+    }
+    setPoolStatus(status);
+    setTriggerRender({});
+  };
+
+  const tasks = useMemo(() => {
+    const tasksTmp = [[getPoolStatus, 0]];
+    if (getChangeTime(Number(props.stakingStart)) > 0) {
+      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.stakingStart))]);
+      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.stakingEnds), Number(props.stakingStart))]);
+      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.earlyWithdraw), Number(props.stakingEnds))]);
+    } else {
+      if (getChangeTime(Number(props.stakingEnds)) > 0) {
+        tasksTmp.push([getPoolStatus, getChangeTime(Number(props.stakingEnds))]);
+        tasksTmp.push([getPoolStatus, getChangeTime(Number(props.earlyWithdraw), Number(props.stakingEnds))]);
+      } else {
+        if (getChangeTime(Number(props.earlyWithdraw)) > 0) {
+          tasksTmp.push([getPoolStatus, getChangeTime(Number(props.earlyWithdraw))]);
+        }
+      }
+    }
+
+    return tasksTmp;
+  }, [props.stakingEnds, props.earlyWithdraw]);
 
   const getTierReward = useCallback(() => {
     let tierCode = tierList[0].code;
@@ -44,20 +90,32 @@ const StakeView = () => {
   }, [yourStakedBalance]);
 
   const getStakeStatus = useCallback(() => {
-    if (props.stakingCap === props.stakedBalance) {
+    if (props.stakingCap === props.stakedBalance || (!!poolStatus && poolStatuses.indexOf(poolStatus) > 1)) {
       setStakeStatus(stakeStatuses[1]);
     } else {
       setStakeStatus(stakeStatuses[0]);
     }
-  }, [props.stakedBalance, props.stakingCap]);
+  }, [poolStatus, props.stakedBalance, props.stakingCap]);
 
-  useLayoutEffect(() => {
-    getTierReward();
-  }, [getTierReward]);
+  useEffect(() => {
+    const task = tasks.shift();
+    if (!task) return;
+
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(...task);
+
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, [tasks, triggerRender]);
 
   useEffect(() => {
     getStakeStatus();
   }, [getStakeStatus]);
+
+  useLayoutEffect(() => {
+    getTierReward();
+  }, [getTierReward]);
 
   const sliderRef = useRef(null);
 
@@ -87,7 +145,7 @@ const StakeView = () => {
           {stakeStatus ?? ''}
         </div>
         <div className='grid grid-cols-2 gap-5 mb-9 w-full'>
-          <Stake />
+          <Stake poolStatus={poolStatus} />
           <PoolInfor />
         </div>
         <div

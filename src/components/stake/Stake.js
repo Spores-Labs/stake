@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import './Stake.css';
 import BigNumber from 'bignumber.js';
 import { TextField, styled, Button, Dialog, Divider, CircularProgress } from '@mui/material';
@@ -8,9 +8,7 @@ import { useSnackbar } from 'notistack';
 import CloseButton from '../common/CloseButton';
 import { useMutation } from 'react-query';
 import { Close, Done, WarningRounded } from '@mui/icons-material';
-import { DateTime } from 'luxon';
-import { tierList } from '../StakeView/StakeView';
-import { useMemo } from 'react';
+import { poolStatuses, tierList } from '../StakeView/StakeView';
 import { useSelector } from 'react-redux';
 import { profileSelector } from '../../reducers/profile';
 import { contractInfosSelector } from '../../reducers/contractInfos';
@@ -42,8 +40,6 @@ const CustomDialog = styled(Dialog)`
     padding: 45px 60px 40px 60px;
   }
 `;
-
-const statuses = ['waiting', 'live', 'lock', 'expired'];
 
 const StakingStage = ({ title, description, loading, success, error, handleRetry }) => (
   <div className='flex gap-8 mb-6'>
@@ -80,65 +76,15 @@ const GroupInfo = ({ title, value, border }) => (
   </div>
 );
 
-const getChangeTime = (nextTime) => {
-  return (nextTime - DateTime.now().toSeconds()) * 1000;
-};
-
-const Stake = () => {
+const Stake = ({ poolStatus }) => {
   const { isLoggedIn, address, balance, yourStakedBalance } = useSelector(profileSelector);
   const props = useSelector(contractInfosSelector);
   const { enqueueSnackbar } = useSnackbar();
   const { control, watch, setValue, handleSubmit, reset: resetInput } = useForm({ mode: 'onChange' });
   const { amount } = watch();
-  const timerRef = useRef();
   const [openPopupStake, setOpenPopupStake] = useState(false);
   const [openPopupUnstake, setOpenPopupUnstake] = useState(false);
   const [openPopupUnstakeSuccess, setOpenPopupUnstakeSuccess] = useState(false);
-  const [poolStatus, setPoolStatus] = useState();
-
-  const [triggerRender, setTriggerRender] = useState({});
-
-  const getPoolStatus = () => {
-    const now = DateTime.now().toSeconds();
-    let status = statuses[0];
-    if (now > props.stakingStart * 1 && now <= props.stakingEnds * 1) {
-      status = statuses[1];
-    } else if (now > props.stakingEnds * 1 && now <= props.earlyWithdraw * 1) {
-      status = statuses[2];
-    } else if (now > props.earlyWithdraw * 1) {
-      status = statuses[3];
-    }
-    setPoolStatus(status);
-    setTriggerRender({});
-  };
-
-  const tasks = useMemo(() => {
-    const tasksTmp = [[getPoolStatus, 0]];
-    if (getChangeTime(Number(props.stakingStart)) > 0) {
-      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.stakingStart))]);
-    }
-
-    if (getChangeTime(Number(props.stakingEnds)) > 0) {
-      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.stakingEnds))]);
-    }
-    if (getChangeTime(Number(props.earlyWithdraw)) > 0) {
-      tasksTmp.push([getPoolStatus, getChangeTime(Number(props.earlyWithdraw))]);
-    }
-
-    return tasksTmp;
-  }, [props.stakingEnds, props.earlyWithdraw]);
-
-  useEffect(() => {
-    const task = tasks.shift();
-    if (!task) return;
-
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(...task);
-
-    return () => {
-      clearTimeout(timerRef.current);
-    };
-  }, [tasks, triggerRender]);
 
   const {
     mutate: approve,
@@ -288,7 +234,7 @@ const Stake = () => {
     <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10 }}>
       {isLoggedIn ? (
         <>
-          {(poolStatus === statuses[0] || poolStatus === statuses[1]) && (
+          {(poolStatus === poolStatuses[0] || poolStatus === poolStatuses[1]) && (
             <>
               <Controller
                 name='amount'
@@ -342,7 +288,7 @@ const Stake = () => {
                 }}
               />
               <div className='flex justify-between items-center'>
-                {poolStatus === statuses[0] ? (
+                {poolStatus === poolStatuses[0] ? (
                   <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
                     STAKE NOW
                   </DesignButton>
@@ -365,7 +311,7 @@ const Stake = () => {
               </div>
             </>
           )}
-          {poolStatus === statuses[2] && (
+          {poolStatus === poolStatuses[2] && (
             <>
               <div className='grid grid-cols-3 gap-5 mb-4'>
                 <GroupInfo title='Staked Amount (OKG)' value='-' border />
@@ -377,7 +323,7 @@ const Stake = () => {
               </DesignButton>
             </>
           )}
-          {poolStatus === statuses[3] && (
+          {poolStatus === poolStatuses[3] && (
             <>
               <div className='grid grid-cols-3 gap-5 mb-4'>
                 <GroupInfo title='Staked Amount (OKG)' value={yourStakedBalance.toLocaleString('en-EN')} border />
