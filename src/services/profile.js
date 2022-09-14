@@ -1,4 +1,4 @@
-import { stakingContract, tokenNPO } from '../artifacts/contracts';
+import { stakingContract, tokenNPO } from '../artifacts/contracts/contractHandler';
 import { store } from '../reducers';
 import { updateInfosProfile } from '../reducers/profile';
 

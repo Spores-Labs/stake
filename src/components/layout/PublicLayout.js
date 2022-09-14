@@ -1,7 +1,7 @@
 import { CircularProgress, Dialog, styled, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useEffect, useState } from 'react';
-import { web3 } from '../../artifacts/contracts';
+import { web3 } from '../../artifacts/contracts/contractHandler';
 import { store } from '../../reducers';
 import { signIn } from '../../reducers/profile';
 import { getContractInfos } from '../../services/contract';

@@ -1,4 +1,4 @@
-import { stakingContract } from '../artifacts/contracts';
+import { stakingContract } from '../artifacts/contracts/contractHandler';
 import { store } from '../reducers';
 import { updateContractInfos } from '../reducers/contractInfos';
 

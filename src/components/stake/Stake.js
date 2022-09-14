@@ -17,7 +17,7 @@ import { contractInfosSelector } from '../../reducers/contractInfos';
 import { connectWallet } from '../../services/wallet';
 import { updateInfosProfileService } from '../../services/profile';
 import { getContractInfos } from '../../services/contract';
-import { stakingContract, tokenNPO } from '../../artifacts/contracts';
+import { stakingContract, tokenNPO } from '../../artifacts/contracts/contractHandler';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
