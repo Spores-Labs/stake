@@ -35,6 +35,52 @@ const getChangeTime = (nextTime, prevTime = DateTime.now().toSeconds()) => {
   return (nextTime - prevTime) * 1000;
 };
 
+const accordContents = [
+  {
+    title: '1.What is OKG staking pool? ',
+    description:
+      'OKG staking pool is the program to reward for long term OKG holders by offering the high earning yields by OKG token.\n\nIn addition, the benefits from OKG staking program are not only from the OKG token rewards (APR) but also the bonus valuable in-game items.\n\nItem rewards scheme here.',
+  },
+  {
+    title: '2. How can I receive the OKG token rewards?',
+    description:
+      'Rewards will be calculated based on your staked amount, then automatically added when you un-stake your token at the expiry time.\n\nYour reward = Your Staked Amount * APR / 365\n\nAPR is up to ....%. APR is totally dependent on the total amount of investment in the pool.',
+  },
+  {
+    title: '3. How can I receive the in-game item rewards?',
+    description:
+      'The in-game item rewards will be transferred into your game account which linked your wallet after the game launched.\n\nMore details about the use of items here.',
+  },
+  {
+    title: '4. When can I un-stake my OKG token?',
+    description: 'You are able to un-stake your token at the expiry time.',
+  },
+  {
+    title: '5. How to stake?',
+    description:
+      'Step 1. Go to OKG staking page (hyperlink: .....)\nStep 2. Connect your crypto wallet\nStep 3. Input amount to stake\nStep 4: Sign on metamask to confirm the transaction',
+  },
+  {
+    title: '6. How to unstake?',
+    description:
+      'Step 1. Go to OKG staking page (hyperlink: .....)\nStep 2. Connect your crypto wallet\nStep 3. Click unstake\nStep 4: Sign on metamask to confirm the transaction',
+  },
+];
+
+const SingleAccord = ({ title, description }) => (
+  <CustomAccord className='bg-color-browny shadow-none'>
+    <AccordionSummary className='font-black text-xl p-0' expandIcon={<ExpandMore className='text-white' />}>
+      {title}
+    </AccordionSummary>
+    <AccordionDetails
+      className='rounded-lg p-8 text-color-secondary whitespace-pre-wrap'
+      style={{ background: '#463831', border: '1px solid #7B593A' }}
+    >
+      {description}
+    </AccordionDetails>
+  </CustomAccord>
+);
+
 const StakeView = () => {
   const { yourStakedBalance } = useSelector(profileSelector);
   const props = useSelector(contractInfosSelector);
@@ -261,21 +307,9 @@ const StakeView = () => {
           FAQs
         </div>
         <div className='bg-color-browny px-8 py-5' style={{ borderRadius: 10, maxWidth: 1120 }}>
-          <CustomAccord className='bg-color-browny shadow-none'>
-            <AccordionSummary className='font-black text-xl p-0' expandIcon={<ExpandMore className='text-white' />}>
-              1. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-            </AccordionSummary>
-            <AccordionDetails
-              className='rounded-lg p-8 text-color-secondary'
-              style={{ background: '#463831', border: '1px solid #7B593A' }}
-            >
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Amet minim mollit non deserunt
-              ullamco est sit aliqua dolor do amet sint. Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Amet minim mollit non
-              deserunt ullamco est sit aliqua dolor do amet sint. Amet minim mollit non deserunt ullamco est sit aliqua
-              dolor do amet sint.
-            </AccordionDetails>
-          </CustomAccord>
+          {accordContents.map((accord, index) => (
+            <SingleAccord key={index} title={accord.title} description={accord.description} />
+          ))}
         </div>
       </Container>
     </div>
