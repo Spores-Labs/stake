@@ -2,6 +2,8 @@ import { CircularProgress, Dialog, styled, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useEffect, useState } from 'react';
 import { web3 } from '../../artifacts/contracts';
+import { store } from '../../reducers';
+import { signIn } from '../../reducers/profile';
 import { getContractInfos } from '../../services/contract';
 import { connectProvider } from '../../services/wallet';
 import DesignButton from '../common/DesignButton';
@@ -55,6 +57,13 @@ const PublicLayout = ({ children }) => {
   useEffect(() => {
     secondLoad();
   }, [secondLoad]);
+
+  useEffect(() => {
+    const profile = JSON.parse(localStorage.getItem('profile'));
+    if (!!profile) {
+      store.dispatch(signIn(profile));
+    }
+  }, []);
 
   const handleConnectBinance = async () => {
     try {

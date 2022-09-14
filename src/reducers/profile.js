@@ -8,11 +8,11 @@ export const profileSlice = createSlice({
       return { ...state, ...profile };
     },
     signIn: (state, { payload: profile }) => {
-      // localStorage.setItem('profile', JSON.stringify(profile));
+      localStorage.setItem('profile', JSON.stringify(profile));
       return { ...state, ...profile, isLoggedIn: true };
     },
     signOut: () => {
-      // localStorage.removeItem('profile');
+      localStorage.removeItem('profile');
       return { isLoggedIn: false };
     },
   },
