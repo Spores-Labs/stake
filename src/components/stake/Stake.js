@@ -280,6 +280,10 @@ const Stake = ({ poolStatus }) => {
                             </div>
                           ),
                           type: 'number',
+                          onKeyDown: (el) => {
+                            if (el.which === 189 || el.which === 190 || el.which === 109 || el.which === 110)
+                              el.preventDefault();
+                          },
                         }}
                       />
                       {invalid && <div className='text-red-500 text-tiny md:text-sm mt-1'>{mes}</div>}
