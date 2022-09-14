@@ -88,7 +88,7 @@ const Stake = () => {
   const { isLoggedIn, address, balance, yourStakedBalance } = useSelector(profileSelector);
   const props = useSelector(contractInfosSelector);
   const { enqueueSnackbar } = useSnackbar();
-  const { control, watch, setValue, handleSubmit } = useForm({ mode: 'onChange' });
+  const { control, watch, setValue, handleSubmit, reset: resetInput } = useForm({ mode: 'onChange' });
   const { amount } = watch();
   const timerRef = useRef();
   const [openPopupStake, setOpenPopupStake] = useState(false);
@@ -440,6 +440,7 @@ const Stake = () => {
               size='large'
               onClick={() => {
                 onClosePopupStake();
+                resetInput();
                 updateInfosProfileService(address);
                 getContractInfos();
               }}
