@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { web3 } from '../artifacts/contracts/contractHandler';
+import { web3 } from '../contractHandler/contractHandler';
 import { store } from '../reducers';
 import { signIn, signOut } from '../reducers/profile';
 import { updateInfosProfileService } from './profile';
