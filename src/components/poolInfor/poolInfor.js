@@ -61,7 +61,7 @@ const PoolInfor = () => {
           </Tooltip>
         </div>
         <div
-          className='text-5xl font-extrabold bg-clip-text text-transparent break-all'
+          className='text-huge font-extrabold bg-clip-text text-transparent break-all'
           style={{
             background: '-webkit-linear-gradient(180deg, #FFF7EA 0%, #A36C02 100%)',
           }}

@@ -315,19 +315,7 @@ const Stake = ({ poolStatus }) => {
               </div>
             </>
           )}
-          {poolStatus === poolStatuses[2] && (
-            <>
-              <div className='grid grid-cols-3 gap-5 mb-4'>
-                <GroupInfo title='Staked Amount (OKG)' value='-' border />
-                <GroupInfo title='Pending Rewards (OKG)' value='-' border />
-                <GroupInfo title='Reward to receive' value='-' />
-              </div>
-              <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
-                UNSTAKE
-              </DesignButton>
-            </>
-          )}
-          {poolStatus === poolStatuses[3] && (
+          {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
             <>
               <div className='grid grid-cols-3 gap-5 mb-4'>
                 <GroupInfo title='Staked Amount (OKG)' value={yourStakedBalance.toLocaleString('en-EN')} border />
@@ -338,16 +326,22 @@ const Stake = ({ poolStatus }) => {
                 />
                 <GroupInfo title='Reward to receive' value={getTierReward()} />
               </div>
-              <DesignButton
-                fullWidth
-                design='yellow'
-                size='large'
-                imageSize='small'
-                className='w-44'
-                onClick={() => setOpenPopupUnstake(true)}
-              >
-                UNSTAKE
-              </DesignButton>
+              {poolStatus === poolStatuses[2] ? (
+                <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
+                  UNSTAKE
+                </DesignButton>
+              ) : (
+                <DesignButton
+                  fullWidth
+                  design='yellow'
+                  size='large'
+                  imageSize='small'
+                  className='w-44'
+                  onClick={() => setOpenPopupUnstake(true)}
+                >
+                  UNSTAKE
+                </DesignButton>
+              )}
             </>
           )}
         </>

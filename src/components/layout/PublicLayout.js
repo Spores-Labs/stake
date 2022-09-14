@@ -5,6 +5,7 @@ import { web3 } from '../../contractHandler/contractHandler';
 import { store } from '../../reducers';
 import { signIn } from '../../reducers/profile';
 import { getContractInfos } from '../../services/contract';
+import { updateInfosProfileService } from '../../services/profile';
 import { connectProvider } from '../../services/wallet';
 import DesignButton from '../common/DesignButton';
 
@@ -62,6 +63,7 @@ const PublicLayout = ({ children }) => {
     const profile = JSON.parse(localStorage.getItem('profile'));
     if (!!profile) {
       store.dispatch(signIn(profile));
+      updateInfosProfileService(profile.address);
     }
   }, []);
 
