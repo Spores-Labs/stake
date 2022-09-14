@@ -1,19 +1,162 @@
 import React from 'react';
 import './header.css';
-function Header() {
-  const txLink = `https://bscscan.com/address/#tokentxns`;
+import { Close, Menu as MenuIcon, AccountBalanceWallet } from '@mui/icons-material';
+import {
+  AppBar,
+  Button,
+  Container,
+  IconButton,
+  ListItemButton,
+  Menu,
+  MenuItem,
+  MenuList,
+  Modal,
+  Toolbar,
+} from '@mui/material';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { shorten } from '../../utils/common';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import useAnchor from '../../hooks/useAnchor';
+import { connectWallet } from '../../services/wallet';
+import { profileSelector, signOut } from '../../reducers/profile';
+
+const HeaderItem = ({ url, state, ...props }) => {
+  return url ? (
+    <ListItemButton
+      className='flex justify-center font-bold text-2xl md:text-lg text-color-primary rounded'
+      {...props}
+    />
+  ) : (
+    <ListItemButton
+      className='flex justify-center font-bold text-2xl md:text-lg text-color-primary rounded'
+      {...props}
+    />
+  );
+};
+
+const Header = () => {
+  const dispatch = useDispatch();
+  const { isLoggedIn, address } = useSelector(profileSelector);
+  const { isMobile } = useWindowDimensions();
+  const [anchorEl, open, onOpen, onClose] = useAnchor();
+  const [openPopup, setOpenPopup] = useState(false);
+
+  const handleClosePopop = () => {
+    setOpenPopup(false);
+  };
 
   return (
-    <header className='header'>
-      <img className='logo' src='https://imgur.com/Qxw1soD.jpeg' alt='logo'></img>
-      <a href={txLink} className='links' target='_blank' rel='noreferrer'>
-        Transaction
-      </a>
-      <a href='https://staking.spores.app' className='links'>
-        Staking Options
-      </a>
-    </header>
+    <AppBar style={{ background: '#3C2C19CC', borderBottom: '1px solid #6C6C6C', backdropFilter: 'blur(8px)' }}>
+      <Toolbar component={Container} className='custom-container'>
+        <img src='/assets/images/logo-header.png' alt='logo' className='h-7 mb-1' />
+        {isMobile ? (
+          <>
+            <div className='flex-1' />
+            <IconButton onClick={() => setOpenPopup(true)}>
+              <MenuIcon />
+            </IconButton>
+
+            <Modal open={openPopup} onClose={handleClosePopop} style={{ background: '#170A02E5' }}>
+              <>
+                <div className='flex justify-end mb-1'>
+                  <IconButton onClick={handleClosePopop}>
+                    <Close />
+                  </IconButton>
+                </div>
+                <div className='flex items-center justify-center h-full'>
+                  <MenuList className='flex flex-col gap-10'>
+                    {/* <HeaderItem url={publicRoute.breeding.path} onClick={handleClosePopop}>
+                      Breeding
+                    </HeaderItem> */}
+                    {isLoggedIn ? (
+                      <HeaderItem
+                        onClick={() => {
+                          dispatch(signOut());
+                          handleClosePopop();
+                        }}
+                      >
+                        Disconnect
+                      </HeaderItem>
+                    ) : (
+                      <HeaderItem
+                        onClick={async () => {
+                          await connectWallet();
+                          handleClosePopop();
+                        }}
+                      >
+                        Connect Wallet
+                      </HeaderItem>
+                    )}
+                  </MenuList>
+                </div>
+              </>
+            </Modal>
+          </>
+        ) : (
+          <>
+            <MenuList className='flex flex-row gap-3 ml-6'>
+              {/* <HeaderItem url={publicRoute.marketplace.path}>Marketplace</HeaderItem> */}
+            </MenuList>
+            <div className='flex-1' />
+
+            {isLoggedIn ? (
+              <>
+                <Button
+                  variant='outlined'
+                  className='flex justify-between bg-color-brown text-color-secondary text-lg w-64 h-10 px-5'
+                  onClick={onOpen}
+                  style={{ border: '1px solid #966740' }}
+                >
+                  {shorten(address)}
+                  <AccountBalanceWallet />
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  PaperProps={{
+                    sx: {
+                      overflow: 'visible',
+                      backgroundColor: '#463024',
+                      border: '1px solid #966740',
+                      marginTop: 1.5,
+                      width: 256,
+                      '&:before': {
+                        ...{ content: '""', display: 'block', zIndex: 0 },
+                        ...{ position: 'absolute', top: 0, right: 14, width: 10, height: 10 },
+                        ...{ borderWidth: 1, borderColor: '#966740', borderBottom: 0, borderRight: 0 },
+                        backgroundColor: '#5c493e',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                      },
+                    },
+                  }}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  open={open}
+                  onClose={onClose}
+                  onClick={onClose}
+                >
+                  <MenuItem className='text-color-primary' onClick={() => dispatch(signOut())}>
+                    Disconnect
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant='outlined'
+                  className='bg-color-brown text-color-caption w-48 h-10'
+                  onClick={() => connectWallet()}
+                  style={{ border: '1px solid #966740' }}
+                >
+                  Connect Wallet
+                </Button>
+              </>
+            )}
+          </>
+        )}
+      </Toolbar>
+    </AppBar>
   );
-}
+};
 
 export default Header;

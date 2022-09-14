@@ -73,7 +73,7 @@ const StakeView = () => {
 
   return (
     <div style={{ background: `url('/assets/images/background-staking.png') no-repeat center top / 100%` }}>
-      <Container className='flex flex-col items-center py-28 text-color-secondary' style={{ maxWidth: 1364 }}>
+      <Container className='flex flex-col items-center py-28 text-color-secondary custom-container'>
         <div className='font-skadi text-giant'>OKG STAKING</div>
         <div
           className='flex justify-center items-center font-bold mb-16 capitalize'

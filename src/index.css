@@ -51,3 +51,7 @@ code {
   text-transform: none !important;
   font-family: Avenir;
 }
+
+.custom-container {
+  max-width: 1364px!important;
+}
