@@ -231,8 +231,8 @@ const Stake = ({ poolStatus }) => {
   };
 
   useEffect(() => {
-    resetInput()
-  },[address, resetInput])
+    resetInput();
+  }, [address, resetInput]);
 
   return (
     <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10, minHeight: 202.5 }}>
@@ -457,6 +457,9 @@ const Stake = ({ poolStatus }) => {
             imageSize='large'
             onClick={() => {
               setOpenPopupUnstakeSuccess(false);
+              resetInput();
+              updateInfosProfileService(address);
+              getContractInfos();
             }}
           >
             DONE
