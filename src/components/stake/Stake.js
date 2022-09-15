@@ -332,7 +332,7 @@ const Stake = ({ poolStatus }) => {
                   value={Number(getOKGReward()) === 0 ? '-' : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))}
                   border
                 />
-                <GroupInfo title='Reward to receive' value={getTierReward()} />
+                <GroupInfo title='Reward to receive' value={Number(yourStakedBalance) === 0 ? '-' : getTierReward()} />
               </div>
               {poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
                 <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
@@ -416,11 +416,11 @@ const Stake = ({ poolStatus }) => {
           >
             <div className='flex justify-between'>
               <div className='text-color-primary'>Unstake amount</div>
-              <div className='font-extrabold'>{`${yourStakedBalance} OKG`}</div>
+              <div className='font-extrabold'>{`${yourStakedBalance.toLocaleString('en-EN')} OKG`}</div>
             </div>
             <div className='flex justify-between'>
               <div className='text-color-primary'>Rewards</div>
-              <div className='font-extrabold'>{`${getOKGReward()} OKG`}</div>
+              <div className='font-extrabold'>{`${Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))} OKG`}</div>
             </div>
           </div>
           <div className='text-color-primary flex gap-2.5 mb-6'>
