@@ -6,9 +6,9 @@ import { updateInfosProfileService } from './profile';
 
 export const connectProvider = async () => {
   const provider = Web3.givenProvider;
-  provider.on('accountsChanged', () => {
+  provider.on('accountsChanged', async(acc) => {
     store.dispatch(signOut());
-    window.location.reload();
+    // window.location.reload();
   });
   provider.on('disconnect', () => {
     store.dispatch(signOut());

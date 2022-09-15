@@ -12,7 +12,7 @@ export const getContractInfos = async () => {
     stakingStart,
     stakingEnds,
     maturityAt,
-    rewardState,
+    // rewardState,
   ] = await Promise.all([
     new Promise(function (resolve, reject) {
       stakingContract.methods.name().call((error, result) => {
@@ -55,11 +55,11 @@ export const getContractInfos = async () => {
         resolve(result);
       });
     }),
-    new Promise(function (resolve, reject) {
-      stakingContract.methods.rewardState().call((error, result) => {
-        resolve(result);
-      });
-    }),
+    // new Promise(function (resolve, reject) {
+    //   stakingContract.methods.rewardState().call((error, result) => {
+    //     resolve(result);
+    //   });
+    // }),
   ]);
   store.dispatch(
     updateContractInfos({
@@ -71,7 +71,7 @@ export const getContractInfos = async () => {
       stakingStart,
       stakingEnds,
       maturityAt,
-      rewardState,
+      // rewardState,
     }),
   );
 };

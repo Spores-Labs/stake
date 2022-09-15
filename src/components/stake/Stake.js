@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Stake.css';
 import BigNumber from 'bignumber.js';
 import { TextField, styled, Button, Dialog, Divider, CircularProgress } from '@mui/material';
@@ -229,6 +229,10 @@ const Stake = ({ poolStatus }) => {
   const onClosePopupUnstake = () => {
     setOpenPopupUnstake(false);
   };
+
+  useEffect(() => {
+    resetInput()
+  },[address, resetInput])
 
   return (
     <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10, minHeight: 202.5 }}>

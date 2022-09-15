@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const defaultState = { address: '', yourStakedBalance: '0', balance: '0' };
+
 export const profileSlice = createSlice({
   name: 'profile',
-  initialState: { address: '', yourStakedBalance: '0', balance: '0' },
+  initialState: defaultState,
   reducers: {
     updateInfosProfile: (state, { payload: profile }) => {
       return { ...state, ...profile };
@@ -13,7 +15,7 @@ export const profileSlice = createSlice({
     },
     signOut: () => {
       localStorage.removeItem('profile');
-      return { isLoggedIn: false };
+      return { ...defaultState, isLoggedIn: false };
     },
   },
 });
