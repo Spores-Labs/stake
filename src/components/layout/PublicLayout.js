@@ -34,22 +34,26 @@ const APP_NETWORK =
       };
 
 const PublicLayout = ({ children }) => {
-  const [formVisibility, setFormVisibility] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [isWrongNetwork, setIsWrongNetwork] = useState(false);
 
   const getNetwork = async () => {
     const netId = await web3.eth.net.getId();
-    setFormVisibility(netId === Number(process.env.REACT_APP_NETWORK_VERSION));
+    const isRightNet = netId === Number(process.env.REACT_APP_NETWORK_VERSION);
+    setIsReady(isRightNet);
+    setIsWrongNetwork(!isRightNet);
   };
+
   const firstLoad = useCallback(async () => {
     await connectProvider();
     await getNetwork();
   }, []);
 
   const secondLoad = useCallback(async () => {
-    if (formVisibility) {
+    if (isReady) {
       await getContractInfos();
     }
-  }, [formVisibility]);
+  }, [isReady]);
 
   useEffect(() => {
     firstLoad();
@@ -86,7 +90,7 @@ const PublicLayout = ({ children }) => {
   return (
     <div className='wrapper'>
       {children}
-      <CustomDialog fullWidth maxWidth='xs' open={!formVisibility}>
+      <CustomDialog fullWidth maxWidth='xs' open={isWrongNetwork}>
         <div className='flex flex-col items-center py-8'>
           <CircularProgress style={{ color: 'rgb(150, 103, 64)' }} />
           <Typography variant='h3' className='mt-4 mb-2'>

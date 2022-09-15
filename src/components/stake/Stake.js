@@ -231,7 +231,7 @@ const Stake = ({ poolStatus }) => {
   };
 
   return (
-    <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10 }}>
+    <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10, minHeight: 202.5 }}>
       {isLoggedIn ? (
         <>
           {(poolStatus === poolStatuses[0] || poolStatus === poolStatuses[1]) && (
