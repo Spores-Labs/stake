@@ -322,15 +322,19 @@ const Stake = ({ poolStatus }) => {
           {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
             <>
               <div className='grid grid-cols-3 gap-5 mb-4'>
-                <GroupInfo title='Staked Amount (OKG)' value={yourStakedBalance.toLocaleString('en-EN')} border />
+                <GroupInfo
+                  title='Staked Amount (OKG)'
+                  value={Number(yourStakedBalance) === 0 ? '-' : yourStakedBalance.toLocaleString('en-EN')}
+                  border
+                />
                 <GroupInfo
                   title='Pending Rewards (OKG)'
-                  value={Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))}
+                  value={Number(getOKGReward()) === 0 ? '-' : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))}
                   border
                 />
                 <GroupInfo title='Reward to receive' value={getTierReward()} />
               </div>
-              {poolStatus === poolStatuses[2] ? (
+              {poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
                 <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
                   UNSTAKE
                 </DesignButton>
