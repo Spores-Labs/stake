@@ -1,13 +1,29 @@
 import Web3 from 'web3';
 import { web3 } from '../contractHandler/contractHandler';
 import { store } from '../reducers';
-import { signIn, signOut, updateInfosProfile } from '../reducers/profile';
+import { signIn, signOut } from '../reducers/profile';
 import { updateInfosProfileService } from './profile';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import Web3Modal from 'web3modal';
 
 export const connectProvider = async () => {
-  const provider = Web3.givenProvider || 'https://data-seed-prebsc-2-s2.binance.org:8545';
-  if (typeof window.ethereum !== 'undefined') {
+  try {
+    const providerOptions = {
+      walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+          rpc: { 97: 'https://data-seed-prebsc-2-s2.binance.org:8545', 56: 'https://bsc-dataseed1.binance.org' },
+        },
+      },
+    };
+    const web3Modal = new Web3Modal({
+      providerOptions,
+      theme: 'dark',
+      cacheProvider: false,
+    });
+    const provider = Web3.givenProvider || (await web3Modal.connect());
     provider.on('accountsChanged', async (acc) => {
+      console.log(acc, 'shit');
       store.dispatch(signOut());
     });
     provider.on('disconnect', () => {
@@ -17,15 +33,18 @@ export const connectProvider = async () => {
     provider.on('chainChanged', () => {
       window.location.reload();
     });
+
+    web3.setProvider(provider);
+  } catch (e) {
+    console.log(e);
   }
-  web3.setProvider(provider);
 };
 
 export const connectWallet = async () => {
-  if (typeof window.ethereum === 'undefined') {
-    store.dispatch(updateInfosProfile({ isInstalled: false }));
-    return;
-  }
+  // if (typeof window.ethereum === 'undefined') {
+  //   store.dispatch(updateInfosProfile({ isInstalled: false }));
+  //   return;
+  // }
   try {
     await connectProvider();
     let address;
