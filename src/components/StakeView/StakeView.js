@@ -245,10 +245,10 @@ const StakeView = () => {
           <PoolInfor />
         </div>
         <div
-          className='py-7 md:py-16 px-8 md:px-32'
+          className='py-8 md:py-16 px-8 md:px-32'
           style={{
             background: `url('/assets/images/background-bonus.png') no-repeat center top / 100% 100%`,
-            height: isMobile ? 588 : 743,
+            height: isMobile ? 'auto' : 743,
             width: '100%',
           }}
         >
