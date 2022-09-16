@@ -16,6 +16,7 @@ import { connectWallet } from '../../services/wallet';
 import { updateInfosProfileService } from '../../services/profile';
 import { getContractInfos } from '../../services/contract';
 import { stakingContract, tokenNPO } from '../../contractHandler/contractHandler';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
@@ -29,6 +30,10 @@ const AmountField = styled(TextField)`
     font-size: 24px;
     color: #392609;
     padding: 8px 16px;
+    @media (max-width: 800px) {
+      font-size: 20x;
+      padding: 16px;
+    }
   }
 `;
 
@@ -38,45 +43,60 @@ const CustomDialog = styled(Dialog)`
     background-size: 100% 100%;
     width: 512px;
     padding: 45px 60px 40px 60px;
+    @media (max-width: 800px) {
+      width: 300px;
+      padding: 34px 27px 34px 27px;
+    }
   }
 `;
 
-const StakingStage = ({ title, description, loading, success, error, handleRetry }) => (
-  <div className='flex gap-8 mb-6'>
-    <div>
-      {!loading && !success && !error && (
-        <CircularProgress variant='determinate' sx={{ color: '#1C0B02' }} size={30} thickness={4} value={100} />
-      )}
-      {loading && <CircularProgress sx={{ color: '#F9B300' }} size={30} thickness={4} />}
-      {success && <Done sx={{ color: '#6FAF51', fontSize: 30 }} />}
-      {error && <Close sx={{ color: '#FF613F', fontSize: 30 }} />}
-    </div>
-    <div className='flex flex-col gap-1'>
-      <div className='text-xl font-black'>{title}</div>
-      <div className='text-color-primary font-semibold' style={{ fontSize: 15 }}>
-        {description}
+const StakingStage = ({ title, description, loading, success, error, handleRetry }) => {
+  const { isMobile } = useWindowDimensions();
+
+  return (
+    <div className='flex gap-8 mb-4 md:mb-6'>
+      <div>
+        {!loading && !success && !error && (
+          <CircularProgress
+            variant='determinate'
+            sx={{ color: '#1C0B02' }}
+            size={isMobile ? 24 : 30}
+            thickness={4}
+            value={100}
+          />
+        )}
+        {loading && <CircularProgress sx={{ color: '#F9B300' }} size={isMobile ? 24 : 30} thickness={4} />}
+        {success && <Done sx={{ color: '#6FAF51', fontSize: isMobile ? 24 : 30 }} />}
+        {error && <Close sx={{ color: '#FF613F', fontSize: isMobile ? 24 : 30 }} />}
       </div>
-      {error && (
-        <Button
-          variant='outlined'
-          className='w-20 text-xs text-color-secondary border-color-secondary px-3 mt-1'
-          onClick={handleRetry}
-        >
-          Try again
-        </Button>
-      )}
+      <div className='flex flex-col gap-1'>
+        <div className='md:text-xl font-black'>{title}</div>
+        <div className='text-color-primary font-semibold text-xs md:text-base' style={{ fontSize: 15 }}>
+          {description}
+        </div>
+        {error && (
+          <Button
+            variant='outlined'
+            className='w-20 text-xs text-color-secondary border-color-secondary px-3 mt-1'
+            onClick={handleRetry}
+          >
+            Try again
+          </Button>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const GroupInfo = ({ title, value, border }) => (
   <div className='flex flex-col gap-2' style={{ borderRight: border ? '1px solid #F1E9DC' : '', fontSize: 15 }}>
-    <div className='font-semibold'>{title}</div>
-    <div className='font-black text-2xl'>{value}</div>
+    <div className='font-semibold text-xs md:text-base h-8 md:h-auto'>{title}</div>
+    <div className='font-black text-xl md:text-2xl'>{value}</div>
   </div>
 );
 
 const Stake = ({ poolStatus }) => {
+  const { isMobile } = useWindowDimensions();
   const { isLoggedIn, address, balance, yourStakedBalance } = useSelector(profileSelector);
   const props = useSelector(contractInfosSelector);
   const { enqueueSnackbar } = useSnackbar();
@@ -203,7 +223,14 @@ const Stake = ({ poolStatus }) => {
   };
 
   const ButtonLogin = () => (
-    <DesignButton fullWidth design='yellow' size='large' imageSize='small' className='w-56' onClick={connectWallet}>
+    <DesignButton
+      fullWidth
+      design='yellow'
+      size={isMobile ? 'medium' : 'large'}
+      imageSize={isMobile ? 'medium' : 'small'}
+      className='w-56'
+      onClick={connectWallet}
+    >
       CONNECT WALLET
     </DesignButton>
   );
@@ -235,7 +262,10 @@ const Stake = ({ poolStatus }) => {
   }, [address, resetInput]);
 
   return (
-    <div className='bg-color-primary p-8 text-color-greyish' style={{ borderRadius: 10, minHeight: 202.5 }}>
+    <div
+      className='bg-color-primary p-4 md:p-8 text-color-greyish'
+      style={{ borderRadius: 10, minHeight: isMobile ? 160 : 202.5 }}
+    >
       {isLoggedIn ? (
         <>
           {(poolStatus === poolStatuses[0] || poolStatus === poolStatuses[1]) && (
@@ -258,7 +288,7 @@ const Stake = ({ poolStatus }) => {
 
                   return (
                     <div className='mb-4'>
-                      <div className='text-xl font-black mb-1'>AMOUNT TO STAKE*</div>
+                      <div className='md:text-xl font-black mb-2 md:mb-1'>AMOUNT TO STAKE*</div>
                       <AmountField
                         {...field}
                         fullWidth
@@ -269,7 +299,7 @@ const Stake = ({ poolStatus }) => {
                         InputProps={{
                           endAdornment: (
                             <div
-                              className='flex gap-2 pr-5 text-xl font-avenir font-bold items-center '
+                              className='flex gap-2 md:pr-5 text-xl font-avenir font-bold items-center '
                               style={{ color: '#392609' }}
                             >
                               <Button
@@ -285,7 +315,14 @@ const Stake = ({ poolStatus }) => {
                           ),
                           type: 'number',
                           onKeyDown: (el) => {
-                            if (el.which === 189 || el.which === 190 || el.which === 109 || el.which === 110)
+                            if (
+                              el.which === 189 ||
+                              el.which === 190 ||
+                              el.which === 109 ||
+                              el.which === 110 ||
+                              el.which === 107 ||
+                              el.which === 187
+                            )
                               el.preventDefault();
                           },
                         }}
@@ -295,24 +332,32 @@ const Stake = ({ poolStatus }) => {
                   );
                 }}
               />
-              <div className='flex justify-between items-center'>
-                {poolStatus === poolStatuses[0] ? (
-                  <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
-                    STAKE NOW
-                  </DesignButton>
-                ) : (
-                  <DesignButton
-                    fullWidth
-                    design='yellow'
-                    size='large'
-                    imageSize='small'
-                    className='w-44'
-                    onClick={() => handleSubmit(() => stakeToken())()}
-                  >
-                    STAKE NOW
-                  </DesignButton>
-                )}
-                <div className='font-black text-color-greyish'>
+              <div className='flex flex-col-reverse md:flex-row justify-between  items-start md:items-center gap-4 md:gap-0'>
+                <div className='flex justify-center w-full md:w-fit'>
+                  {poolStatus === poolStatuses[0] ? (
+                    <DesignButton
+                      fullWidth
+                      design='gray'
+                      size={isMobile ? 'medium' : 'large'}
+                      imageSize={isMobile ? 'medium' : 'small'}
+                      className='w-60 md:w-44'
+                    >
+                      STAKE NOW
+                    </DesignButton>
+                  ) : (
+                    <DesignButton
+                      fullWidth
+                      design='yellow'
+                      size={isMobile ? 'medium' : 'large'}
+                      imageSize={isMobile ? 'medium' : 'small'}
+                      className='w-60 md:w-44'
+                      onClick={() => handleSubmit(() => stakeToken())()}
+                    >
+                      STAKE NOW
+                    </DesignButton>
+                  )}
+                </div>
+                <div className='font-black text-color-greyish text-xs md:text-base'>
                   <div>{`Wallet Balance: ${(balance / 1e18).toLocaleString('en-EN')} OKG`}</div>
                   <div>{`Current staked: ${Math.round(yourStakedBalance).toLocaleString('en-EN')} OKG`}</div>
                 </div>
@@ -321,7 +366,7 @@ const Stake = ({ poolStatus }) => {
           )}
           {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
             <>
-              <div className='grid grid-cols-3 gap-5 mb-4'>
+              <div className='grid grid-cols-3 gap-3 md:gap-5 mb-4'>
                 <GroupInfo
                   title='Staked Amount (OKG)'
                   value={Number(yourStakedBalance) === 0 ? '-' : yourStakedBalance.toLocaleString('en-EN')}
@@ -334,22 +379,30 @@ const Stake = ({ poolStatus }) => {
                 />
                 <GroupInfo title='Reward to receive' value={Number(yourStakedBalance) === 0 ? '-' : getTierReward()} />
               </div>
-              {poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
-                <DesignButton fullWidth design='gray' size='large' imageSize='small' className='w-44'>
-                  UNSTAKE
-                </DesignButton>
-              ) : (
-                <DesignButton
-                  fullWidth
-                  design='yellow'
-                  size='large'
-                  imageSize='small'
-                  className='w-44'
-                  onClick={() => setOpenPopupUnstake(true)}
-                >
-                  UNSTAKE
-                </DesignButton>
-              )}
+              <div className='flex justify-center md:justify-start'>
+                {poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
+                  <DesignButton
+                    fullWidth
+                    design='gray'
+                    size={isMobile ? 'medium' : 'large'}
+                    imageSize={isMobile ? 'medium' : 'small'}
+                    className='w-60 md:w-44'
+                  >
+                    UNSTAKE
+                  </DesignButton>
+                ) : (
+                  <DesignButton
+                    fullWidth
+                    design='yellow'
+                    size={isMobile ? 'medium' : 'large'}
+                    imageSize={isMobile ? 'medium' : 'small'}
+                    className='w-60 md:w-44'
+                    onClick={() => setOpenPopupUnstake(true)}
+                  >
+                    UNSTAKE
+                  </DesignButton>
+                )}
+              </div>
             </>
           )}
         </>
@@ -360,15 +413,17 @@ const Stake = ({ poolStatus }) => {
             <GroupInfo title='Pending Rewards (OKG)' value='-' border />
             <GroupInfo title='Reward to receive' value='-' />
           </div>
-          <ButtonLogin />
+          <div className='flex justify-center md:justify-start'>
+            <ButtonLogin />
+          </div>
         </>
       )}
       <CustomDialog fullWidth open={openPopupStake}>
         <div className='text-color-secondary'>
-          <div className='text-color-caption font-skadi text-center mb-2' style={{ fontSize: 32 }}>
+          <div className='text-color-caption font-skadi text-center mb-2' style={{ fontSize: isMobile ? 20 : 32 }}>
             STAKING
           </div>
-          <Divider className='mb-6' style={{ borderTop: '1px solid #7B593A' }} />
+          <Divider className='mb-4 md:mb-6' style={{ borderTop: '1px solid #7B593A' }} />
           <StakingStage
             title='Approve OKG'
             description='You first need to approve the spending of your OKG token'
@@ -389,7 +444,7 @@ const Stake = ({ poolStatus }) => {
             <DesignButton
               fullWidth
               design='yellow'
-              size='large'
+              size={isMobile ? 'medium' : 'large'}
               onClick={() => {
                 onClosePopupStake();
                 resetInput();
@@ -405,13 +460,13 @@ const Stake = ({ poolStatus }) => {
       </CustomDialog>
       <CustomDialog fullWidth open={openPopupUnstake}>
         <div className='text-color-secondary'>
-          <div className='text-color-caption font-skadi text-center mb-2' style={{ fontSize: 32 }}>
+          <div className='text-color-caption font-skadi text-center mb-2' style={{ fontSize: isMobile ? 20 : 32 }}>
             UNSTAKE
           </div>
-          <Divider className='mb-6' style={{ borderTop: '1px solid #7B593A' }} />
-          <div className='text-xl mb-6'>Are you sure you want to unstake OKG?</div>
+          <Divider className='mb-4 md:mb-6' style={{ borderTop: '1px solid #7B593A' }} />
+          <div className='text-xs md:text-xl mb-4 md:mb-6 text-center'>Are you sure you want to unstake OKG?</div>
           <div
-            className='flex flex-col gap-4 p-5 text-xl mb-6'
+            className='flex flex-col gap-4 p-4 md:p-5 md:text-xl mb-4 md:mb-6'
             style={{ background: '#523527', border: '1px solid #7B593A', borderRadius: 8 }}
           >
             <div className='flex justify-between'>
@@ -423,17 +478,17 @@ const Stake = ({ poolStatus }) => {
               <div className='font-extrabold'>{`${Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))} OKG`}</div>
             </div>
           </div>
-          <div className='text-color-primary flex gap-2.5 mb-6'>
-            <WarningRounded style={{ color: '#FFA108' }} />
+          <div className='text-color-primary flex gap-2.5 mb-4 md:mb-6 text-xs md:text-base'>
+            <WarningRounded style={{ color: '#FFA108', fontSize: isMobile ? 14 : 24 }} />
             Item rewards will be transferred into your game account. Please make sure you have linked your wallet to the
             game account.
           </div>
-          <div className='flex gap-2'>
+          <div className='flex gap-4 md:gap-2'>
             <DesignButton
               fullWidth
               design='yellow'
-              size='large'
-              imageSize='small'
+              size={isMobile ? 'medium' : 'large'}
+              imageSize={isMobile ? 'medium' : 'small'}
               onClick={() => {
                 unstake();
                 onClosePopupUnstake();
@@ -441,7 +496,13 @@ const Stake = ({ poolStatus }) => {
             >
               UNSTAKE
             </DesignButton>
-            <DesignButton fullWidth design='gray' size='large' imageSize='small' onClick={() => onClosePopupUnstake()}>
+            <DesignButton
+              fullWidth
+              design='gray'
+              size={isMobile ? 'medium' : 'large'}
+              imageSize={isMobile ? 'medium' : 'small'}
+              onClick={() => onClosePopupUnstake()}
+            >
               CANCEL
             </DesignButton>
           </div>
@@ -449,16 +510,16 @@ const Stake = ({ poolStatus }) => {
       </CustomDialog>
       <CustomDialog fullWidth open={openPopupUnstakeSuccess}>
         <div className='text-color-secondary'>
-          <div className='flex justify-center'>
-            <img src='/assets/icons/icon-success.png' alt='Success' className='mb-8' />
+          <div className='flex justify-center mb-7 md:mb-8'>
+            <img src='/assets/icons/icon-success.png' alt='Success' style={{ height: isMobile ? 95 : 'auto' }} />
           </div>
-          <div className='font-skadi text-center text-3xl mb-3'>UNSTAKING SUCCEEDED</div>
-          <div className='text-center text-xl mb-12'>You have successfull unstaked OKG token</div>
+          <div className='font-skadi text-center text-xl md:text-3xl mb-4 md:mb-3'>UNSTAKING SUCCEEDED</div>
+          <div className='text-center text-xs md:text-xl mb-6 md:mb-12'>You have successfull unstaked OKG token</div>
           <DesignButton
             fullWidth
             design='yellow'
-            size='large'
-            imageSize='large'
+            size={isMobile ? 'medium' : 'large'}
+            imageSize={isMobile ? 'medium' : 'large'}
             onClick={() => {
               setOpenPopupUnstakeSuccess(false);
               resetInput();

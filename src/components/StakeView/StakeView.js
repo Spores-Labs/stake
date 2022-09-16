@@ -11,13 +11,44 @@ import { profileSelector } from '../../reducers/profile';
 import { contractInfosSelector } from '../../reducers/contractInfos';
 import { DateTime } from 'luxon';
 import { useMemo } from 'react';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 export const tierList = [
-  { code: 'tier-1', name: 'TIER 1', reward: 5000, image: '/assets/images/bonus-tier-1.png' },
-  { code: 'tier-2', name: 'TIER 2', reward: 10000, image: '/assets/images/bonus-tier-2.png' },
-  { code: 'tier-3', name: 'TIER 3', reward: 20000, image: '/assets/images/bonus-tier-3.png' },
-  { code: 'tier-4', name: 'TIER 4', reward: 30000, image: '/assets/images/bonus-tier-4.png' },
-  { code: 'tier-5', name: 'TIER 5', reward: 50000, image: '/assets/images/bonus-tier-5.png' },
+  {
+    code: 'tier-1',
+    name: 'TIER 1',
+    reward: 5000,
+    image: '/assets/images/bonus-tier-1.png',
+    imageMobile: '/assets/images/bonus-tier-1-mobile.png',
+  },
+  {
+    code: 'tier-2',
+    name: 'TIER 2',
+    reward: 10000,
+    image: '/assets/images/bonus-tier-2.png',
+    imageMobile: '/assets/images/bonus-tier-2-mobile.png',
+  },
+  {
+    code: 'tier-3',
+    name: 'TIER 3',
+    reward: 20000,
+    image: '/assets/images/bonus-tier-3.png',
+    imageMobile: '/assets/images/bonus-tier-3-mobile.png',
+  },
+  {
+    code: 'tier-4',
+    name: 'TIER 4',
+    reward: 30000,
+    image: '/assets/images/bonus-tier-4.png',
+    imageMobile: '/assets/images/bonus-tier-4-mobile.png',
+  },
+  {
+    code: 'tier-5',
+    name: 'TIER 5',
+    reward: 50000,
+    image: '/assets/images/bonus-tier-5.png',
+    imageMobile: '/assets/images/bonus-tier-5-mobile.png',
+  },
 ];
 
 const CustomAccord = styled(Accordion)`
@@ -69,11 +100,11 @@ const accordContents = [
 
 const SingleAccord = ({ title, description }) => (
   <CustomAccord className='bg-color-browny shadow-none'>
-    <AccordionSummary className='font-black text-xl p-0' expandIcon={<ExpandMore className='text-white' />}>
+    <AccordionSummary className='font-black md:text-xl p-0' expandIcon={<ExpandMore className='text-white' />}>
       {title}
     </AccordionSummary>
     <AccordionDetails
-      className='rounded-lg p-8 text-color-secondary whitespace-pre-wrap'
+      className='rounded-lg p-6 md:p-8 text-color-secondary whitespace-pre-wrap text-xs md:text-base'
       style={{ background: '#463831', border: '1px solid #7B593A' }}
     >
       {description}
@@ -82,6 +113,7 @@ const SingleAccord = ({ title, description }) => (
 );
 
 const StakeView = () => {
+  const { isMobile } = useWindowDimensions();
   const { yourStakedBalance } = useSelector(profileSelector);
   const props = useSelector(contractInfosSelector);
   const timerRef = useRef();
@@ -123,7 +155,7 @@ const StakeView = () => {
     }
 
     return tasksTmp;
-  }, [props.stakingEnds, props.earlyWithdraw]);
+  }, [props.stakingEnds, props.earlyWithdraw, props.stakingStart]);
 
   const getTierReward = useCallback(() => {
     let tierCode = tierList[0].code;
@@ -175,47 +207,79 @@ const StakeView = () => {
     sliderRef.current.swiper.slideNext();
   }, []);
 
+  const imageTier = tierList.find((tier) => tier.code === activeTier);
+
+  const handleNextTier = () => {
+    const imageTierIndex = tierList.indexOf(imageTier);
+    const nextTierIndex = imageTierIndex + 1 === tierList.length ? 0 : imageTierIndex + 1;
+    setActiveTier(tierList[nextTierIndex].code);
+  };
+
+  const handlePrevTier = () => {
+    const imageTierIndex = tierList.indexOf(imageTier);
+    const prevTierIndex = imageTierIndex === 0 ? tierList.length - 1 : imageTierIndex - 1;
+    setActiveTier(tierList[prevTierIndex].code);
+  };
+
   return (
-    <div style={{ background: `url('/assets/images/background-staking.png') no-repeat center top / 100%` }}>
-      <Container className='flex flex-col items-center py-28 text-color-secondary custom-container'>
-        <div className='font-skadi text-giant'>OKG STAKING</div>
+    <div
+      style={{
+        background: `url('/assets/images/background-staking.png') no-repeat center top ${isMobile ? '' : '/ 100%'}`,
+      }}
+    >
+      <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary custom-container'>
+        <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING</div>
         <div
-          className='flex justify-center items-center font-bold mb-16 capitalize'
+          className='flex justify-center items-center font-bold mb-6 md:mb-16 capitalize text-xs md:text-base'
           style={{
             background: stakeStatus === stakeStatuses[0] ? '#6FAF51' : '#615955',
-            width: 192,
-            height: 38,
+            width: isMobile ? 84 : 192,
+            height: isMobile ? 25 : 38,
             borderRadius: 16,
           }}
         >
           {stakeStatus ?? ''}
         </div>
-        <div className='grid grid-cols-2 gap-5 mb-9 w-full'>
+        <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-9 w-full'>
           <Stake poolStatus={poolStatus} />
           <PoolInfor />
         </div>
         <div
-          className='py-16 px-32'
+          className='py-7 md:py-16 px-8 md:px-32'
           style={{
-            background: `url('/assets/images/background-bonus.png') no-repeat center top / cover`,
-            height: 743,
+            background: `url('/assets/images/background-bonus.png') no-repeat center top / 100% 100%`,
+            height: isMobile ? 588 : 743,
             width: '100%',
           }}
         >
-          <div className='relative font-skadi text-center' style={{ fontSize: 32 }}>
+          <div className='relative font-skadi text-center' style={{ fontSize: isMobile ? 20 : 32 }}>
             <Tooltip title={<img src='/assets/images/bonus-tooltip.png' alt='bonus-tooltip' />} placement='right-start'>
               <div
-                className='absolute top-1/2 flex justify-center items-center h-7 w-7 bg-color-dark rounded-full'
+                className='absolute top-1/2 right-0 md:left-0 flex justify-center items-center h-5 md:h-7 w-5 md:w-7 bg-color-dark rounded-full'
                 style={{ transform: 'translateY(-50%)' }}
               >
-                <QuestionMark className='text-color-primary' />
+                <QuestionMark className='text-color-primary text-xl md:text-2xl' />
               </div>
             </Tooltip>
             BONUS INGAME ITEMS
           </div>
-          <div className='text-center mb-4'>Stake OKG Token to receive ingame items</div>
-          <img src={tierList.find((tier) => tier.code === activeTier).image} alt={activeTier} />
-          <div className='flex justify-center items-center'>
+          <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>Stake OKG Token to receive ingame items</div>
+          <div className='relative'>
+            <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />
+            <img
+              src='/assets/images/prev-arrow.png'
+              alt='prev-arrow'
+              className='block md:hidden absolute top-48 left-1 cursor-pointer w-3'
+              onClick={handlePrevTier}
+            />
+            <img
+              src='/assets/images/next-arrow.png'
+              alt='next-arrow'
+              className='block md:hidden absolute top-48 right-1 cursor-pointer w-3'
+              onClick={handleNextTier}
+            />
+          </div>
+          <div className='hidden md:flex justify-center items-center'>
             <div
               className='relative'
               style={{
@@ -267,15 +331,19 @@ const StakeView = () => {
             </div>
           </div>
         </div>
-        <div className='text-color-primary mb-20'>
+        <div className='text-color-primary mb-8 md:mb-20 text-xs md:text-base text-center'>
           <span style={{ color: '#FF613F' }}>*</span> Item rewards will be transferred into your game account at
           mm/dd/yyyy. Don’t forget to link game account into wallet.
         </div>
-        <div className='relative w-full h-full mb-32'>
+        <div className='relative w-full h-full md:mb-32'>
           <Swiper
             ref={sliderRef}
-            pagination={{
-              clickable: true,
+            {...{
+              pagination: isMobile
+                ? false
+                : {
+                    clickable: true,
+                  },
             }}
             mousewheel
             keyboard
@@ -293,20 +361,20 @@ const StakeView = () => {
           <img
             src='/assets/images/prev-arrow.png'
             alt='prev-arrow'
-            className='absolute top-1/2 -translate-y-1/2 -left-14 cursor-pointer'
+            className='hidden md:block absolute top-1/2 -translate-y-1/2 -left-14 cursor-pointer'
             onClick={handlePrev}
           />
           <img
             src='/assets/images/next-arrow.png'
             alt='next-arrow'
-            className='absolute top-1/2 -translate-y-1/2 -right-14 cursor-pointer'
+            className='hidden md:block absolute top-1/2 -translate-y-1/2 -right-14 cursor-pointer'
             onClick={handleNext}
           />
         </div>
-        <div className='font-skadi mb-8' style={{ fontSize: 32 }}>
+        <div className='font-skadi mb-4 md:mb-8' style={{ fontSize: isMobile ? 20 : 32 }}>
           FAQs
         </div>
-        <div className='bg-color-browny px-8 py-5' style={{ borderRadius: 10, maxWidth: 1120 }}>
+        <div className='bg-color-browny px-4 py-2.5 md:px-8 md:py-5' style={{ borderRadius: 10, maxWidth: 1120 }}>
           {accordContents.map((accord, index) => (
             <SingleAccord key={index} title={accord.title} description={accord.description} />
           ))}

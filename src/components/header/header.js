@@ -49,12 +49,12 @@ const Header = () => {
   return (
     <AppBar style={{ background: '#3C2C19CC', borderBottom: '1px solid #6C6C6C', backdropFilter: 'blur(8px)' }}>
       <Toolbar component={Container} className='custom-container'>
-        <img src='/assets/images/logo-header.png' alt='logo' className='h-7 mb-1' />
+        <img src='/assets/images/logo-header.png' alt='logo' className='h-5 md:h-7 mb-1' />
         {isMobile ? (
           <>
             <div className='flex-1' />
             <IconButton onClick={() => setOpenPopup(true)}>
-              <MenuIcon />
+              <MenuIcon className='text-color-secondary' />
             </IconButton>
 
             <Modal open={openPopup} onClose={handleClosePopop} style={{ background: '#170A02E5' }}>
