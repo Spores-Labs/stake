@@ -379,7 +379,7 @@ const Stake = ({ poolStatus }) => {
             <GroupInfo
               title='Pending Rewards (OKG)'
               value={
-                Number(getOKGReward()) === 0 || !isLoggedIn
+                Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
                   ? '-'
                   : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))
               }
