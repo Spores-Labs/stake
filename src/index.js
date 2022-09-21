@@ -5,30 +5,22 @@ import Header from './components/header/header';
 import reportWebVitals from './reportWebVitals';
 import Footer from './components/footer/footer';
 import StakeView from './components/StakeView/StakeView';
-import { SnackbarProvider } from 'notistack';
-import { QueryClientProvider } from 'react-query';
-import queryClient from './services/client';
-import { Provider as ReduxProvider } from 'react-redux';
-import { store } from './reducers';
 import PublicLayout from './components/layout/PublicLayout';
+import Container from './components/layout/Container';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <ReduxProvider store={store}>
-      <SnackbarProvider preventDuplicate={false} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-        <QueryClientProvider client={queryClient}>
-          <PublicLayout>
-            <Header />
-            <div className='container-app'>
-              <StakeView />
-            </div>
-            <Footer />
-          </PublicLayout>
-        </QueryClientProvider>
-      </SnackbarProvider>
-    </ReduxProvider>
+    <Container>
+      <PublicLayout>
+        <Header />
+        <div className='container-app'>
+          <StakeView />
+        </div>
+        <Footer />
+      </PublicLayout>
+    </Container>
   </React.StrictMode>,
 );
 
