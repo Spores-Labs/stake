@@ -40,10 +40,6 @@ export const connectProvider = async () => {
 };
 
 export const connectWallet = async () => {
-  // if (typeof window.ethereum === 'undefined') {
-  //   store.dispatch(updateInfosProfile({ isInstalled: false }));
-  //   return;
-  // }
   try {
     await connectProvider();
     let address;
