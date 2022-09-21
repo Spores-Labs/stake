@@ -23,10 +23,11 @@ const PoolInfor = () => {
   const lockDays = Duration.fromObject({ seconds: Number(props.earlyWithdraw) - Number(props.stakingEnds) }).toFormat(
     'd',
   );
-  const apr =
-    !props.stakedTotal || Number(props.stakedTotal) < 100000 * 1e18
-      ? 4055
-      : (((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / Number(lockDays)) * 365 * 100).toFixed(2);
+  const aprRaw =
+    !props.stakedTotal || Number(props.stakedTotal) < 1000 * 1e18
+      ? 405555
+      : ((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / Number(lockDays)) * 365 * 100;
+  const apr = aprRaw > 1000 ? Math.round(aprRaw) : aprRaw.toFixed(2);
 
   const Group1 = () => (
     <div className='flex flex-col gap-6 pr-7 md:pr-0' style={{ borderRight: '1px solid #B7A284' }}>

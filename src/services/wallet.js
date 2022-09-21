@@ -23,7 +23,6 @@ export const connectProvider = async () => {
     });
     const provider = Web3.givenProvider || (await web3Modal.connect());
     provider.on('accountsChanged', async (acc) => {
-      console.log(acc, 'shit');
       store.dispatch(signOut());
     });
     provider.on('disconnect', () => {
