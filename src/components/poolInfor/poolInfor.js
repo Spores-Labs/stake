@@ -44,12 +44,20 @@ const PoolInfor = () => {
     <div className='flex flex-col gap-6 pl-7 md:pl-0' style={{ borderRight: isMobile ? '' : '1px solid #B7A284' }}>
       <GroupInfo
         title='Open time'
-        value={DateTime.fromSeconds(Number(props.stakingStart)).toFormat('MM/dd/yyyy')}
+        value={
+          props.stakingStart === '0'
+            ? '--/--/----'
+            : DateTime.fromSeconds(Number(props.stakingStart)).toFormat('MM/dd/yyyy')
+        }
         icon={<AccessTime className='text-xs md:text-base' />}
       />
       <GroupInfo
         title='Close time'
-        value={DateTime.fromSeconds(Number(props.stakingEnds)).toFormat('MM/dd/yyyy')}
+        value={
+          props.stakingEnds === '0'
+            ? '--/--/----'
+            : DateTime.fromSeconds(Number(props.stakingEnds)).toFormat('MM/dd/yyyy')
+        }
         icon={<AccessTime className='text-xs md:text-base' />}
       />
     </div>
