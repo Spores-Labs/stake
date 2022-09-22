@@ -1,6 +1,14 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './StakeView.css';
-import { Container, Tooltip, styled, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import {
+  Container,
+  Tooltip,
+  styled,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  ClickAwayListener,
+} from '@mui/material';
 import { QuestionMark, ExpandMore } from '@mui/icons-material';
 import Stake from '../stake/Stake';
 import PoolInfor from '../poolInfor/poolInfor';
@@ -106,7 +114,7 @@ const accordContents = [
         <br />
         <br />
         In addition, the benefits from OKG staking program are not only from the OKG token rewards (APR) but also the
-        bonus valuable in-game items.
+        bonus valuable NFT & ingame items.
         <br />
         <br />
         Item rewards scheme{' '}
@@ -120,19 +128,19 @@ const accordContents = [
   {
     title: '2. How can I receive the OKG token rewards?',
     description:
-      'Rewards will be calculated based on your staked amount, then automatically added when you un-stake your token at the expiry time.\n\nYour reward = Your Staked Amount * APR / 365\n\nAPR is up to ....%. APR is totally dependent on the total amount of investment in the pool.',
+      'Rewards will be calculated based on your staked amount, then automatically added when you un-stake your token at the expiry time.\n\nYour reward = Your Staked Amount * APR / 365\n\nAPR is totally dependent on the total amount of investment in the pool.',
   },
   {
-    title: '3. How can I receive the in-game item rewards?',
+    title: '3. How can I receive the in-game item and NFT item rewards?',
     description:
-      'The in-game item rewards will be transferred into your game account which linked your wallet after the game launched.\n\nMore details about the use of items here.',
+      'The in-game item rewards will be transferred into your game account which linked your wallet after the game launched.\n\nThe NFT item rewards will be airdropped into your crypto wallet after the game launched.\n\nThe detail reward schedule will be announced on Ookeenga social media.',
   },
   {
     title: '4. When can I un-stake my OKG token?',
     description: 'You are able to un-stake your token at the expiry time.',
   },
   {
-    title: '5. How to stake?',
+    title: '5. How can I stake OKG?',
     description: (
       <div>
         Step 1. Go to{' '}
@@ -149,7 +157,7 @@ const accordContents = [
     ),
   },
   {
-    title: '6. How to unstake?',
+    title: '6. How can I unstake OKG?',
     description: (
       <div>
         Step 1. Go to{' '}
@@ -171,7 +179,6 @@ const slides = [
   '/assets/images/slide-image-1.png',
   '/assets/images/slide-image-2.png',
   '/assets/images/slide-image-3.png',
-  '/assets/images/slide-image-4.png',
 ];
 
 const SingleAccord = ({ title, description }) => (
@@ -196,8 +203,16 @@ const StakeView = () => {
   const [activeTier, setActiveTier] = useState(tierList[0].code);
   const [stakeStatus, setStakeStatus] = useState();
   const [poolStatus, setPoolStatus] = useState();
-
   const [triggerRender, setTriggerRender] = useState({});
+  const [openTooltip, setOpenTooltip] = useState(false);
+
+  const handleTooltipClose = () => {
+    setOpenTooltip(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpenTooltip(true);
+  };
 
   const getPoolStatus = useCallback(() => {
     const now = DateTime.now().toSeconds();
@@ -297,6 +312,35 @@ const StakeView = () => {
     setActiveTier(tierList[prevTierIndex].code);
   };
 
+  const AlterTooltip = ({ isClickable }) => (
+    <ClickAwayListener onClickAway={handleTooltipClose}>
+      <Tooltip
+        {...(isClickable
+          ? {
+              PopperProps: {
+                disablePortal: true,
+              },
+              onClose: handleTooltipClose,
+              open: openTooltip,
+              disableFocusListener: true,
+              disableHoverListener: true,
+              disableTouchListener: true,
+            }
+          : {})}
+        title={<img src='/assets/images/bonus-tooltip.png' alt='bonus-tooltip' />}
+        placement={`${isClickable ? 'left' : 'right'}-start`}
+      >
+        <div
+          className='absolute top-1/2 right-0 md:left-0 flex justify-center items-center h-5 md:h-7 w-5 md:w-7 bg-color-dark rounded-full'
+          style={{ transform: 'translateY(-50%)' }}
+          {...(isClickable ? { onClick: handleTooltipOpen } : {})}
+        >
+          <QuestionMark className='text-color-primary text-xl md:text-2xl' />
+        </div>
+      </Tooltip>
+    </ClickAwayListener>
+  );
+
   return (
     <div
       style={{
@@ -338,18 +382,11 @@ const StakeView = () => {
           }}
         >
           <div className='relative font-skadi text-center' style={{ fontSize: isMobile ? 20 : 32 }}>
-            <Tooltip title={<img src='/assets/images/bonus-tooltip.png' alt='bonus-tooltip' />} placement='right-start'>
-              <div
-                className='absolute top-1/2 right-0 md:left-0 flex justify-center items-center h-5 md:h-7 w-5 md:w-7 bg-color-dark rounded-full'
-                style={{ transform: 'translateY(-50%)' }}
-              >
-                <QuestionMark className='text-color-primary text-xl md:text-2xl' />
-              </div>
-            </Tooltip>
-            BONUS INGAME ITEMS
+            {isMobile ? <AlterTooltip isClickable /> : <AlterTooltip />}
+            BONUS REWARDS
           </div>
           <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>
-            Stake OKG Token to receive Genesis Cocoon & valuable ingame rewards
+            Stake OKG Token to receive Genesis Cocoons & valuable ingame items
           </div>
           <div className='relative'>
             <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />

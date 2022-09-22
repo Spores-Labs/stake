@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './poolInfor.css';
 import { AccessTime, HelpOutline, Layers, Lock } from '@mui/icons-material';
 import { DateTime, Duration } from 'luxon';
-import { Tooltip } from '@mui/material';
+import { ClickAwayListener, Tooltip } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { contractInfosSelector } from '../../reducers/contractInfos';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -28,6 +28,45 @@ const PoolInfor = () => {
       ? 405555
       : ((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / Number(lockDays)) * 365 * 100;
   const apr = aprRaw > 1000 ? Math.round(aprRaw) : aprRaw.toFixed(2);
+
+  const [openTooltip, setOpenTooltip] = useState(false);
+
+  const handleTooltipClose = () => {
+    setOpenTooltip(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpenTooltip(true);
+  };
+
+  const AlterTooltip = ({ isClickable }) => (
+    <ClickAwayListener onClickAway={handleTooltipClose}>
+      <Tooltip
+        {...(isClickable
+          ? {
+              PopperProps: {
+                disablePortal: true,
+              },
+              onClose: handleTooltipClose,
+              open: openTooltip,
+              disableFocusListener: true,
+              disableHoverListener: true,
+              disableTouchListener: true,
+            }
+          : {})}
+        title={
+          <div className='text-black font-semibold font-avenir' style={{ maxWidth: 220, fontSize: 15 }}>
+            The APR shown is an estimate and fluctuates depending on total staked amount. The APR will be determined at
+            the closing time of this pool.
+          </div>
+        }
+        placement='top'
+        arrow
+      >
+        <HelpOutline {...(isClickable ? { onClick: handleTooltipOpen } : {})} style={{ width: 19, height: 19 }} />
+      </Tooltip>
+    </ClickAwayListener>
+  );
 
   const Group1 = () => (
     <div className='flex flex-col gap-6 pr-7 md:pr-0' style={{ borderRight: '1px solid #B7A284' }}>
@@ -67,18 +106,7 @@ const PoolInfor = () => {
     <div className='text-center mb-5 md:mb-0'>
       <div className='flex gap-1 items-center justify-center text-xl font-extrabold'>
         APR
-        <Tooltip
-          title={
-            <div className='text-black font-semibold font-avenir' style={{ maxWidth: 220, fontSize: 15 }}>
-              The APR shown is an estimate and fluctuates depending on total staked amount. The APR will be determined
-              at the closing time of this pool.
-            </div>
-          }
-          placement='top'
-          arrow
-        >
-          <HelpOutline style={{ width: 19, height: 19 }} />
-        </Tooltip>
+        {isMobile ? <AlterTooltip isClickable /> : <AlterTooltip />}
       </div>
       <div
         className='font-extrabold bg-clip-text text-transparent break-all'

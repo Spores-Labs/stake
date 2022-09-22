@@ -61,7 +61,7 @@ const Header = () => {
               <>
                 <div className='flex justify-end mb-1'>
                   <IconButton onClick={handleClosePopop}>
-                    <Close />
+                    <Close className='text-color-secondary' />
                   </IconButton>
                 </div>
                 <div className='flex items-center justify-center h-full'>
