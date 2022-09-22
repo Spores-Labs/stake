@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const defaultState = { address: '', yourStakedBalance: '0', balance: '0' };
+const defaultState = { address: '', yourStakedBalance: '0', balance: '0', isCalled: false, isLoggedIn: false };
 
 export const profileSlice = createSlice({
   name: 'profile',

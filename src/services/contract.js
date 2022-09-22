@@ -72,6 +72,7 @@ export const getContractInfos = async () => {
       stakingEnds,
       maturityAt,
       // rewardState,
+      isCalled: true,
     }),
   );
 };

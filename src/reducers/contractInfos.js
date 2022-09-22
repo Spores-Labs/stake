@@ -12,6 +12,7 @@ export const contractInfosSlice = createSlice({
     stakingEnds: '0',
     maturityAt: '0',
     rewardState: '0',
+    isCalled: false,
   },
   reducers: {
     updateContractInfos: (state, { payload: infos }) => {

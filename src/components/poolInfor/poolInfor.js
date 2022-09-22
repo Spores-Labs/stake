@@ -19,7 +19,7 @@ const GroupInfo = ({ title, value, icon }) => (
 
 const PoolInfor = () => {
   const { isMobile } = useWindowDimensions();
-  const props = useSelector(contractInfosSelector);
+  const { isCalled, ...props } = useSelector(contractInfosSelector);
   const lockDays = Duration.fromObject({ seconds: Number(props.earlyWithdraw) - Number(props.stakingEnds) }).toFormat(
     'd',
   );
@@ -97,19 +97,23 @@ const PoolInfor = () => {
       className='p-4 pb-8 md:px-8 md:py-0 md:grid md:grid-cols-3 md:gap-7 items-center'
       style={{ background: '#3F281CE5', borderRadius: 10 }}
     >
-      {isMobile ? (
+      {isCalled && (
         <>
-          <GroupAPR />
-          <div className='grid grid-cols-2'>
-            <Group1 />
-            <Group2 />
-          </div>
-        </>
-      ) : (
-        <>
-          <Group1 />
-          <Group2 />
-          <GroupAPR />
+          {isMobile ? (
+            <>
+              <GroupAPR />
+              <div className='grid grid-cols-2'>
+                <Group1 />
+                <Group2 />
+              </div>
+            </>
+          ) : (
+            <>
+              <Group1 />
+              <Group2 />
+              <GroupAPR />
+            </>
+          )}
         </>
       )}
     </div>

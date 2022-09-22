@@ -191,7 +191,7 @@ const SingleAccord = ({ title, description }) => (
 const StakeView = () => {
   const { isMobile } = useWindowDimensions();
   const { yourStakedBalance } = useSelector(profileSelector);
-  const props = useSelector(contractInfosSelector);
+  const { isCalled: isCalledContract, ...props } = useSelector(contractInfosSelector);
   const timerRef = useRef();
   const [activeTier, setActiveTier] = useState(tierList[0].code);
   const [stakeStatus, setStakeStatus] = useState();
@@ -306,15 +306,23 @@ const StakeView = () => {
       <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary custom-container'>
         <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING</div>
         <div
-          className='flex justify-center items-center font-bold mb-6 md:mb-16 capitalize text-xs md:text-base'
+          className='mb-6 md:mb-16'
           style={{
-            background: stakeStatus === stakeStatuses[0] ? '#6FAF51' : '#615955',
             width: isMobile ? 84 : 192,
             height: isMobile ? 25 : 38,
-            borderRadius: 16,
           }}
         >
-          {stakeStatus ?? ''}
+          {isCalledContract && (
+            <div
+              className='flex justify-center items-center w-full h-full font-bold capitalize text-xs md:text-base'
+              style={{
+                background: stakeStatus === stakeStatuses[0] ? '#6FAF51' : '#615955',
+                borderRadius: 16,
+              }}
+            >
+              {stakeStatus ?? ''}
+            </div>
+          )}
         </div>
         <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-9 w-full'>
           <Stake poolStatus={poolStatus} id={componentIds[0]} />
