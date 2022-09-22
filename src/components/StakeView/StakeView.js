@@ -199,7 +199,7 @@ const StakeView = () => {
 
   const [triggerRender, setTriggerRender] = useState({});
 
-  const getPoolStatus = () => {
+  const getPoolStatus = useCallback(() => {
     const now = DateTime.now().toSeconds();
     let status = poolStatuses[0];
     if (now > props.stakingStart * 1 && now <= props.stakingEnds * 1) {
@@ -211,7 +211,7 @@ const StakeView = () => {
     }
     setPoolStatus(status);
     setTriggerRender({});
-  };
+  }, [props.earlyWithdraw, props.stakingEnds, props.stakingStart]);
 
   const tasks = useMemo(() => {
     const tasksTmp = [[getPoolStatus, 0]];
@@ -231,7 +231,7 @@ const StakeView = () => {
     }
 
     return tasksTmp;
-  }, [props.stakingEnds, props.earlyWithdraw, props.stakingStart]);
+  }, [getPoolStatus, props.earlyWithdraw, props.stakingEnds, props.stakingStart]);
 
   const getTierReward = useCallback(() => {
     let tierCode = tierList[0].code;
