@@ -38,16 +38,37 @@ export const tierList = [
   {
     code: 'tier-4',
     name: 'TIER 4',
-    reward: 30000,
+    reward: 40000,
     image: '/assets/images/bonus-tier-4.png',
     imageMobile: '/assets/images/bonus-tier-4-mobile.png',
   },
   {
     code: 'tier-5',
     name: 'TIER 5',
-    reward: 50000,
+    reward: 60000,
     image: '/assets/images/bonus-tier-5.png',
     imageMobile: '/assets/images/bonus-tier-5-mobile.png',
+  },
+  {
+    code: 'tier-6',
+    name: 'TIER 6',
+    reward: 80000,
+    image: '/assets/images/bonus-tier-6.png',
+    imageMobile: '/assets/images/bonus-tier-6-mobile.png',
+  },
+  {
+    code: 'tier-7',
+    name: 'TIER 7',
+    reward: 100000,
+    image: '/assets/images/bonus-tier-7.png',
+    imageMobile: '/assets/images/bonus-tier-7-mobile.png',
+  },
+  {
+    code: 'tier-8',
+    name: 'TIER 8',
+    reward: 200000,
+    image: '/assets/images/bonus-tier-8.png',
+    imageMobile: '/assets/images/bonus-tier-8-mobile.png',
   },
 ];
 
@@ -66,11 +87,35 @@ const getChangeTime = (nextTime, prevTime = DateTime.now().toSeconds()) => {
   return (nextTime - prevTime) * 1000;
 };
 
+const componentIds = ['stake-section', 'item-rewards'];
+
+const scrollToComponent = (id) => {
+  const com = document.getElementById(id);
+  const destination = com.offsetTop - 100;
+  document.body.scrollTop = destination;
+  document.documentElement.scrollTop = destination;
+};
+
 const accordContents = [
   {
     title: '1.What is OKG staking pool? ',
-    description:
-      'OKG staking pool is the program to reward for long term OKG holders by offering the high earning yields by OKG token.\n\nIn addition, the benefits from OKG staking program are not only from the OKG token rewards (APR) but also the bonus valuable in-game items.\n\nItem rewards scheme here.',
+    description: (
+      <div>
+        OKG staking pool is the program to reward for long term OKG holders by offering the high earning yields by OKG
+        token.
+        <br />
+        <br />
+        In addition, the benefits from OKG staking program are not only from the OKG token rewards (APR) but also the
+        bonus valuable in-game items.
+        <br />
+        <br />
+        Item rewards scheme{' '}
+        <span className='underline cursor-pointer' onClick={() => scrollToComponent(componentIds[1])}>
+          here
+        </span>
+        .
+      </div>
+    ),
   },
   {
     title: '2. How can I receive the OKG token rewards?',
@@ -88,19 +133,50 @@ const accordContents = [
   },
   {
     title: '5. How to stake?',
-    description:
-      'Step 1. Go to OKG staking page (hyperlink: .....)\nStep 2. Connect your crypto wallet\nStep 3. Input amount to stake\nStep 4: Sign on metamask to confirm the transaction',
+    description: (
+      <div>
+        Step 1. Go to{' '}
+        <span className='underline cursor-pointer' onClick={() => scrollToComponent(componentIds[0])}>
+          OKG staking page
+        </span>
+        <br />
+        Step 2. Connect your crypto wallet
+        <br />
+        Step 3. Input amount to stake
+        <br />
+        Step 4: Sign on metamask to confirm the transaction
+      </div>
+    ),
   },
   {
     title: '6. How to unstake?',
-    description:
-      'Step 1. Go to OKG staking page (hyperlink: .....)\nStep 2. Connect your crypto wallet\nStep 3. Click unstake\nStep 4: Sign on metamask to confirm the transaction',
+    description: (
+      <div>
+        Step 1. Go to{' '}
+        <span className='underline cursor-pointer' onClick={() => scrollToComponent(componentIds[0])}>
+          OKG staking page
+        </span>
+        <br />
+        Step 2. Connect your crypto wallet
+        <br />
+        Step 3. Click unstake
+        <br />
+        Step 4: Sign on metamask to confirm the transaction
+      </div>
+    ),
   },
+];
+
+const slides = [
+  '/assets/images/slide-image-1.png',
+  '/assets/images/slide-image-2.png',
+  '/assets/images/slide-image-3.png',
+  '/assets/images/slide-image-4.png',
 ];
 
 const SingleAccord = ({ title, description }) => (
   <CustomAccord className='bg-color-browny shadow-none'>
-    <AccordionSummary className='font-black md:text-xl p-0' expandIcon={<ExpandMore className='text-white' />}>
+    <AccordionSummary className='font-black p-0' expandIcon={<ExpandMore className='text-white' />}>
       {title}
     </AccordionSummary>
     <AccordionDetails
@@ -241,11 +317,12 @@ const StakeView = () => {
           {stakeStatus ?? ''}
         </div>
         <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-9 w-full'>
-          <Stake poolStatus={poolStatus} />
+          <Stake poolStatus={poolStatus} id={componentIds[0]} />
           <PoolInfor />
         </div>
         <div
           className='py-8 md:py-16 px-8 md:px-32'
+          id={componentIds[1]}
           style={{
             background: `url('/assets/images/background-bonus.png') no-repeat center top / 100% 100%`,
             height: isMobile ? 'auto' : 743,
@@ -263,19 +340,21 @@ const StakeView = () => {
             </Tooltip>
             BONUS INGAME ITEMS
           </div>
-          <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>Stake OKG Token to receive ingame items</div>
+          <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>
+            Stake OKG Token to receive Genesis Cocoon & valuable ingame rewards
+          </div>
           <div className='relative'>
             <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />
             <img
               src='/assets/images/prev-arrow.png'
               alt='prev-arrow'
-              className='block md:hidden absolute top-48 left-1 cursor-pointer w-3'
+              className='block md:hidden absolute top-32 left-1 cursor-pointer w-3'
               onClick={handlePrevTier}
             />
             <img
               src='/assets/images/next-arrow.png'
               alt='next-arrow'
-              className='block md:hidden absolute top-48 right-1 cursor-pointer w-3'
+              className='block md:hidden absolute top-32 right-1 cursor-pointer w-3'
               onClick={handleNextTier}
             />
           </div>
@@ -323,7 +402,7 @@ const StakeView = () => {
                       }}
                     >
                       <div className='text-sm '>{tier.name}</div>
-                      <div className='whitespace-nowrap'>{`${tier.reward} OKG`}</div>
+                      <div className='whitespace-nowrap'>{`${tier.reward.toLocaleString()} OKG`}</div>
                     </div>
                   </div>
                 );
@@ -332,8 +411,8 @@ const StakeView = () => {
           </div>
         </div>
         <div className='text-color-primary mb-8 md:mb-20 text-xs md:text-base text-center'>
-          <span style={{ color: '#FF613F' }}>*</span> Item rewards will be transferred into your game account at
-          mm/dd/yyyy. Don’t forget to link game account into wallet.
+          <span style={{ color: '#FF613F' }}>*</span> Item rewards will be transferred into your game account. Don’t
+          forget to link game account into wallet.
         </div>
         <div className='relative w-full h-full md:mb-32'>
           <Swiper
@@ -351,12 +430,11 @@ const StakeView = () => {
             modules={[Pagination, Mousewheel, Keyboard, Autoplay]}
             autoplay={{ delay: 10000, pauseOnMouseEnter: true, disableOnInteraction: false }}
           >
-            <SwiperSlide>
-              <img src='/assets/images/slide-image-1.png' alt='slide' />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src='/assets/images/slide-image-1.png' alt='slide' />
-            </SwiperSlide>
+            {slides.map((slide, index) => (
+              <SwiperSlide key={index}>
+                <img src={slide} alt='slide' style={{ borderRadius: 16 }} />
+              </SwiperSlide>
+            ))}
           </Swiper>
           <img
             src='/assets/images/prev-arrow.png'

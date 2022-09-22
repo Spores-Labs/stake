@@ -95,7 +95,7 @@ const GroupInfo = ({ title, value, border }) => (
   </div>
 );
 
-const Stake = ({ poolStatus }) => {
+const Stake = ({ poolStatus, id }) => {
   const { isMobile } = useWindowDimensions();
   const { isLoggedIn, address, balance, yourStakedBalance } = useSelector(profileSelector);
   const props = useSelector(contractInfosSelector);
@@ -263,6 +263,7 @@ const Stake = ({ poolStatus }) => {
 
   return (
     <div
+      id={id}
       className='bg-color-primary p-4 md:p-8 text-color-greyish'
       style={{ borderRadius: 10, minHeight: isMobile ? 160 : 202.5 }}
     >
