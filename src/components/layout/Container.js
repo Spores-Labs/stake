@@ -6,8 +6,10 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { store } from '../../reducers';
 import { useRef } from 'react';
 import { Close } from '@mui/icons-material';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import PublicLayout from './PublicLayout';
 
-const Container = ({ children }) => {
+const Container = () => {
   const notistackRef = useRef();
 
   return (
@@ -21,7 +23,13 @@ const Container = ({ children }) => {
           <Close onClick={() => notistackRef.current.closeSnackbar(snackbarId)} className='text-base' />
         )}
       >
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <Routes>
+              <Route path='/*' element={<PublicLayout />} />
+            </Routes>
+          </BrowserRouter>
+        </QueryClientProvider>
       </SnackbarProvider>
     </ReduxProvider>
   );

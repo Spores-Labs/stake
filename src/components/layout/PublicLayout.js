@@ -1,13 +1,18 @@
 import { CircularProgress, Dialog, styled, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useEffect, useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { web3 } from '../../contractHandler/contractHandler';
 import { store } from '../../reducers';
 import { signIn } from '../../reducers/profile';
+import publicRoute from '../../routes/publicRoute';
 import { getContractInfos } from '../../services/contract';
 import { updateInfosProfileService } from '../../services/profile';
 import { connectProvider } from '../../services/wallet';
 import DesignButton from '../common/DesignButton';
+import Footer from '../footer/footer';
+import Header from '../header/header';
+import StakeView from '../StakeView/StakeView';
 
 const CustomDialog = styled(Dialog)`
   & .MuiDialog-paper {
@@ -33,7 +38,7 @@ const APP_NETWORK =
         nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
       };
 
-const PublicLayout = ({ children }) => {
+const PublicLayout = () => {
   const [isReady, setIsReady] = useState(false);
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
 
@@ -89,7 +94,17 @@ const PublicLayout = ({ children }) => {
 
   return (
     <div className='wrapper'>
-      {children}
+      <Header />
+      <div className='container-app'>
+        <StakeView />
+        <Routes>
+          {Object.values(publicRoute).map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+          <Route path='*' element={<Navigate to={publicRoute.stakeView.path} />} />
+        </Routes>
+      </div>
+      <Footer />
       <CustomDialog fullWidth maxWidth='xs' open={isWrongNetwork}>
         <div className='flex flex-col items-center py-8'>
           <CircularProgress style={{ color: 'rgb(150, 103, 64)' }} />

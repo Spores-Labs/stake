@@ -1,26 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Header from './components/header/header';
 import reportWebVitals from './reportWebVitals';
-import Footer from './components/footer/footer';
-import StakeView from './components/StakeView/StakeView';
-import PublicLayout from './components/layout/PublicLayout';
 import Container from './components/layout/Container';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <Container>
-      <PublicLayout>
-        <Header />
-        <div className='container-app'>
-          <StakeView />
-        </div>
-        <Footer />
-      </PublicLayout>
-    </Container>
+    <Container />
   </React.StrictMode>,
 );
 
