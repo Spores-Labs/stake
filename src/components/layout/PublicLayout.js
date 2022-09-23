@@ -12,7 +12,6 @@ import { connectProvider } from '../../services/wallet';
 import DesignButton from '../common/DesignButton';
 import Footer from '../footer/footer';
 import Header from '../header/header';
-import StakeView from '../StakeView/StakeView';
 
 const CustomDialog = styled(Dialog)`
   & .MuiDialog-paper {
