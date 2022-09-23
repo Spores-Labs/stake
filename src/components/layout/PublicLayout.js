@@ -96,7 +96,6 @@ const PublicLayout = () => {
     <div className='wrapper'>
       <Header />
       <div className='container-app'>
-        <StakeView />
         <Routes>
           {Object.values(publicRoute).map(({ path, element }) => (
             <Route key={path} path={path} element={element} />
