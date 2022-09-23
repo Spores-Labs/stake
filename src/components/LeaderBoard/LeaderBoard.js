@@ -1,7 +1,7 @@
-import './StakeView.css';
+import './LeaderBoard.css';
 import { Container } from '@mui/material';
 
-const StakeView = () => {
+const LeaderBoard = () => {
   return (
     <div
       style={{
@@ -12,4 +12,5 @@ const StakeView = () => {
     </div>
   );
 };
-export default StakeView;
+
+export default LeaderBoard;

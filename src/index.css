@@ -40,11 +40,12 @@ code {
 
 .wrapper {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container-app {
   width: 100%;
-  min-height: 100vh;
 }
 
 .MuiButton-root {
@@ -53,5 +54,9 @@ code {
 }
 
 .custom-container {
-  max-width: 1364px!important;
+  max-width: 1364px !important;
+}
+
+.footer {
+  margin-top: auto
 }

@@ -144,7 +144,7 @@ const Stake = ({ poolStatus, id }) => {
     {
       onSuccess: () => {
         enqueueSnackbar('Approve successfully!', { variant: 'success' });
-        stake();
+        clickStake();
       },
       onError: () => {
         enqueueSnackbar('Approve failed!', { variant: 'error' });
@@ -172,6 +172,16 @@ const Stake = ({ poolStatus, id }) => {
       },
     },
   );
+
+  const clickStake = () => {
+    const a = document.createElement('div');
+    a.addEventListener('click', function handleClick(event) {
+      stake();
+    });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
 
   const { mutate: unstake } = useMutation(
     async () => {
@@ -267,158 +277,164 @@ const Stake = ({ poolStatus, id }) => {
       className='bg-color-primary p-4 md:p-8 text-color-greyish'
       style={{ borderRadius: 10, minHeight: isMobile ? 160 : 202.5 }}
     >
-      {(poolStatus === poolStatuses[0] || poolStatus === poolStatuses[1]) && (
+      {props.isCalled && (
         <>
-          <Controller
-            name='amount'
-            defaultValue=''
-            control={control}
-            rules={{
-              required: true,
-              pattern: /^\d*\.?\d*$/,
-              min: 1,
-              max: getMaxLimit(),
-            }}
-            render={({ field, fieldState: { invalid, error } }) => {
-              let mes = 'Please enter a positive number';
-              if (error?.type === 'max') {
-                mes = getMaxLimitErrorMessage();
-              }
+          {(poolStatus === poolStatuses[0] || poolStatus === poolStatuses[1]) && (
+            <>
+              <Controller
+                name='amount'
+                defaultValue=''
+                control={control}
+                rules={{
+                  required: true,
+                  pattern: /^\d*\.?\d*$/,
+                  min: 1,
+                  max: getMaxLimit(),
+                }}
+                render={({ field, fieldState: { invalid, error } }) => {
+                  let mes = 'Please enter a positive number';
+                  if (error?.type === 'max') {
+                    mes = getMaxLimitErrorMessage();
+                  }
 
-              return (
-                <div className='mb-4'>
-                  <div className='md:text-xl font-black mb-2 md:mb-1'>AMOUNT TO STAKE*</div>
-                  <AmountField
-                    {...field}
-                    fullWidth
-                    variant='outlined'
-                    placeholder='0'
-                    size='medium'
-                    error={invalid}
-                    InputProps={{
-                      endAdornment: (
-                        <div
-                          className='flex gap-2 md:pr-5 text-xl font-avenir font-bold items-center '
-                          style={{ color: '#392609' }}
-                        >
-                          <Button
-                            variant='contained'
-                            className='font-bold text-color-secondary text-sm'
-                            style={{ background: '#6FAF51', borderRadius: 8 }}
-                            onClick={() => setValue('amount', getMaxLimit(), { shouldValidate: true })}
-                          >
-                            Max
-                          </Button>
-                          OKG
-                        </div>
-                      ),
-                      type: 'number',
-                      onKeyDown: (el) => {
-                        if (
-                          el.which === 189 ||
-                          el.which === 190 ||
-                          el.which === 109 ||
-                          el.which === 110 ||
-                          el.which === 107 ||
-                          el.which === 187
-                        )
-                          el.preventDefault();
-                      },
-                    }}
-                  />
-                  {invalid && <div className='text-red-500 text-tiny md:text-sm mt-1'>{mes}</div>}
+                  return (
+                    <div className='mb-4'>
+                      <div className='md:text-xl font-black mb-2 md:mb-1'>AMOUNT TO STAKE*</div>
+                      <AmountField
+                        {...field}
+                        fullWidth
+                        variant='outlined'
+                        placeholder='0'
+                        size='medium'
+                        error={invalid}
+                        InputProps={{
+                          endAdornment: (
+                            <div
+                              className='flex gap-2 md:pr-5 text-xl font-avenir font-bold items-center '
+                              style={{ color: '#392609' }}
+                            >
+                              <Button
+                                variant='contained'
+                                className='font-bold text-color-secondary text-sm'
+                                style={{ background: '#6FAF51', borderRadius: 8 }}
+                                onClick={() => setValue('amount', getMaxLimit(), { shouldValidate: true })}
+                              >
+                                Max
+                              </Button>
+                              OKG
+                            </div>
+                          ),
+                          type: 'number',
+                          onKeyDown: (el) => {
+                            if (
+                              el.which === 189 ||
+                              el.which === 190 ||
+                              el.which === 109 ||
+                              el.which === 110 ||
+                              el.which === 107 ||
+                              el.which === 187
+                            )
+                              el.preventDefault();
+                          },
+                        }}
+                      />
+                      {invalid && <div className='text-red-500 text-tiny md:text-sm mt-1'>{mes}</div>}
+                    </div>
+                  );
+                }}
+              />
+              <div className='flex flex-col-reverse md:flex-row justify-between  items-start md:items-center gap-4 md:gap-0'>
+                <div className='flex justify-center w-full md:w-fit'>
+                  {isLoggedIn ? (
+                    poolStatus === poolStatuses[0] ? (
+                      <DesignButton
+                        fullWidth
+                        design='gray'
+                        size={isMobile ? 'medium' : 'large'}
+                        imageSize={isMobile ? 'medium' : 'small'}
+                        className='w-56 md:w-44'
+                      >
+                        STAKE NOW
+                      </DesignButton>
+                    ) : (
+                      <DesignButton
+                        fullWidth
+                        design='yellow'
+                        size={isMobile ? 'medium' : 'large'}
+                        imageSize={isMobile ? 'medium' : 'small'}
+                        className='w-56 md:w-44'
+                        onClick={() => handleSubmit(() => stakeToken())()}
+                      >
+                        STAKE NOW
+                      </DesignButton>
+                    )
+                  ) : (
+                    <ButtonLogin />
+                  )}
                 </div>
-              );
-            }}
-          />
-          <div className='flex flex-col-reverse md:flex-row justify-between  items-start md:items-center gap-4 md:gap-0'>
-            <div className='flex justify-center w-full md:w-fit'>
-              {isLoggedIn ? (
-                poolStatus === poolStatuses[0] ? (
-                  <DesignButton
-                    fullWidth
-                    design='gray'
-                    size={isMobile ? 'medium' : 'large'}
-                    imageSize={isMobile ? 'medium' : 'small'}
-                    className='w-56 md:w-44'
-                  >
-                    STAKE NOW
-                  </DesignButton>
+                <div className='font-black text-color-greyish text-xs md:text-base'>
+                  <div>{`Wallet Balance: ${isLoggedIn ? `${(balance / 1e18).toLocaleString('en-EN')} OKG` : '-'}`}</div>
+                  <div>{`Current staked: ${
+                    isLoggedIn ? `${Math.round(yourStakedBalance).toLocaleString('en-EN')} OKG` : '-'
+                  }`}</div>
+                </div>
+              </div>
+            </>
+          )}
+          {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
+            <>
+              <div className='grid grid-cols-3 gap-3 md:gap-5 mb-4'>
+                <GroupInfo
+                  title='Staked Amount (OKG)'
+                  value={
+                    Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : yourStakedBalance.toLocaleString('en-EN')
+                  }
+                  border
+                />
+                <GroupInfo
+                  title='Pending Rewards (OKG)'
+                  value={
+                    Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
+                      ? '-'
+                      : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))
+                  }
+                  border
+                />
+                <GroupInfo
+                  title='Reward to receive'
+                  value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : getTierReward()}
+                />
+              </div>
+              <div className='flex justify-center md:justify-start'>
+                {isLoggedIn ? (
+                  poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
+                    <DesignButton
+                      fullWidth
+                      design='gray'
+                      size={isMobile ? 'medium' : 'large'}
+                      imageSize={isMobile ? 'medium' : 'small'}
+                      className='w-56 md:w-44'
+                    >
+                      UNSTAKE
+                    </DesignButton>
+                  ) : (
+                    <DesignButton
+                      fullWidth
+                      design='yellow'
+                      size={isMobile ? 'medium' : 'large'}
+                      imageSize={isMobile ? 'medium' : 'small'}
+                      className='w-56 md:w-44'
+                      onClick={() => setOpenPopupUnstake(true)}
+                    >
+                      UNSTAKE
+                    </DesignButton>
+                  )
                 ) : (
-                  <DesignButton
-                    fullWidth
-                    design='yellow'
-                    size={isMobile ? 'medium' : 'large'}
-                    imageSize={isMobile ? 'medium' : 'small'}
-                    className='w-56 md:w-44'
-                    onClick={() => handleSubmit(() => stakeToken())()}
-                  >
-                    STAKE NOW
-                  </DesignButton>
-                )
-              ) : (
-                <ButtonLogin />
-              )}
-            </div>
-            <div className='font-black text-color-greyish text-xs md:text-base'>
-              <div>{`Wallet Balance: ${isLoggedIn ? `${(balance / 1e18).toLocaleString('en-EN')} OKG` : '-'}`}</div>
-              <div>{`Current staked: ${
-                isLoggedIn ? `${Math.round(yourStakedBalance).toLocaleString('en-EN')} OKG` : '-'
-              }`}</div>
-            </div>
-          </div>
-        </>
-      )}
-      {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
-        <>
-          <div className='grid grid-cols-3 gap-3 md:gap-5 mb-4'>
-            <GroupInfo
-              title='Staked Amount (OKG)'
-              value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : yourStakedBalance.toLocaleString('en-EN')}
-              border
-            />
-            <GroupInfo
-              title='Pending Rewards (OKG)'
-              value={
-                Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
-                  ? '-'
-                  : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))
-              }
-              border
-            />
-            <GroupInfo
-              title='Reward to receive'
-              value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : getTierReward()}
-            />
-          </div>
-          <div className='flex justify-center md:justify-start'>
-            {isLoggedIn ? (
-              poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
-                <DesignButton
-                  fullWidth
-                  design='gray'
-                  size={isMobile ? 'medium' : 'large'}
-                  imageSize={isMobile ? 'medium' : 'small'}
-                  className='w-56 md:w-44'
-                >
-                  UNSTAKE
-                </DesignButton>
-              ) : (
-                <DesignButton
-                  fullWidth
-                  design='yellow'
-                  size={isMobile ? 'medium' : 'large'}
-                  imageSize={isMobile ? 'medium' : 'small'}
-                  className='w-56 md:w-44'
-                  onClick={() => setOpenPopupUnstake(true)}
-                >
-                  UNSTAKE
-                </DesignButton>
-              )
-            ) : (
-              <ButtonLogin />
-            )}
-          </div>
+                  <ButtonLogin />
+                )}
+              </div>
+            </>
+          )}
         </>
       )}
       <CustomDialog fullWidth open={openPopupStake}>

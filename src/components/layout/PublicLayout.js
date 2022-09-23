@@ -5,7 +5,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { web3 } from '../../contractHandler/contractHandler';
 import { store } from '../../reducers';
 import { signIn } from '../../reducers/profile';
-import publicRoute from '../../routes/publicRoute';
+import { publicRoute } from '../../routes';
 import { getContractInfos } from '../../services/contract';
 import { updateInfosProfileService } from '../../services/profile';
 import { connectProvider } from '../../services/wallet';

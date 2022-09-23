@@ -270,12 +270,12 @@ const StakeView = () => {
     const task = tasks.shift();
     if (!task) return;
 
-    clearTimeout(timerRef.current);
+    // clearTimeout(timerRef.current);
     timerRef.current = setTimeout(...task);
 
-    return () => {
-      clearTimeout(timerRef.current);
-    };
+    // return () => {
+    //   clearTimeout(timerRef.current);
+    // };
   }, [tasks, triggerRender]);
 
   useEffect(() => {

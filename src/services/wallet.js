@@ -36,6 +36,11 @@ export const connectProvider = async () => {
     web3.setProvider(provider);
   } catch (e) {
     console.log(e);
+    const provider =
+      process.env.REACT_APP_NETWORK_VERSION === '97'
+        ? 'https://data-seed-prebsc-2-s2.binance.org:8545'
+        : 'https://bsc-dataseed1.binance.org';
+    web3.setProvider(provider);
   }
 };
 

@@ -20,13 +20,17 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 import useAnchor from '../../hooks/useAnchor';
 import { connectWallet } from '../../services/wallet';
 import { profileSelector, signOut } from '../../reducers/profile';
+import { Link } from 'react-router-dom';
+import { publicRoute } from '../../routes';
 
 const HeaderItem = ({ url, state, ...props }) => {
   return url ? (
-    <ListItemButton
-      className='flex justify-center font-bold text-2xl md:text-lg text-color-primary rounded'
-      {...props}
-    />
+    <Link to={url}>
+      <ListItemButton
+        className='flex justify-center font-bold text-2xl md:text-lg text-color-primary rounded'
+        {...props}
+      />
+    </Link>
   ) : (
     <ListItemButton
       className='flex justify-center font-bold text-2xl md:text-lg text-color-primary rounded'
@@ -49,7 +53,9 @@ const Header = () => {
   return (
     <AppBar style={{ background: '#3C2C19CC', borderBottom: '1px solid #6C6C6C', backdropFilter: 'blur(8px)' }}>
       <Toolbar component={Container} className='custom-container'>
-        <img src='/assets/images/logo-header.png' alt='logo' className='h-8 md:h-12 mb-1' />
+        <Link to={publicRoute.stakeView.path}>
+          <img src='/assets/images/logo-header.png' alt='logo' className='h-8 md:h-12 mb-1' />
+        </Link>
         {isMobile ? (
           <>
             <div className='flex-1' />
@@ -69,6 +75,9 @@ const Header = () => {
                     {/* <HeaderItem url={publicRoute.breeding.path} onClick={handleClosePopop}>
                       Breeding
                     </HeaderItem> */}
+                    <HeaderItem url={publicRoute.leaderBoard.path} onClick={handleClosePopop}>
+                      Leaderboard
+                    </HeaderItem>
                     {isLoggedIn ? (
                       <HeaderItem
                         onClick={() => {
@@ -96,7 +105,7 @@ const Header = () => {
         ) : (
           <>
             <MenuList className='flex flex-row gap-3 ml-6'>
-              {/* <HeaderItem url={publicRoute.marketplace.path}>Marketplace</HeaderItem> */}
+              <HeaderItem url={publicRoute.leaderBoard.path}>Leaderboard</HeaderItem>
             </MenuList>
             <div className='flex-1' />
 
