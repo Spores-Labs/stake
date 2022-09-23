@@ -144,7 +144,7 @@ const Stake = ({ poolStatus, id }) => {
     {
       onSuccess: () => {
         enqueueSnackbar('Approve successfully!', { variant: 'success' });
-        clickStake();
+        stake();
       },
       onError: () => {
         enqueueSnackbar('Approve failed!', { variant: 'error' });
@@ -172,11 +172,6 @@ const Stake = ({ poolStatus, id }) => {
       },
     },
   );
-
-  const clickStake = () => {
-    const a = document.getElementById('buttonStake');
-    a.click();
-  };
 
   const { mutate: unstake } = useMutation(
     async () => {
@@ -545,7 +540,6 @@ const Stake = ({ poolStatus, id }) => {
           </DesignButton>
         </div>
       </CustomDialog>
-      <button id='buttonStake' className='hidden' onClick={() => stake()}/>
     </div>
   );
 };
