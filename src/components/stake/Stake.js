@@ -174,7 +174,7 @@ const Stake = ({ poolStatus, id }) => {
   );
 
   const clickStake = () => {
-    const a = document.createElement('div');
+    const a = document.createElement('button');
     a.addEventListener('click', function handleClick(event) {
       stake();
     });
