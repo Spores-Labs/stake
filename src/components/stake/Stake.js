@@ -174,13 +174,8 @@ const Stake = ({ poolStatus, id }) => {
   );
 
   const clickStake = () => {
-    const a = document.createElement('button');
-    a.addEventListener('click', function handleClick(event) {
-      stake();
-    });
-    document.body.appendChild(a);
+    const a = document.getElementById('buttonStake');
     a.click();
-    a.remove();
   };
 
   const { mutate: unstake } = useMutation(
@@ -550,6 +545,7 @@ const Stake = ({ poolStatus, id }) => {
           </DesignButton>
         </div>
       </CustomDialog>
+      <button id='buttonStake' className='hidden' onClick={() => stake()}/>
     </div>
   );
 };
