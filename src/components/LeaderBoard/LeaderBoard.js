@@ -1,6 +1,7 @@
 import './LeaderBoard.css';
 import { Container, styled, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { shorten } from '../../utils/common';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const defaultData = [
   { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
@@ -57,6 +58,8 @@ const TopStakerInfo = ({ address, amount, bottom }) => (
 );
 
 const LeaderBoard = () => {
+  const { isMobile } = useWindowDimensions();
+
   return (
     <div
       style={{
@@ -65,8 +68,8 @@ const LeaderBoard = () => {
       }}
     >
       <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary custom-container'>
-        <div className='font-skadi text-5xl mb-9'>LEADERBOARD OF STAKERS</div>
-        <div className='flex gap-5 w-full mb-32'>
+        <div className='font-skadi text-xl md:text-5xl mb-9'>LEADERBOARD OF STAKERS</div>
+        <div className='flex flex-col md:flex-row md:gap-5 w-full mb-8 md:mb-32'>
           <div className='relative flex-1'>
             <img src='/assets/images/leaderBoard-hero-1.png' alt='hero-1' className='mt-28' />
             <div className='absolute bottom-0 right-0'>
@@ -75,7 +78,11 @@ const LeaderBoard = () => {
                 <TopStakerInfo address={defaultData[1].address} amount={defaultData[1].amount} bottom={128} />
               </div>
             </div>
-            <img src='/assets/images/leaderBoard-gold-1.png' alt='gold-1' className='absolute -bottom-20' />
+            <img
+              src='/assets/images/leaderBoard-gold-1.png'
+              alt='gold-1'
+              className='hidden md:block absolute -bottom-20'
+            />
           </div>
           <div className='relative'>
             <img src='/assets/images/leaderBoard-top-1.png' alt='top-1' />
@@ -89,15 +96,19 @@ const LeaderBoard = () => {
                 <TopStakerInfo address={defaultData[2].address} amount={defaultData[2].amount} bottom={72} />
               </div>
             </div>
-            <img src='/assets/images/leaderBoard-gold-2.png' alt='gold-2' className='absolute -bottom-28 right-10' />
+            <img
+              src='/assets/images/leaderBoard-gold-2.png'
+              alt='gold-2'
+              className='hidden md:block absolute -bottom-28 right-10'
+            />
           </div>
         </div>
         <div
-          className='bg-color-dark w-full flex flex-col items-center px-24'
+          className='bg-color-dark w-full flex flex-col items-center px-8 md:px-24'
           style={{
             background: `url('/assets/images/frame-leaderBoard.png') no-repeat center top`,
             backgroundSize: '100% 100%',
-            height: 900,
+            height: isMobile ? 700 : 900,
             maxWidth: 1240,
           }}
         >
@@ -105,9 +116,9 @@ const LeaderBoard = () => {
             style={{
               background: `url('/assets/components/yellow_trapezium.png') no-repeat center top`,
               backgroundSize: '100% 100%',
-              fontSize: 35,
+              fontSize: isMobile ? 20 : 35,
             }}
-            className='text-center text-color-secondary font-skadi w-fit py-5 px-32 mb-8'
+            className='text-center text-color-secondary font-skadi w-fit py-3 md:py-5 px-16 md:px-32 mb-4 md:mb-8 whitespace-nowrap'
           >
             TOP STAKERS
           </div>
