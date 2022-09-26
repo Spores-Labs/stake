@@ -347,7 +347,7 @@ const StakeView = () => {
         background: `url('/assets/images/background-staking.png') no-repeat center top ${isMobile ? '' : '/ 100%'}`,
       }}
     >
-      <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary custom-container'>
+      <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary' style={{ maxWidth: 1364 }}>
         <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING</div>
         <div
           className='mb-6 md:mb-16'

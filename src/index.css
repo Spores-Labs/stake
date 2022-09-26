@@ -46,6 +46,10 @@ code {
 
 .container-app {
   width: 100%;
+  min-height: calc(100vh - 64px);
+  @media (max-width: 800px) {
+    min-height: calc(100vh - 56px);
+  }
 }
 
 .MuiButton-root {
@@ -54,7 +58,7 @@ code {
 }
 
 .custom-container {
-  max-width: 1364px !important;
+  max-width: 1644px !important;
 }
 
 .footer {
