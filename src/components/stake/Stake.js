@@ -275,6 +275,9 @@ const Stake = ({ poolStatus, id }) => {
                   if (error?.type === 'max') {
                     mes = getMaxLimitErrorMessage();
                   }
+                  if (error?.type === 'required' && poolStatus === poolStatuses[0]) {
+                    mes = `Available to stake at ${new Date(props.stakingStart * 1000).toLocaleString()}`;
+                  }
 
                   return (
                     <div className='mb-4'>
@@ -282,6 +285,7 @@ const Stake = ({ poolStatus, id }) => {
                       <AmountField
                         {...field}
                         fullWidth
+                        disabled={poolStatus === poolStatuses[0]}
                         variant='outlined'
                         placeholder='0'
                         size='medium'
