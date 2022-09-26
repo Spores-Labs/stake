@@ -363,7 +363,9 @@ const Stake = ({ poolStatus, id }) => {
                   )}
                 </div>
                 <div className='font-black text-color-greyish text-xs md:text-base'>
-                  <div>{`Wallet Balance: ${isLoggedIn ? `${(balance / 1e18).toLocaleString('en-EN')} OKG` : '-'}`}</div>
+                  <div>{`Wallet Balance: ${
+                    isLoggedIn ? `${Math.round(balance / 1e18).toLocaleString('en-EN')} OKG` : '-'
+                  }`}</div>
                   <div>{`Current staked: ${
                     isLoggedIn ? `${Math.round(yourStakedBalance).toLocaleString('en-EN')} OKG` : '-'
                   }`}</div>
