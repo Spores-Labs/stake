@@ -4,7 +4,7 @@ on:
     branches:
       - OKG-Staking
 env:
-  PAGE_PROJECT_NAME: stake
+  PAGE_PROJECT_NAME: stake-mainnet
 jobs:
   build-deploy:
     name: Build and deploy to Cloudflare Pages
