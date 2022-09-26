@@ -118,22 +118,15 @@ const Stake = ({ poolStatus, id }) => {
       // Balance
       // Step 1: Call the NPO token contract & approve the amount contract (to Set Allowance)
       if (props.stakingEnds * 1000 < Date.now()) {
-        enqueueSnackbar('Contribution was CLOSED, please choose another pool!', { variant: 'error' });
-        throw new Error();
+        throw new Error('Contribution was CLOSED, please choose another pool!');
       } else if (amount === '' || amount <= 0) {
-        enqueueSnackbar('Please input a positive amount', { variant: 'error' }); // user has to input amount before click on stake button
-        throw new Error();
+        throw new Error('Please input a positive amount');
       } else if (Date.now() < props.stakingStart * 1000) {
-        enqueueSnackbar(`Could not stake, staking starts at ${new Date(props.stakingStart * 1000).toLocaleString()}`, {
-          variant: 'error',
-        });
-        throw new Error();
+        throw new Error(`Available to stake at ${new Date(props.stakingStart * 1000).toLocaleString()}`);
       } else if (amount > balance / 1e18) {
-        enqueueSnackbar('Not enough OKG balance', { variant: 'error' }); // check wallet balance
-        throw new Error();
+        throw new Error('Not enough OKG balance');
       } else if (props.stakingCap === props.stakedBalance) {
-        enqueueSnackbar('Pool was fulfilled, please stake into another pool!', { variant: 'error' }); // check if pool was fulfilled
-        throw new Error();
+        throw new Error('Pool was fulfilled, please stake into another pool!');
       } else {
         // handle amount (number bigint)
         const handleAmount = BigNumber(amount * 1e18).toFixed(0);
@@ -146,8 +139,8 @@ const Stake = ({ poolStatus, id }) => {
         enqueueSnackbar('Approve successfully!', { variant: 'success' });
         stake();
       },
-      onError: () => {
-        enqueueSnackbar('Approve failed!', { variant: 'error' });
+      onError: (e) => {
+        enqueueSnackbar(e.message, { variant: 'error' });
       },
     },
   );
@@ -178,17 +171,13 @@ const Stake = ({ poolStatus, id }) => {
       let handleAmount = yourStakedBalance;
 
       if (Date.now() < props.earlyWithdraw * 1000) {
-        enqueueSnackbar(
+        throw new Error(
           `Could not withdraw, you can withdraw from  ${new Date(props.earlyWithdraw * 1000).toLocaleString()}`,
-          { variant: 'error' },
         );
-        throw new Error();
       } else if (parseFloat(handleAmount) > parseFloat(yourStakedBalance)) {
-        enqueueSnackbar('You could not withdraw more than what you staked', { variant: 'error' });
-        throw new Error();
+        throw new Error('You could not withdraw more than what you staked');
       } else if (handleAmount === '' || handleAmount <= 0) {
-        enqueueSnackbar('Please input a positive amount', { variant: 'error' }); // user has to input amount before click on stake button
-        throw new Error();
+        throw new Error('Please input a positive amount');
       } else {
         // handle amount (number bigint)
         handleAmount = BigNumber(handleAmount * 1e18).toFixed(0);
@@ -200,8 +189,8 @@ const Stake = ({ poolStatus, id }) => {
         enqueueSnackbar('Unstake successfully!', { variant: 'success' });
         setOpenPopupUnstakeSuccess(true);
       },
-      onError: () => {
-        enqueueSnackbar('Unstake failed!', { variant: 'error' });
+      onError: (e) => {
+        enqueueSnackbar(e.message, { variant: 'error' });
       },
     },
   );
@@ -336,28 +325,16 @@ const Stake = ({ poolStatus, id }) => {
               <div className='flex flex-col-reverse md:flex-row justify-between  items-start md:items-center gap-4 md:gap-0'>
                 <div className='flex justify-center w-full md:w-fit'>
                   {isLoggedIn ? (
-                    poolStatus === poolStatuses[0] ? (
-                      <DesignButton
-                        fullWidth
-                        design='gray'
-                        size={isMobile ? 'medium' : 'large'}
-                        imageSize={isMobile ? 'medium' : 'small'}
-                        className='w-56 md:w-44'
-                      >
-                        STAKE NOW
-                      </DesignButton>
-                    ) : (
-                      <DesignButton
-                        fullWidth
-                        design='yellow'
-                        size={isMobile ? 'medium' : 'large'}
-                        imageSize={isMobile ? 'medium' : 'small'}
-                        className='w-56 md:w-44'
-                        onClick={() => handleSubmit(() => stakeToken())()}
-                      >
-                        STAKE NOW
-                      </DesignButton>
-                    )
+                    <DesignButton
+                      fullWidth
+                      design='yellow'
+                      size={isMobile ? 'medium' : 'large'}
+                      imageSize={isMobile ? 'medium' : 'small'}
+                      className='w-56 md:w-44'
+                      onClick={() => handleSubmit(() => stakeToken())()}
+                    >
+                      STAKE NOW
+                    </DesignButton>
                   ) : (
                     <ButtonLogin />
                   )}
