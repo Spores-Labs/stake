@@ -26,7 +26,7 @@ const PoolInfor = () => {
   const aprRaw =
     !props.stakedTotal || Number(props.stakedTotal) < 1000 * 1e18
       ? 405555
-      : ((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / Number(lockDays)) * 365 * 100;
+      : ((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / Number(lockDays)) * 365 * 100 + 101.15;
   const apr = aprRaw > 1000 ? Math.round(aprRaw) : aprRaw.toFixed(2);
 
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -56,8 +56,9 @@ const PoolInfor = () => {
           : {})}
         title={
           <div className='text-black font-semibold font-avenir' style={{ maxWidth: 220, fontSize: 15 }}>
-            The APR shown is an estimate and fluctuates depending on total staked amount. The APR will be determined at
-            the closing time of this pool.
+            The APR shown is an estimate and fluctuates depending on many factors, including total staked amount, token
+            price, items price, and more. <br />
+            The calculated APR includes both OKG token rewards and item bonus earned through the staking pool.
           </div>
         }
         placement='top'

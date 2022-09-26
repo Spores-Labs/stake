@@ -87,7 +87,7 @@ const CustomAccord = styled(Accordion)`
   }
 `;
 
-const stakeStatuses = ['open', 'filled'];
+const stakeStatuses = ['coming soon', 'open', 'filled'];
 
 export const poolStatuses = ['waiting', 'live', 'lock', 'expired'];
 
@@ -109,12 +109,13 @@ const accordContents = [
     title: '1.What is OKG staking pool? ',
     description: (
       <div>
-        OKG staking pool is the program to reward for long term OKG holders by offering the high earning yields by OKG
-        token.
+        OKG staking pool is the program to reward for OKG holders by offering the high earning yields by OKG token.
         <br />
         <br />
-        In addition, the benefits from OKG staking program are not only from the OKG token rewards (APR) but also the
-        bonus valuable NFT & ingame items.
+        In addition, the benefits from OKG staking program are{' '}
+        <span className='font-black'>
+          not only from the OKG token rewards (APR) but also the bonus valuable NFT & ingame items.
+        </span>
         <br />
         <br />
         Item rewards scheme{' '}
@@ -127,13 +128,23 @@ const accordContents = [
   },
   {
     title: '2. How can I receive the OKG token rewards?',
-    description:
-      'Rewards will be calculated based on your staked amount, then automatically added when you un-stake your token at the expiry time.\n\nYour reward = Your Staked Amount * APR / 365\n\nAPR is totally dependent on the total amount of investment in the pool.',
+    description: (
+      <div>
+        Rewards will be calculated based on your staked amount, and automatically added when you un-stake your token{' '}
+        <span className='font-black'>at the expiry time.</span>
+        <br />
+        <br />
+        Your reward = Your Staked Amount * APR / 365
+        <br />
+        <br />
+        APR depends on the total amount of investment in the pool.
+      </div>
+    ),
   },
   {
     title: '3. How can I receive the in-game item and NFT item rewards?',
     description:
-      'The in-game item rewards will be transferred into your game account which linked your wallet after the game launched.\n\nThe NFT item rewards will be airdropped into your crypto wallet after the game launched.\n\nThe detail reward schedule will be announced on Ookeenga social media.',
+      'The in-game item rewards will be transferred into your game account which is linked your wallet after the game launched.\n\nThe NFT item rewards will be airdropped into your crypto wallet after the game launched.\n\nThe detail reward schedule will be announced on Ookeenga social media.',
   },
   {
     title: '4. When can I un-stake my OKG token?',
@@ -148,7 +159,7 @@ const accordContents = [
           OKG staking page
         </span>
         <br />
-        Step 2. Connect your crypto wallet
+        Step 2. Connect your wallet
         <br />
         Step 3. Input amount to stake
         <br />
@@ -165,7 +176,7 @@ const accordContents = [
           OKG staking page
         </span>
         <br />
-        Step 2. Connect your crypto wallet
+        Step 2. Connect your wallet
         <br />
         Step 3. Click unstake
         <br />
@@ -260,8 +271,10 @@ const StakeView = () => {
 
   const getStakeStatus = useCallback(() => {
     if (props.stakingCap === props.stakedBalance || (!!poolStatus && poolStatuses.indexOf(poolStatus) > 1)) {
+      setStakeStatus(stakeStatuses[2]);
+    } else if (poolStatuses.indexOf(poolStatus) === 1) {
       setStakeStatus(stakeStatuses[1]);
-    } else {
+    } else if (poolStatuses.indexOf(poolStatus) === 0) {
       setStakeStatus(stakeStatuses[0]);
     }
   }, [poolStatus, props.stakedBalance, props.stakingCap]);
@@ -360,7 +373,7 @@ const StakeView = () => {
             <div
               className='flex justify-center items-center w-full h-full font-bold capitalize text-xs md:text-base'
               style={{
-                background: stakeStatus === stakeStatuses[0] ? '#6FAF51' : '#615955',
+                background: stakeStatus === stakeStatuses[2] ? '#615955' : '#6FAF51',
                 borderRadius: 16,
               }}
             >

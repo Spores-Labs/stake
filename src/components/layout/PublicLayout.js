@@ -1,4 +1,4 @@
-import { CircularProgress, Dialog, styled, Typography } from '@mui/material';
+import { CircularProgress, Dialog, styled } from '@mui/material';
 import { useCallback } from 'react';
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -104,12 +104,10 @@ const PublicLayout = () => {
       </div>
       <Footer />
       <CustomDialog fullWidth maxWidth='xs' open={isWrongNetwork}>
-        <div className='flex flex-col items-center py-8'>
+        <div className='flex flex-col items-center py-8 font-black'>
           <CircularProgress style={{ color: 'rgb(150, 103, 64)' }} />
-          <Typography variant='h3' className='mt-4 mb-2'>
-            Wrong Network
-          </Typography>
-          <Typography className='mb-6'>Please switch network to continue</Typography>
+          <div className='mt-4 mb-2 text-xl '>Wrong Network</div>
+          <div className='mb-6'>Please switch network to continue</div>
           <DesignButton onClick={handleConnectBinance} imageSize='small'>
             BNB Chain
           </DesignButton>
