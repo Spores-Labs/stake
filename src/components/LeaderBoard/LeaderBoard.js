@@ -1,20 +1,7 @@
 import './LeaderBoard.css';
 import { Container, styled, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { shorten } from '../../utils/common';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-
-const defaultData = [
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-  { address: '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB', amount: 5201 },
-];
+import { useQuery } from 'react-query';
 
 const StyledTableCell = styled(TableCell)`
   background-color: inherit;
@@ -49,7 +36,7 @@ const TopStakerInfo = ({ address, amount, bottom }) => (
     }}
     className='flex flex-col items-center gap-3 text-xl absolute left-1/2'
   >
-    <div style={{ color: '#FDE4BF' }}>{shorten(address, 8, 9)}</div>
+    <div style={{ color: '#FDE4BF' }}>{address}</div>
     <div style={{ color: '#E8CB9F' }} className='flex gap-1'>
       <img src='/assets/icons/OKG-token.png' alt='OKG' className='h-6' />
       {amount}
@@ -60,7 +47,15 @@ const TopStakerInfo = ({ address, amount, bottom }) => (
 const LeaderBoard = () => {
   const { isMobile } = useWindowDimensions();
 
-  return (
+  const { data: list = [] } = useQuery(
+    ['fetchTokenBalance', process.env.REACT_APP_LEADERBOARD_API],
+    async ({ queryKey }) => {
+      const dataResponse = await fetch(queryKey[1]).then((res) => res.json());
+      return dataResponse.data;
+    },
+  );
+
+  return list.length > 3 ? (
     <div
       style={{
         background: `url('/assets/images/background-leaderBoard.png') no-repeat center top / 100%`,
@@ -75,7 +70,7 @@ const LeaderBoard = () => {
             <div className='absolute bottom-0 right-0'>
               <div className='relative'>
                 <img src='/assets/images/leaderBoard-top-2.png' alt='top-2' />
-                <TopStakerInfo address={defaultData[1].address} amount={defaultData[1].amount} bottom={128} />
+                <TopStakerInfo address={list[1].wallet_address} amount={list[1].total} bottom={128} />
               </div>
             </div>
             <img
@@ -86,14 +81,14 @@ const LeaderBoard = () => {
           </div>
           <div className='relative'>
             <img src='/assets/images/leaderBoard-top-1.png' alt='top-1' />
-            <TopStakerInfo address={defaultData[0].address} amount={defaultData[0].amount} bottom={208} />
+            <TopStakerInfo address={list[0].wallet_address} amount={list[0].total} bottom={208} />
           </div>
           <div className='relative flex-1 flex justify-end'>
             <img src='/assets/images/leaderBoard-hero-2.png' alt='hero-2' className='mt-28' />
             <div className='absolute bottom-0 left-0'>
               <div className='relative'>
                 <img src='/assets/images/leaderBoard-top-3.png' alt='top-3' />
-                <TopStakerInfo address={defaultData[2].address} amount={defaultData[2].amount} bottom={72} />
+                <TopStakerInfo address={list[2].wallet_address} amount={list[2].total} bottom={72} />
               </div>
             </div>
             <img
@@ -131,11 +126,11 @@ const LeaderBoard = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {defaultData.map((data, index) => (
+              {list.map((data, index) => (
                 <TableRow key={index}>
                   <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell>{shorten(data.address)}</StyledTableCell>
-                  <StyledTableCell>{data.amount}</StyledTableCell>
+                  <StyledTableCell>{data.wallet_address}</StyledTableCell>
+                  <StyledTableCell>{data.total}</StyledTableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -143,7 +138,7 @@ const LeaderBoard = () => {
         </div>
       </Container>
     </div>
-  );
+  ) : null;
 };
 
 export default LeaderBoard;
