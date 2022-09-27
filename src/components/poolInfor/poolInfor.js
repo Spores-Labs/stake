@@ -24,7 +24,7 @@ const PoolInfor = () => {
     'd',
   );
   const aprRaw =
-    !props.stakedTotal || Number(props.stakedTotal) < 1000 * 1e18
+    !props.stakedTotal || Number(props.stakedTotal) < 258900 * 1e18
       ? 1668
       : ((process.env.REACT_APP_TOTAL_REWARD * 1e18) / props.stakedTotal / Number(lockDays)) * 365 * 100 + 101.15;
   const apr = aprRaw > 1000 ? Math.round(aprRaw) : aprRaw.toFixed(2);
