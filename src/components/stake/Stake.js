@@ -17,6 +17,7 @@ import { updateInfosProfileService } from '../../services/profile';
 import { getContractInfos } from '../../services/contract';
 import { stakingContract, tokenNPO } from '../../contractHandler/contractHandler';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { DateTime } from 'luxon';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
@@ -272,11 +273,16 @@ const Stake = ({ poolStatus, id }) => {
                 }}
                 render={({ field, fieldState: { invalid, error } }) => {
                   let mes = 'Please enter a positive number';
+                  let color = '#EF4444';
+                  const isDisabled = poolStatus === poolStatuses[0];
                   if (error?.type === 'max') {
                     mes = getMaxLimitErrorMessage();
                   }
-                  if (error?.type === 'required' && poolStatus === poolStatuses[0]) {
-                    mes = `Available to stake at ${new Date(props.stakingStart * 1000).toLocaleString()}`;
+                  if (error?.type === 'required' && isDisabled) {
+                    mes = `Available to stake on ${DateTime.fromSeconds(Number(props.stakingStart)).toFormat(
+                      'dd/MM/yyyy',
+                    )}`;
+                    color = '#423429';
                   }
 
                   return (
@@ -285,7 +291,7 @@ const Stake = ({ poolStatus, id }) => {
                       <AmountField
                         {...field}
                         fullWidth
-                        disabled={poolStatus === poolStatuses[0]}
+                        disabled={isDisabled}
                         variant='outlined'
                         placeholder='0'
                         size='medium'
@@ -298,6 +304,7 @@ const Stake = ({ poolStatus, id }) => {
                             >
                               <Button
                                 variant='contained'
+                                disabled={isDisabled}
                                 className='font-bold text-color-secondary text-sm'
                                 style={{ background: '#6FAF51', borderRadius: 8 }}
                                 onClick={() => setValue('amount', getMaxLimit(), { shouldValidate: true })}
@@ -315,13 +322,19 @@ const Stake = ({ poolStatus, id }) => {
                               el.which === 109 ||
                               el.which === 110 ||
                               el.which === 107 ||
-                              el.which === 187
+                              el.which === 187 ||
+                              el.which === 69 ||
+                              el.which === 231
                             )
                               el.preventDefault();
                           },
                         }}
                       />
-                      {invalid && <div className='text-red-500 text-tiny md:text-sm mt-1'>{mes}</div>}
+                      {invalid && (
+                        <div className='text-tiny md:text-sm mt-1' style={{ color }}>
+                          {mes}
+                        </div>
+                      )}
                     </div>
                   );
                 }}
