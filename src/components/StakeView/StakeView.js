@@ -109,16 +109,16 @@ const accordContents = [
     title: '1.What is OKG staking pool? ',
     description: (
       <div>
-        OKG staking pool is the program to reward for OKG holders by offering the high earning yields by OKG token.
+        OKG staking pool is the program to reward OKG holders by offering high earning yields of OKG token.
         <br />
         <br />
         In addition, the benefits from OKG staking program are{' '}
         <span className='font-black'>
-          not only from the OKG token rewards (APR) but also the bonus valuable NFT & ingame items.
+          not only from the OKG token rewards (APR) but also from the valuable NFT & in-game items.
         </span>
         <br />
         <br />
-        Item rewards scheme{' '}
+        See item rewards scheme{' '}
         <span className='underline cursor-pointer' onClick={() => scrollToComponent(componentIds[1])}>
           here
         </span>
@@ -130,11 +130,11 @@ const accordContents = [
     title: '2. How can I receive the OKG token rewards?',
     description: (
       <div>
-        Rewards will be calculated based on your staked amount, and automatically added when you un-stake your token{' '}
+        Rewards will be calculated based on your staked amount, and is automatically added when you unstake your token{' '}
         <span className='font-black'>at the expiry time.</span>
         <br />
         <br />
-        Your reward = Your Staked Amount * APR / 365
+        Your OKG token rewards = Your Staked Amount * APR / 365
         <br />
         <br />
         APR depends on the total amount of investment in the pool.
@@ -143,12 +143,22 @@ const accordContents = [
   },
   {
     title: '3. How can I receive the in-game item and NFT item rewards?',
-    description:
-      'The in-game item rewards will be transferred into your game account which is linked your wallet after the game launched.\n\nThe NFT item rewards will be airdropped into your crypto wallet after the game launched.\n\nThe detail reward schedule will be announced on Ookeenga social media.',
+    description: (
+      <div>
+        The in-game item rewards will be transferred into your game account. You should link your wallet with this game
+        account to receive these in-game items after the game is launched.
+        <br />
+        <br />
+        The NFT item rewards will be airdropped into your wallet after the game is launched.
+        <br />
+        <br />
+        The detailed reward schedule will be announced on Ookeenga social media channel.
+      </div>
+    ),
   },
   {
-    title: '4. When can I un-stake my OKG token?',
-    description: 'You are able to un-stake your token at the expiry time.',
+    title: '4. When can I unstake my OKG token?',
+    description: 'You are able to unstake your token at the expiry time.',
   },
   {
     title: '5. How can I stake OKG?',
@@ -163,7 +173,7 @@ const accordContents = [
         <br />
         Step 3. Input amount to stake
         <br />
-        Step 4: Sign on metamask to confirm the transaction
+        Step 4: Sign on your wallet to confirm the transaction
       </div>
     ),
   },
@@ -180,7 +190,7 @@ const accordContents = [
         <br />
         Step 3. Click unstake
         <br />
-        Step 4: Sign on metamask to confirm the transaction
+        Step 4: Sign on your wallet to confirm the transaction
       </div>
     ),
   },
@@ -401,7 +411,7 @@ const StakeView = () => {
           <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>
             Stake OKG Token to receive Genesis Cocoons & valuable ingame items
           </div>
-          <div className='relative'>
+          <div className='relative mb-12'>
             <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />
             <img
               src='/assets/images/prev-arrow.png'
@@ -418,24 +428,34 @@ const StakeView = () => {
           </div>
           <div className='hidden md:flex justify-center items-center'>
             <div
-              className='relative'
+              className='relative grid grid-cols-7'
               style={{
-                background: `url('/assets/images/bonus-bar.png') no-repeat center center / 100%`,
+                background: `url('/assets/images/bonus-bar-deactive.png') no-repeat center center / cover`,
                 width: 884,
-                height: 108,
+                height: 12,
               }}
             >
               {tierList.map((tier, index) => {
+                const activeIndex = tierList.indexOf(tierList.find(({ code }) => code === activeTier));
+                const isActiveBar = index < activeIndex;
                 const active = tier.code === activeTier;
                 const left = `${(index / (tierList.length - 1)) * 100}%`;
 
                 return (
-                  <div key={index}>
+                  <div
+                    key={index}
+                    style={{
+                      background: isActiveBar
+                        ? `url('/assets/images/bonus-bar-active.png') no-repeat center center / cover`
+                        : '',
+                      height: 12,
+                    }}
+                  >
                     {active && (
                       <img
                         src={`/assets/images/bonus-arrow-down.png`}
                         alt={tier.name}
-                        className='absolute top-0'
+                        className='absolute -top-12'
                         style={{
                           transform: `translateX(-10px)`,
                           left,
@@ -445,7 +465,7 @@ const StakeView = () => {
                     <img
                       src={`/assets/images/${active ? 'active' : 'deactive'}-bonus-tier.png`}
                       alt={tier.name}
-                      className='absolute top-1/2 cursor-pointer'
+                      className={`absolute top-1/2 cursor-pointer ${active ? '' : 'h-6'}`}
                       style={{
                         transform: `translate(${active ? -58 : -18}px,-50%)`,
                         left,
@@ -453,7 +473,7 @@ const StakeView = () => {
                       onClick={() => setActiveTier(tier.code)}
                     />
                     <div
-                      className='text-center absolute -bottom-8 font-semibold'
+                      className='text-center absolute -bottom-20 font-semibold'
                       style={{
                         transform: `translateX(-38px)`,
                         left,

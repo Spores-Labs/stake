@@ -56,8 +56,9 @@ const PoolInfor = () => {
           : {})}
         title={
           <div className='text-black font-semibold font-avenir' style={{ maxWidth: 220, fontSize: 15 }}>
-            The APR shown is an estimate and fluctuates depending on many factors, including total staked amount, items
-            price, and more. <br />
+            The shown APR is an estimated and fluctuating indicator that depends on many factors, including total stake
+            amount, item prices, etc.
+            <br />
             <br />
             The calculated APR includes both OKG token rewards and item bonus earned through the staking pool.
           </div>
