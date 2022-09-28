@@ -12,6 +12,7 @@ import {
   MenuList,
   Modal,
   Toolbar,
+  Link as MuiLink,
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,9 +54,9 @@ const Header = () => {
   return (
     <AppBar style={{ background: '#3C2C19CC', borderBottom: '1px solid #6C6C6C', backdropFilter: 'blur(8px)' }}>
       <Toolbar component={Container} className='custom-container'>
-        <Link to={publicRoute.stakeView.path}>
+        <MuiLink href='https://ookeenga.io/' underline='none'>
           <img src='/assets/images/logo-header.png' alt='logo' className='h-8 md:h-12' />
-        </Link>
+        </MuiLink>
         {isMobile ? (
           <>
             <div className='flex-1' />
