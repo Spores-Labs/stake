@@ -47,6 +47,7 @@ code {
 .container-app {
   width: 100%;
   min-height: calc(100vh - 64px);
+
   @media (max-width: 800px) {
     min-height: calc(100vh - 56px);
   }
@@ -61,6 +62,30 @@ code {
   max-width: 1644px !important;
 }
 
+.container-page {
+  max-width: 1364px !important;
+}
+
 .footer {
   margin-top: auto
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: inherit;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #96846a;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
