@@ -73,6 +73,9 @@ const Header = () => {
                 </div>
                 <div className='flex items-center justify-center h-full'>
                   <MenuList className='flex flex-col gap-10'>
+                    <HeaderItem url={publicRoute.stakeView.path} onClick={handleClosePopop}>
+                      Staking
+                    </HeaderItem>
                     <HeaderItem url={publicRoute.leaderBoard.path} onClick={handleClosePopop}>
                       Leaderboard
                     </HeaderItem>
@@ -103,6 +106,7 @@ const Header = () => {
         ) : (
           <>
             <MenuList className='flex flex-row gap-3 ml-6'>
+              <HeaderItem url={publicRoute.stakeView.path}>Staking</HeaderItem>
               <HeaderItem url={publicRoute.leaderBoard.path}>Leaderboard</HeaderItem>
             </MenuList>
             <div className='flex-1' />
