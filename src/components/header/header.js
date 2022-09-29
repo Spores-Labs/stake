@@ -76,9 +76,9 @@ const Header = () => {
                     <HeaderItem url={publicRoute.stakeView.path} onClick={handleClosePopop}>
                       Staking
                     </HeaderItem>
-                    <HeaderItem url={publicRoute.leaderBoard.path} onClick={handleClosePopop}>
+                    {/* <HeaderItem url={publicRoute.leaderBoard.path} onClick={handleClosePopop}>
                       Leaderboard
-                    </HeaderItem>
+                    </HeaderItem> */}
                     {isLoggedIn ? (
                       <HeaderItem
                         onClick={() => {
@@ -107,7 +107,7 @@ const Header = () => {
           <>
             <MenuList className='flex flex-row gap-3 ml-6'>
               <HeaderItem url={publicRoute.stakeView.path}>Staking</HeaderItem>
-              <HeaderItem url={publicRoute.leaderBoard.path}>Leaderboard</HeaderItem>
+              {/* <HeaderItem url={publicRoute.leaderBoard.path}>Leaderboard</HeaderItem> */}
             </MenuList>
             <div className='flex-1' />
 
