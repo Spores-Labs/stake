@@ -229,7 +229,8 @@ const Stake = ({ poolStatus, id }) => {
 
   const getMaxLimit = () => {
     const capLimit = getRemainingStakingCap();
-    return balance / 1e18 > capLimit ? capLimit : balance / 1e18;
+    const maxLimit = balance / 1e18 > capLimit ? capLimit : balance / 1e18;
+    return Math.round(Number(maxLimit));
   };
 
   const getMaxLimitErrorMessage = () => {
