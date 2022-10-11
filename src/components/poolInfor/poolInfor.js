@@ -2,6 +2,10 @@ import React from "react";
 import "./poolInfor.css";
 import withWallet from "../HOC/hoc";
 
+function formatUTC(time) { // seconds
+  return new Date(time * 1000).toUTCString().split(',')[1].trim();
+}
+
 function PoolInfor(props) {
   // props.onAccountChange()
 
@@ -34,25 +38,25 @@ function PoolInfor(props) {
             Staking starts at{" "}
       {props.stakingStarts}
             <span className="boldText">
-              {new Date(props.stakingStart * 1000).toLocaleString()}
+              {formatUTC(props.stakingStart)}
             </span>
           </li>
           <li>
             Contribution close at{" "}
             <span className="boldText">
-              {new Date(props.stakingEnds * 1000).toLocaleString()}
+              {formatUTC(props.stakingEnds)}
             </span>
           </li>
           <li>
             Early withdraw open at{" "}
             <span className="boldText">
-              {new Date(props.earlyWithdraw * 1000).toLocaleString()}
+              {formatUTC(props.earlyWithdraw)}
             </span>
           </li>
           <li>
             Maturity at{" "}
             <span className="boldText">
-              {new Date(props.maturityAt * 1000).toLocaleString()}
+              {formatUTC(props.maturityAt)}
             </span>
           </li>
         </ul>
