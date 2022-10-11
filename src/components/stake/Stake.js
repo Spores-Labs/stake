@@ -179,7 +179,7 @@ function Stake(props) {
       )}
       <div className="stakeBox">
         <p>
-          <span className="boldText">{props.poolName}</span>
+          <span className="boldText">SPO-BSC Traditional pool Oct 2022</span>
         </p>
         <p>{props.chain}</p>
         <p>
