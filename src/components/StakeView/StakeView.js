@@ -15,7 +15,6 @@ import PoolInfor from '../poolInfor/poolInfor';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper';
 import { useSelector } from 'react-redux';
-import { profileSelector } from '../../reducers/profile';
 import { contractInfosSelector } from '../../reducers/contractInfos';
 import { DateTime } from 'luxon';
 import { useMemo } from 'react';
@@ -218,9 +217,10 @@ const SingleAccord = ({ title, description }) => (
 
 const StakeView = () => {
   const { isMobile } = useWindowDimensions();
-  const { yourStakedBalance } = useSelector(profileSelector);
+  // const { yourStakedBalance } = useSelector(profileSelector);
   const { isCalled: isCalledContract, ...props } = useSelector(contractInfosSelector);
   const timerRef = useRef();
+  const timerRewardRef = useRef();
   const [activeTier, setActiveTier] = useState(tierList[0].code);
   const [stakeStatus, setStakeStatus] = useState();
   const [poolStatus, setPoolStatus] = useState();
@@ -269,15 +269,15 @@ const StakeView = () => {
     return tasksTmp;
   }, [getPoolStatus, props.earlyWithdraw, props.stakingEnds, props.stakingStart]);
 
-  const getTierReward = useCallback(() => {
-    let tierCode = tierList[0].code;
-    tierList.forEach((tier) => {
-      if (yourStakedBalance * 1 >= tier.reward) {
-        tierCode = tier.code;
-      }
-    });
-    setActiveTier(tierCode);
-  }, [yourStakedBalance]);
+  // const getTierReward = useCallback(() => {
+  //   let tierCode = tierList[0].code;
+  //   tierList.forEach((tier) => {
+  //     if (yourStakedBalance * 1 >= tier.reward) {
+  //       tierCode = tier.code;
+  //     }
+  //   });
+  //   setActiveTier(tierCode);
+  // }, [yourStakedBalance]);
 
   const getStakeStatus = useCallback(() => {
     if (props.stakingCap === props.stakedBalance || (!!poolStatus && poolStatuses.indexOf(poolStatus) > 1)) {
@@ -305,9 +305,9 @@ const StakeView = () => {
     getStakeStatus();
   }, [getStakeStatus]);
 
-  useLayoutEffect(() => {
-    getTierReward();
-  }, [getTierReward]);
+  // useLayoutEffect(() => {
+  //   getTierReward();
+  // }, [getTierReward]);
 
   const sliderRef = useRef(null);
 
@@ -321,19 +321,27 @@ const StakeView = () => {
     sliderRef.current.swiper.slideNext();
   }, []);
 
-  const imageTier = tierList.find((tier) => tier.code === activeTier);
+  const imageTier = useMemo(() => tierList.find((tier) => tier.code === activeTier), [activeTier]);
 
-  const handleNextTier = () => {
+  const handleNextTier = useCallback(() => {
     const imageTierIndex = tierList.indexOf(imageTier);
     const nextTierIndex = imageTierIndex + 1 === tierList.length ? 0 : imageTierIndex + 1;
     setActiveTier(tierList[nextTierIndex].code);
-  };
+  }, [imageTier]);
 
-  const handlePrevTier = () => {
+  const handlePrevTier = useCallback(() => {
     const imageTierIndex = tierList.indexOf(imageTier);
     const prevTierIndex = imageTierIndex === 0 ? tierList.length - 1 : imageTierIndex - 1;
     setActiveTier(tierList[prevTierIndex].code);
-  };
+  }, [imageTier]);
+
+  useLayoutEffect(() => {
+    timerRewardRef.current = setInterval(handleNextTier, 10000);
+
+    return () => {
+      clearInterval(timerRewardRef.current);
+    };
+  }, [handleNextTier]);
 
   const AlterTooltip = ({ isClickable }) => (
     <ClickAwayListener onClickAway={handleTooltipClose}>
@@ -383,7 +391,7 @@ const StakeView = () => {
             <div
               className='flex justify-center items-center w-full h-full font-bold capitalize text-xs md:text-base'
               style={{
-                background: stakeStatus === stakeStatuses[2] ? '#615955' : '#6FAF51',
+                background: stakeStatus === stakeStatuses[2] ? '#D73432' : '#6FAF51',
                 borderRadius: 16,
               }}
             >

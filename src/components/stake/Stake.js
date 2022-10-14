@@ -370,28 +370,36 @@ const Stake = ({ poolStatus, id }) => {
           )}
           {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
             <>
-              <div className='grid grid-cols-3 gap-3 md:gap-5 mb-4'>
-                <GroupInfo
-                  title='Staked Amount (OKG)'
-                  value={
-                    Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : yourStakedBalance.toLocaleString('en-EN')
-                  }
-                  border
-                />
-                <GroupInfo
-                  title='Pending Rewards (OKG)'
-                  value={
-                    Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
-                      ? '-'
-                      : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))
-                  }
-                  border
-                />
-                <GroupInfo
-                  title='Reward to receive'
-                  value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : getTierReward()}
-                />
-              </div>
+              {Number(yourStakedBalance) === 0 ? (
+                <div className='mb-4 h-16 font-black' style={{ color: '#A74908' }}>
+                  You have missed this staking pool.
+                  <br />
+                  Stay tuned for more rewards from others.
+                </div>
+              ) : (
+                <div className='grid grid-cols-3 gap-3 md:gap-5 mb-4'>
+                  <GroupInfo
+                    title='Staked Amount (OKG)'
+                    value={
+                      Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : yourStakedBalance.toLocaleString('en-EN')
+                    }
+                    border
+                  />
+                  <GroupInfo
+                    title='Pending Rewards (OKG)'
+                    value={
+                      Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
+                        ? '-'
+                        : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))
+                    }
+                    border
+                  />
+                  <GroupInfo
+                    title='Reward to receive'
+                    value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : getTierReward()}
+                  />
+                </div>
+              )}
               <div className='flex justify-center md:justify-start'>
                 {isLoggedIn ? (
                   poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
