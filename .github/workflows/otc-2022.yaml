@@ -1,8 +1,9 @@
 name: deploy oct 2022
 on:
+  workflow_dispatch:
   push:
     branches:
-      - otc-2022
+      - oct-2022
 env:
   PAGE_PROJECT_NAME: spores-stake-oct-2022
 jobs:
@@ -12,6 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Checkout
+        with:
+          ref: 'oct-2022'
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
