@@ -1,0 +1,34 @@
+name: deploy oct 2022
+on:
+  push:
+    branches:
+      - otc-2022
+env:
+  PAGE_PROJECT_NAME: spores-stake-oct-2022
+jobs:
+  build-deploy:
+    name: Build and deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        env:
+          REACT_APP_BSC_PROVIDER_LINK: https://bsc-dataseed.binance.org/
+          REACT_APP_NETWORK_VERSION: 56
+          REACT_APP_STK_CONTRACT: '0x3d9d0e3B00F2DFe94B6cAfb01580a46bb69dAB87'
+          REACT_APP_TKN_CONTRACT: '0x8357c604c5533fa0053beaaa1494da552cea38f7'
+          REACT_APP_TOTAL_REWARD: 12000
+        run: npm run build
+      - name: Deploy Cloudflare Pages
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages publish build --project-name=$PAGE_PROJECT_NAME --branch=main
