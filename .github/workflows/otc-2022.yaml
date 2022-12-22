@@ -28,6 +28,7 @@ jobs:
           REACT_APP_STK_CONTRACT: '0x3d9d0e3B00F2DFe94B6cAfb01580a46bb69dAB87'
           REACT_APP_TKN_CONTRACT: '0x8357c604c5533fa0053beaaa1494da552cea38f7'
           REACT_APP_TOTAL_REWARD: 12000
+          CI: false
         run: npm run build
       - name: Deploy Cloudflare Pages
         uses: cloudflare/wrangler-action@2.0.0
