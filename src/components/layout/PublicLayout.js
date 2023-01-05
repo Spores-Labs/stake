@@ -15,7 +15,7 @@ import Header from '../header/header';
 
 const CustomDialog = styled(Dialog)`
   & .MuiDialog-paper {
-    background: url('assets/images/background-dialog.png');
+    background: url('/assets/images/background-dialog.png');
     background-size: 100% 100%;
     color: #f1e9dc;
   }
