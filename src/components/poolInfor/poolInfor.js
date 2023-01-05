@@ -22,7 +22,7 @@ const GroupInfo = ({ title, value, icon, isCenterDown, isCenterUp }) => (
 );
 
 const GroupAPR = ({ value, title }) => (
-  <div className='text-center font-extrabold'>
+  <div className='flex flex-col gap-1 text-center font-extrabold'>
     <div className='text-xs md:text-[15px]'>{title}</div>
     <div
       className='bg-clip-text text-transparent break-all text-[28px] md:text-4xl'
