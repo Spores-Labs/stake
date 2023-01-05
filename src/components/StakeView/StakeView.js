@@ -33,7 +33,7 @@ export const tierList = [
     code: 'tier-2',
     name: 'TIER 2',
     reward: 5000,
-    image: '/assets/stake2/images/bonus-tier-2.png',
+    image: '/assets/stake2/images/bonus-tier.png',
     imageMobile: '/assets/stake2/images/bonus-tier-2-mobile.png',
   },
   {
@@ -418,9 +418,9 @@ const StakeView = () => {
           className='py-8 md:py-16 px-8 md:px-32'
           id={componentIds[1]}
           style={{
-            background: `url('/assets/images/background-bonus${
-              isMobile ? '-mobile' : ''
-            }.png') no-repeat center top / 100% 100%`,
+            background: `url('${
+              isMobile ? '/assets/stake2/images/background-bonus-mobile.png' : '/assets/images/background-bonus.png'
+            }') no-repeat center top / 100% 100%`,
             height: isMobile ? 'auto' : 743,
             width: '100%',
           }}
