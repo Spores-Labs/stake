@@ -3,13 +3,13 @@ import { LeaderBoard } from '../components/LeaderBoard';
 
 const publicRoute = {
   stakeView: {
-    path: '/stake',
-    url: () => `/stake`,
+    path: '/stake2/stake',
+    url: () => `/stake2/stake`,
     element: <StakeView />,
   },
   leaderBoard: {
-    path: '/leader-board',
-    url: () => `/leader-board`,
+    path: '/stake2/leader-board',
+    url: () => `/stake2/leader-board`,
     element: <LeaderBoard />,
   },
 };
