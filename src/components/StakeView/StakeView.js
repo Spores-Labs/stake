@@ -8,6 +8,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   ClickAwayListener,
+  IconButton,
 } from '@mui/material';
 import { QuestionMark, ExpandMore } from '@mui/icons-material';
 import Stake from '../stake/Stake';
@@ -24,58 +25,65 @@ export const tierList = [
   {
     code: 'tier-1',
     name: 'TIER 1',
-    reward: 5000,
+    reward: 2000,
     image: '/assets/images/bonus-tier-1.png',
     imageMobile: '/assets/images/bonus-tier-1-mobile.png',
   },
   {
     code: 'tier-2',
     name: 'TIER 2',
-    reward: 10000,
+    reward: 5000,
     image: '/assets/images/bonus-tier-2.png',
     imageMobile: '/assets/images/bonus-tier-2-mobile.png',
   },
   {
     code: 'tier-3',
     name: 'TIER 3',
-    reward: 20000,
+    reward: 10000,
     image: '/assets/images/bonus-tier-3.png',
     imageMobile: '/assets/images/bonus-tier-3-mobile.png',
   },
   {
     code: 'tier-4',
     name: 'TIER 4',
-    reward: 40000,
+    reward: 20000,
     image: '/assets/images/bonus-tier-4.png',
     imageMobile: '/assets/images/bonus-tier-4-mobile.png',
   },
   {
     code: 'tier-5',
     name: 'TIER 5',
-    reward: 60000,
+    reward: 40000,
     image: '/assets/images/bonus-tier-5.png',
     imageMobile: '/assets/images/bonus-tier-5-mobile.png',
   },
   {
     code: 'tier-6',
     name: 'TIER 6',
-    reward: 80000,
+    reward: 60000,
     image: '/assets/images/bonus-tier-6.png',
     imageMobile: '/assets/images/bonus-tier-6-mobile.png',
   },
   {
     code: 'tier-7',
     name: 'TIER 7',
-    reward: 100000,
+    reward: 80000,
     image: '/assets/images/bonus-tier-7.png',
     imageMobile: '/assets/images/bonus-tier-7-mobile.png',
   },
   {
     code: 'tier-8',
     name: 'TIER 8',
-    reward: 200000,
+    reward: 100000,
     image: '/assets/images/bonus-tier-8.png',
     imageMobile: '/assets/images/bonus-tier-8-mobile.png',
+  },
+  {
+    code: 'tier-9',
+    name: 'TIER 9',
+    reward: 200000,
+    image: '/assets/images/bonus-tier-9.png',
+    imageMobile: '/assets/images/bonus-tier-9-mobile.png',
   },
 ];
 
@@ -203,7 +211,10 @@ const slides = [
 
 const SingleAccord = ({ title, description }) => (
   <CustomAccord className='bg-color-browny shadow-none'>
-    <AccordionSummary className='font-black p-0' expandIcon={<ExpandMore className='text-white' />}>
+    <AccordionSummary
+      className='font-black text-[13px] md:text-base p-0'
+      expandIcon={<ExpandMore className='text-white' />}
+    >
       {title}
     </AccordionSummary>
     <AccordionDetails
@@ -407,7 +418,9 @@ const StakeView = () => {
           className='py-8 md:py-16 px-8 md:px-32'
           id={componentIds[1]}
           style={{
-            background: `url('/assets/images/background-bonus.png') no-repeat center top / 100% 100%`,
+            background: `url('/assets/images/background-bonus${
+              isMobile ? '-mobile' : ''
+            }.png') no-repeat center top / 100% 100%`,
             height: isMobile ? 'auto' : 743,
             width: '100%',
           }}
@@ -421,25 +434,27 @@ const StakeView = () => {
           </div>
           <div className='relative mb-12'>
             <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />
-            <img
-              src='/assets/images/prev-arrow.png'
-              alt='prev-arrow'
-              className='block md:hidden absolute top-32 left-1 cursor-pointer w-3'
+            <IconButton
+              className='flex justify-start items-center md:hidden absolute top-28 left-3 h-8 w-8'
+              style={{ background: 'rgba(183, 162, 132, 0.2)' }}
               onClick={handlePrevTier}
-            />
-            <img
-              src='/assets/images/next-arrow.png'
-              alt='next-arrow'
-              className='block md:hidden absolute top-32 right-1 cursor-pointer w-3'
+            >
+              <img src='/assets/images/prev-arrow.png' alt='prev-arrow' className='w-3' />
+            </IconButton>
+            <IconButton
+              className='flex justify-end items-center md:hidden absolute top-28 right-3 h-8 w-8'
+              style={{ background: 'rgba(183, 162, 132, 0.2)' }}
               onClick={handleNextTier}
-            />
+            >
+              <img src='/assets/images/next-arrow.png' alt='next-arrow' className='w-3' />
+            </IconButton>
           </div>
           <div className='hidden md:flex justify-center items-center'>
             <div
-              className='relative grid grid-cols-7'
+              className='relative grid grid-cols-8'
               style={{
                 background: `url('/assets/images/bonus-bar-deactive.png') no-repeat center center / cover`,
-                width: 884,
+                width: 1010,
                 height: 12,
               }}
             >
