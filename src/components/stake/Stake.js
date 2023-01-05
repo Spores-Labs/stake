@@ -40,7 +40,7 @@ const AmountField = styled(TextField)`
 
 const CustomDialog = styled(Dialog)`
   & .MuiDialog-paper {
-    background: url('assets/images/background-dialog.png');
+    background: url('/assets/images/background-dialog.png');
     background-size: 100% 100%;
     width: 512px;
     padding: 45px 60px 40px 60px;

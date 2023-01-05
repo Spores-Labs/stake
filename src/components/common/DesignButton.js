@@ -6,7 +6,7 @@ const DesignButton = (props) => {
   return (
     <LoadingButton
       sx={{
-        background: `url('assets/components/${design}_${imageSize}.png')`,
+        background: `url('/assets/components/${design}_${imageSize}.png')`,
         backgroundSize: '100% 100%',
         fontFamily: 'Skranji',
         color: design === 'gray' ? '#B7A284' : '#F1E9DC',
