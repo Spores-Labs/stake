@@ -43,8 +43,8 @@ const PoolInfor = () => {
     [props.earlyWithdraw, props.stakingEnds],
   );
   const daysTillMaturity = useMemo(
-    () => Duration.fromObject({ seconds: Number(props.earlyWithdraw) - DateTime.now().toSeconds() }).toFormat('d'),
-    [props.earlyWithdraw],
+    () => Duration.fromObject({ seconds: Number(props.maturityAt) - Number(props.stakingEnds) }).toFormat('d'),
+    [props.maturityAt, props.stakingEnds],
   );
   // const aprRaw =
   //   !props.stakedTotal || Number(props.stakedTotal) < 258900 * 1e18
