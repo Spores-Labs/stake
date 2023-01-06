@@ -347,7 +347,7 @@ const StakeView = () => {
   }, [imageTier]);
 
   useLayoutEffect(() => {
-    timerRewardRef.current = setInterval(handleNextTier, 10000);
+    timerRewardRef.current = setInterval(handleNextTier, 5000);
 
     return () => {
       clearInterval(timerRewardRef.current);
