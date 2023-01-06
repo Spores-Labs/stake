@@ -369,7 +369,7 @@ const StakeView = () => {
               disableTouchListener: true,
             }
           : {})}
-        title={<img src='/assets/images/bonus-tooltip.png' alt='bonus-tooltip' />}
+        title={<img src='/assets/stake2/images/bonus-tooltip.png' alt='bonus-tooltip' />}
         placement={`${isClickable ? 'left' : 'right'}-start`}
       >
         <div
