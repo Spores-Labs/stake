@@ -390,7 +390,7 @@ const StakeView = () => {
       }}
     >
       <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary container-page'>
-        <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING</div>
+        <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING POOL 2</div>
         <div
           className='mb-6 md:mb-16'
           style={{
@@ -430,7 +430,7 @@ const StakeView = () => {
             BONUS REWARDS
           </div>
           <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>
-            Stake OKG Token to receive Genesis Cocoons & valuable ingame items
+            Stake OKG Token to receive Genesis Cocoons, NFT Heroes & valuable ingame items
           </div>
           <div className='relative mb-12'>
             <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />

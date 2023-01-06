@@ -24,7 +24,7 @@ import { profileSelector, signOut } from '../../reducers/profile';
 import { Link } from 'react-router-dom';
 import { publicRoute } from '../../routes';
 
-const HeaderItem = ({ url, state, ...props }) => {
+const HeaderItem = ({ url, href, state, ...props }) => {
   return url ? (
     <Link to={url}>
       <ListItemButton
@@ -32,6 +32,13 @@ const HeaderItem = ({ url, state, ...props }) => {
         {...props}
       />
     </Link>
+  ) : href ? (
+    <MuiLink href={href} target='_blank' underline='none'>
+      <ListItemButton
+        className='flex justify-center font-bold text-2xl md:text-lg text-color-primary rounded'
+        {...props}
+      />
+    </MuiLink>
   ) : (
     <ListItemButton
       className='flex justify-center font-bold text-2xl md:text-lg text-color-primary rounded'
@@ -76,6 +83,15 @@ const Header = () => {
                     <HeaderItem url={publicRoute.stakeView.path} onClick={handleClosePopop}>
                       Staking
                     </HeaderItem>
+                    <HeaderItem href='https://marketplace.ookeenga.io/' onClick={handleClosePopop}>
+                      Marketplace
+                    </HeaderItem>
+                    <HeaderItem
+                      href='https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x7758a52c1Bb823d02878B67aD87B6bA37a0CDbF5'
+                      onClick={handleClosePopop}
+                    >
+                      Get OKG
+                    </HeaderItem>
                     {/* <HeaderItem url={publicRoute.leaderBoard.path} onClick={handleClosePopop}>
                       Leaderboard
                     </HeaderItem> */}
@@ -107,6 +123,10 @@ const Header = () => {
           <>
             <MenuList className='flex flex-row gap-3 ml-6'>
               <HeaderItem url={publicRoute.stakeView.path}>Staking</HeaderItem>
+              <HeaderItem href='https://marketplace.ookeenga.io/'>Marketplace</HeaderItem>
+              <HeaderItem href='https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x7758a52c1Bb823d02878B67aD87B6bA37a0CDbF5'>
+                Get OKG
+              </HeaderItem>
               {/* <HeaderItem url={publicRoute.leaderBoard.path}>Leaderboard</HeaderItem> */}
             </MenuList>
             <div className='flex-1' />
