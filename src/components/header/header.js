@@ -1,6 +1,6 @@
 import React from 'react';
 import './header.css';
-import { Close, Menu as MenuIcon, AccountBalanceWallet } from '@mui/icons-material';
+import { Close, Menu as MenuIcon, AccountBalanceWallet, ExpandMore, ArrowDropDown } from '@mui/icons-material';
 import {
   AppBar,
   Button,
@@ -13,6 +13,9 @@ import {
   Modal,
   Toolbar,
   Link as MuiLink,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -52,6 +55,7 @@ const Header = () => {
   const { isLoggedIn, address } = useSelector(profileSelector);
   const { isMobile } = useWindowDimensions();
   const [anchorEl, open, onOpen, onClose] = useAnchor();
+  const [anchorElStaking, openStaking, onOpenStaking, onCloseStaking] = useAnchor();
   const [openPopup, setOpenPopup] = useState(false);
 
   const handleClosePopop = () => {
@@ -80,9 +84,22 @@ const Header = () => {
                 </div>
                 <div className='flex items-center justify-center h-full'>
                   <MenuList className='flex flex-col gap-10'>
-                    <HeaderItem url={publicRoute.stakeView.path} onClick={handleClosePopop}>
-                      Staking
-                    </HeaderItem>
+                    <Accordion className='text-2xl font-black bg-none bg-transparent shadow-none'>
+                      <AccordionSummary
+                        className='bg-none bg-transparent w-fit text-color-primary mx-auto'
+                        expandIcon={<ExpandMore className='ml-2 text-color-primary' />}
+                      >
+                        Staking
+                      </AccordionSummary>
+                      <AccordionDetails className='bg-none bg-transparent'>
+                        <HeaderItem href='https://staking.ookeenga.io/stake' onClick={handleClosePopop}>
+                          Staking Pool 1
+                        </HeaderItem>
+                        <HeaderItem url={publicRoute.stakeView.path} onClick={handleClosePopop}>
+                          Staking Pool 2
+                        </HeaderItem>
+                      </AccordionDetails>
+                    </Accordion>
                     <HeaderItem href='https://marketplace.ookeenga.io/' onClick={handleClosePopop}>
                       Marketplace
                     </HeaderItem>
@@ -122,7 +139,44 @@ const Header = () => {
         ) : (
           <>
             <MenuList className='flex flex-row gap-3 ml-6'>
-              <HeaderItem url={publicRoute.stakeView.path}>Staking</HeaderItem>
+              <HeaderItem onClick={onOpenStaking}>
+                Staking <ArrowDropDown />
+              </HeaderItem>
+              <Menu
+                anchorEl={anchorElStaking}
+                PaperProps={{
+                  sx: {
+                    overflow: 'visible',
+                    backgroundColor: '#423429',
+                    border: '1px solid #B7A284',
+                    marginTop: 0,
+                    width: 153,
+                    '&:before': {
+                      display: 'none',
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+                open={openStaking}
+                onClose={onCloseStaking}
+                onClick={onCloseStaking}
+              >
+                <MenuItem
+                  onClick={() => {
+                    window.open('https://staking.ookeenga.io/stake', '_blank');
+                  }}
+                >
+                  <div className='font-avenir font-black text-white py-1'>Staking Pool 1</div>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                >
+                  <div className='font-avenir font-black text-white py-1'>Staking Pool 2</div>
+                </MenuItem>
+              </Menu>
               <HeaderItem href='https://marketplace.ookeenga.io/'>Marketplace</HeaderItem>
               <HeaderItem href='https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x7758a52c1Bb823d02878B67aD87B6bA37a0CDbF5'>
                 Get OKG
