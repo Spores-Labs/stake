@@ -18,3 +18,9 @@
 # 4. NOTE
         - Operator MUST add reward after the constribution period ends and before the early withdraw starts
         - The APR is calculated based on the total amout of reward added
+
+
+env:
+REACT_APP_NETWORK_VERSION=
+REACT_APP_STK_CONTRACT=
+REACT_APP_TKN_CONTRACT=
