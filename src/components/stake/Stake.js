@@ -479,7 +479,11 @@ const Stake = ({ poolStatus, id }) => {
                       >
                         UNSTAKE
                       </DesignButton>
-                      <div className='text-[#A74908] font-black text-center md:text-left'>{`Wait more ${nowToMaturity} day(s) to receive the maturity reward`}</div>
+                      {poolStatus === poolStatuses[2] && (
+                        <div className='text-[#A74908] font-black text-center md:text-left'>{`Wait more ${
+                          Number(nowToMaturity) < 0 ? 0 : nowToMaturity
+                        } day(s) to receive the maturity reward`}</div>
+                      )}
                     </>
                   ) : (
                     <DesignButton
