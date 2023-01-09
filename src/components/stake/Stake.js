@@ -163,6 +163,10 @@ const Stake = ({ poolStatus, id }) => {
     () => Duration.fromObject({ seconds: Number(props.maturityAt) - Number(props.stakingEnds) }).toFormat('d'),
     [props.maturityAt, props.stakingEnds],
   );
+  const nowToMaturity = useMemo(
+    () => Duration.fromObject({ seconds: Number(props.maturityAt) - DateTime.now().toSeconds() }).toFormat('d'),
+    [props.maturityAt],
+  );
 
   const {
     mutate: approve,
@@ -462,18 +466,21 @@ const Stake = ({ poolStatus, id }) => {
               ) : (
                 
               )} */}
-              <div className='flex justify-center md:justify-start'>
+              <div className='flex flex-col md:flex-row items-center gap-2 justify-center md:justify-start'>
                 {isLoggedIn ? (
                   poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
-                    <DesignButton
-                      fullWidth
-                      design='gray'
-                      size={isMobile ? 'medium' : 'large'}
-                      imageSize={isMobile ? 'medium' : 'small'}
-                      className='w-56 md:w-44'
-                    >
-                      UNSTAKE
-                    </DesignButton>
+                    <>
+                      <DesignButton
+                        fullWidth
+                        design='gray'
+                        size={isMobile ? 'medium' : 'large'}
+                        imageSize={isMobile ? 'medium' : 'small'}
+                        className='w-56 md:w-44'
+                      >
+                        UNSTAKE
+                      </DesignButton>
+                      <div className='text-[#A74908] font-black text-center md:text-left'>{`Wait more ${nowToMaturity} day(s) to receive the maturity reward`}</div>
+                    </>
                   ) : (
                     <DesignButton
                       fullWidth
