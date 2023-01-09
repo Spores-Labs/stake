@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import './Stake.css';
 import BigNumber from 'bignumber.js';
-import { TextField, styled, Button, Dialog, Divider, CircularProgress } from '@mui/material';
+import {
+  TextField,
+  styled,
+  Button,
+  Dialog,
+  Divider,
+  CircularProgress,
+  Tooltip,
+  ClickAwayListener,
+} from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import DesignButton from '../common/DesignButton';
 import { useSnackbar } from 'notistack';
 import CloseButton from '../common/CloseButton';
 import { useMutation } from 'react-query';
-import { Close, Done, WarningRounded } from '@mui/icons-material';
+import { Close, Done, InfoOutlined, WarningRounded } from '@mui/icons-material';
 import { poolStatuses, tierList } from '../StakeView/StakeView';
 import { useSelector } from 'react-redux';
 import { profileSelector } from '../../reducers/profile';
@@ -17,7 +26,9 @@ import { updateInfosProfileService } from '../../services/profile';
 import { getContractInfos } from '../../services/contract';
 import { stakingContract, tokenNPO } from '../../contractHandler/contractHandler';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
+import { maturityRewardAPR } from '../../utils/common';
+import { useMemo } from 'react';
 
 const AmountField = styled(TextField)`
   border-radius: 8px;
@@ -96,6 +107,48 @@ const GroupInfo = ({ title, value, border }) => (
   </div>
 );
 
+const AlterTooltip = ({ isClickable }) => {
+  const [openTooltip, setOpenTooltip] = useState(false);
+
+  const handleTooltipClose = () => {
+    setOpenTooltip(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpenTooltip(true);
+  };
+
+  return (
+    <ClickAwayListener onClickAway={handleTooltipClose}>
+      <Tooltip
+        {...(isClickable
+          ? {
+              PopperProps: {
+                disablePortal: true,
+              },
+              onClose: handleTooltipClose,
+              open: openTooltip,
+              disableFocusListener: true,
+              disableHoverListener: true,
+              disableTouchListener: true,
+            }
+          : {})}
+        title={
+          <div className='text-black font-semibold font-avenir' style={{ maxWidth: 220, fontSize: 15 }}>
+            The estimated rewards calculated based on the maturity APR. In case you unstake early, your rewards should
+            be lower than estimated.
+          </div>
+        }
+        placement={`${isClickable ? 'bottom' : 'right-start'}`}
+      >
+        <div {...(isClickable ? { onClick: handleTooltipOpen } : {})}>
+          <InfoOutlined className='text-xs md:text-base' />
+        </div>
+      </Tooltip>
+    </ClickAwayListener>
+  );
+};
+
 const Stake = ({ poolStatus, id }) => {
   const { isMobile } = useWindowDimensions();
   const { isLoggedIn, address, balance, yourStakedBalance } = useSelector(profileSelector);
@@ -106,6 +159,10 @@ const Stake = ({ poolStatus, id }) => {
   const [openPopupStake, setOpenPopupStake] = useState(false);
   const [openPopupUnstake, setOpenPopupUnstake] = useState(false);
   const [openPopupUnstakeSuccess, setOpenPopupUnstakeSuccess] = useState(false);
+  const daysTillMaturity = useMemo(
+    () => Duration.fromObject({ seconds: Number(props.maturityAt) - Number(props.stakingEnds) }).toFormat('d'),
+    [props.maturityAt, props.stakingEnds],
+  );
 
   const {
     mutate: approve,
@@ -209,7 +266,7 @@ const Stake = ({ poolStatus, id }) => {
   };
 
   const getOKGReward = () => {
-    return (process.env.REACT_APP_TOTAL_REWARD / (props.stakedTotal / 1e18)) * (yourStakedBalance * 1);
+    return (maturityRewardAPR / 100 / (365 * Number(daysTillMaturity))) * (yourStakedBalance * 1);
   };
 
   const ButtonLogin = () => (
@@ -370,7 +427,7 @@ const Stake = ({ poolStatus, id }) => {
           )}
           {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
             <>
-              <div className='grid grid-cols-3 gap-3 md:gap-5 mb-4'>
+              <div className='grid grid-cols-3 gap-3 mb-4'>
                 <GroupInfo
                   title='Staked Amount (OKG)'
                   value={
@@ -379,7 +436,11 @@ const Stake = ({ poolStatus, id }) => {
                   border
                 />
                 <GroupInfo
-                  title='Pending Rewards (OKG)'
+                  title={
+                    <div className='flex gap-0.5 items-center'>
+                      Est. Maturity Rewards {isMobile ? <AlterTooltip isClickable /> : <AlterTooltip />}
+                    </div>
+                  }
                   value={
                     Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
                       ? '-'

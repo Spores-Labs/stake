@@ -50,12 +50,15 @@ const HeaderItem = ({ url, href, state, ...props }) => {
   );
 };
 
+const DropdownItem = ({ text }) => <div className='font-avenir font-black text-white py-1'>{text}</div>;
+
 const Header = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, address } = useSelector(profileSelector);
   const { isMobile } = useWindowDimensions();
   const [anchorEl, open, onOpen, onClose] = useAnchor();
   const [anchorElStaking, openStaking, onOpenStaking, onCloseStaking] = useAnchor();
+  const [anchorElGetOKG, openGetOKG, onOpenGetOKG, onCloseGetOKG] = useAnchor();
   const [openPopup, setOpenPopup] = useState(false);
 
   const handleClosePopop = () => {
@@ -103,12 +106,25 @@ const Header = () => {
                     <HeaderItem href='https://marketplace.ookeenga.io/' onClick={handleClosePopop}>
                       Marketplace
                     </HeaderItem>
-                    <HeaderItem
-                      href='https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x7758a52c1Bb823d02878B67aD87B6bA37a0CDbF5'
-                      onClick={handleClosePopop}
-                    >
-                      Get OKG
-                    </HeaderItem>
+                    <Accordion className='text-2xl font-black bg-none bg-transparent shadow-none'>
+                      <AccordionSummary
+                        className='bg-none bg-transparent w-fit text-color-primary mx-auto'
+                        expandIcon={<ExpandMore className='ml-2 text-color-primary' />}
+                      >
+                        Get OKG
+                      </AccordionSummary>
+                      <AccordionDetails className='bg-none bg-transparent'>
+                        <HeaderItem
+                          href='https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x7758a52c1Bb823d02878B67aD87B6bA37a0CDbF5'
+                          onClick={handleClosePopop}
+                        >
+                          Pancake
+                        </HeaderItem>
+                        <HeaderItem href='https://www.bybit.com/en-US/trade/spot/OKG/USDT' onClick={handleClosePopop}>
+                          Bybit
+                        </HeaderItem>
+                      </AccordionDetails>
+                    </Accordion>
                     {/* <HeaderItem url={publicRoute.leaderBoard.path} onClick={handleClosePopop}>
                       Leaderboard
                     </HeaderItem> */}
@@ -167,20 +183,58 @@ const Header = () => {
                     window.open('https://staking.ookeenga.io/stake', '_blank');
                   }}
                 >
-                  <div className='font-avenir font-black text-white py-1'>Staking Pool 1</div>
+                  <DropdownItem text='Staking Pool 1' />
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
                     window.location.reload();
                   }}
                 >
-                  <div className='font-avenir font-black text-white py-1'>Staking Pool 2</div>
+                  <DropdownItem text='Staking Pool 2' />
                 </MenuItem>
               </Menu>
               <HeaderItem href='https://marketplace.ookeenga.io/'>Marketplace</HeaderItem>
-              <HeaderItem href='https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x7758a52c1Bb823d02878B67aD87B6bA37a0CDbF5'>
-                Get OKG
+              <HeaderItem onClick={onOpenGetOKG}>
+                Get OKG <ArrowDropDown />
               </HeaderItem>
+              <Menu
+                anchorEl={anchorElGetOKG}
+                PaperProps={{
+                  sx: {
+                    overflow: 'visible',
+                    backgroundColor: '#423429',
+                    border: '1px solid #B7A284',
+                    marginTop: 0,
+                    width: 153,
+                    '&:before': {
+                      display: 'none',
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+                open={openGetOKG}
+                onClose={onCloseGetOKG}
+                onClick={onCloseGetOKG}
+              >
+                <MenuItem
+                  onClick={() => {
+                    window.open(
+                      'https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x7758a52c1Bb823d02878B67aD87B6bA37a0CDbF5',
+                      '_blank',
+                    );
+                  }}
+                >
+                  <DropdownItem text='Pancake' />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    window.open('https://www.bybit.com/en-US/trade/spot/OKG/USDT', '_blank');
+                  }}
+                >
+                  <DropdownItem text='Bybit' />
+                </MenuItem>
+              </Menu>
               {/* <HeaderItem url={publicRoute.leaderBoard.path}>Leaderboard</HeaderItem> */}
             </MenuList>
             <div className='flex-1' />

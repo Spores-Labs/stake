@@ -5,6 +5,7 @@ import { DateTime, Duration } from 'luxon';
 import { useSelector } from 'react-redux';
 import { contractInfosSelector } from '../../reducers/contractInfos';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { earlyRewardAPR, maturityRewardAPR } from '../../utils/common';
 
 const GroupInfo = ({ title, value, icon, isCenterDown, isCenterUp }) => (
   <div className='text-xs md:text-[15px] flex flex-col gap-1'>
@@ -157,7 +158,7 @@ const PoolInfor = () => {
           icon={<Lock className='text-xs md:text-[15px]' />}
           isCenterDown
         />
-        <GroupAPR value='15' title='Early reward APR' />
+        <GroupAPR value={earlyRewardAPR} title='Early reward APR' />
       </div>
     ),
     [isMobile, lockDays],
@@ -172,7 +173,7 @@ const PoolInfor = () => {
           icon={<Lock className='text-xs md:text-[15px]' />}
           isCenterDown
         />
-        <GroupAPR value='30' title='Maturity reward APR' />
+        <GroupAPR value={maturityRewardAPR} title='Maturity reward APR' />
       </div>
     ),
     [daysTillMaturity],

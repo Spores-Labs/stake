@@ -33,7 +33,7 @@ export const tierList = [
     code: 'tier-2',
     name: 'TIER 2',
     reward: 5000,
-    image: '/assets/stake2/images/bonus-tier.png',
+    image: '/assets/stake2/images/bonus-tier-2.png',
     imageMobile: '/assets/stake2/images/bonus-tier-2-mobile.png',
   },
   {
@@ -134,29 +134,26 @@ const accordContents = [
     ),
   },
   {
-    title: '2. How can I receive the OKG token rewards?',
+    title: '2. How can I received token rewards?',
     description: (
       <div>
         Rewards will be calculated based on your staked amount, and is automatically added when you unstake your token{' '}
         <span className='font-black'>at the expiry time.</span>
         <br />
         <br />
-        Your OKG token rewards = Your Staked Amount * APR / 365
-        <br />
-        <br />
-        APR depends on the total amount of investment in the pool.
+        OKG token rewards = your staked amount * APR * days staked/365
       </div>
     ),
   },
   {
-    title: '3. How can I receive the in-game item and NFT item rewards?',
+    title: '3. How can I receive the in-game & NFT item rewards?',
     description: (
       <div>
         The in-game item rewards will be transferred into your game account. You should link your wallet with this game
-        account to receive these in-game items after the game is launched.
+        account to receive these in-game items.
         <br />
         <br />
-        The NFT item rewards will be airdropped into your wallet after the game is launched.
+        The NFT item & KAB token rewards will be airdropped into your wallet.
         <br />
         <br />
         The detailed reward schedule will be announced on Ookeenga social media channel.
@@ -430,7 +427,7 @@ const StakeView = () => {
             BONUS REWARDS
           </div>
           <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>
-            Stake OKG Token to receive Genesis Cocoons, NFT Heroes & valuable ingame items
+            Stake OKG Token to receive Genesis Cocoons, NFT Heroes, KAB token & valuable ingame items
           </div>
           <div className='relative mb-12'>
             <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />
