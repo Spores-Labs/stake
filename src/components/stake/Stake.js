@@ -266,7 +266,7 @@ const Stake = ({ poolStatus, id }) => {
   };
 
   const getOKGReward = () => {
-    return (maturityRewardAPR / 100 / (365 * Number(daysTillMaturity))) * (yourStakedBalance * 1);
+    return (maturityRewardAPR / 100 / 365) * Number(daysTillMaturity) * (yourStakedBalance * 1);
   };
 
   const ButtonLogin = () => (
