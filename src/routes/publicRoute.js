@@ -7,8 +7,8 @@ const publicRoute = {
     element: <StakeView />,
   },
   // leaderBoard: {
-  //   path: '/stake2/leader-board',
-  //   url: () => `/stake2/leader-board`,
+  //   path: '/stake-2/leader-board',
+  //   url: () => `/stake-2/leader-board`,
   //   element: <LeaderBoard />,
   // },
 };
