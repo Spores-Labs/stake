@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './StakeView.css';
 import {
   Container,
@@ -91,6 +91,12 @@ const CustomAccord = styled(Accordion)`
   color: #b7a284;
   & .Mui-expanded {
     color: #f1e9dc !important;
+  }
+`;
+
+const CustomSwiper = styled(Swiper)`
+  & .swiper-wrapper {
+    padding: 0px !important;
   }
 `;
 
@@ -228,8 +234,7 @@ const StakeView = () => {
   // const { yourStakedBalance } = useSelector(profileSelector);
   const { isCalled: isCalledContract, ...props } = useSelector(contractInfosSelector);
   const timerRef = useRef();
-  const timerRewardRef = useRef();
-  const [activeTier, setActiveTier] = useState(tierList[0].code);
+  const [activeTier, setActiveTier] = useState(0);
   const [stakeStatus, setStakeStatus] = useState();
   const [poolStatus, setPoolStatus] = useState();
   const [triggerRender, setTriggerRender] = useState({});
@@ -318,6 +323,7 @@ const StakeView = () => {
   // }, [getTierReward]);
 
   const sliderRef = useRef(null);
+  const sliderBonusRef = useRef(null);
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -329,27 +335,13 @@ const StakeView = () => {
     sliderRef.current.swiper.slideNext();
   }, []);
 
-  const imageTier = useMemo(() => tierList.find((tier) => tier.code === activeTier), [activeTier]);
-
   const handleNextTier = useCallback(() => {
-    const imageTierIndex = tierList.indexOf(imageTier);
-    const nextTierIndex = imageTierIndex + 1 === tierList.length ? 0 : imageTierIndex + 1;
-    setActiveTier(tierList[nextTierIndex].code);
-  }, [imageTier]);
+    sliderBonusRef.current.swiper.slideNext();
+  }, []);
 
   const handlePrevTier = useCallback(() => {
-    const imageTierIndex = tierList.indexOf(imageTier);
-    const prevTierIndex = imageTierIndex === 0 ? tierList.length - 1 : imageTierIndex - 1;
-    setActiveTier(tierList[prevTierIndex].code);
-  }, [imageTier]);
-
-  useLayoutEffect(() => {
-    timerRewardRef.current = setInterval(handleNextTier, 5000);
-
-    return () => {
-      clearInterval(timerRewardRef.current);
-    };
-  }, [handleNextTier]);
+    sliderBonusRef.current.swiper.slidePrev();
+  }, []);
 
   const AlterTooltip = ({ isClickable }) => (
     <ClickAwayListener onClickAway={handleTooltipClose}>
@@ -430,35 +422,61 @@ const StakeView = () => {
             Stake OKG Token to receive Genesis Cocoons, NFT Heroes, KAB token & valuable ingame items
           </div>
           <div className='relative mb-12'>
-            <img src={isMobile ? imageTier.imageMobile : imageTier.image} alt={activeTier} className='w-full' />
+            <CustomSwiper
+              ref={sliderBonusRef}
+              onActiveIndexChange={(swiper) => {
+                var activeIndex = swiper?.activeIndex ?? 0;
+                if (activeIndex > tierList.length) {
+                  activeIndex = 1;
+                }
+                setActiveTier(activeIndex - 1);
+              }}
+              {...{
+                pagination: false,
+              }}
+              mousewheel
+              keyboard
+              loop
+              modules={[Pagination, Mousewheel, Keyboard, Autoplay]}
+              autoplay={{ delay: 5000, pauseOnMouseEnter: true, disableOnInteraction: false }}
+            >
+              {tierList.map((slide, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    src={isMobile ? slide.imageMobile : slide.image}
+                    alt='slide'
+                    className='w-full'
+                  />
+                </SwiperSlide>
+              ))}
+            </CustomSwiper>
             <IconButton
-              className='flex justify-start items-center md:hidden absolute top-28 left-3 h-8 w-8'
+              className='flex justify-start items-center md:hidden absolute top-28 left-3 h-8 w-8 z-50'
               style={{ background: 'rgba(183, 162, 132, 0.2)' }}
               onClick={handlePrevTier}
             >
               <img src='/assets/images/prev-arrow.png' alt='prev-arrow' className='w-3' />
             </IconButton>
             <IconButton
-              className='flex justify-end items-center md:hidden absolute top-28 right-3 h-8 w-8'
+              className='flex justify-end items-center md:hidden absolute top-28 right-3 h-8 w-8 z-50'
               style={{ background: 'rgba(183, 162, 132, 0.2)' }}
               onClick={handleNextTier}
             >
               <img src='/assets/images/next-arrow.png' alt='next-arrow' className='w-3' />
             </IconButton>
           </div>
-          <div className='hidden md:flex justify-center items-center'>
+          <div className='hidden md:flex justify-center items-center px-6'>
             <div
               className='relative grid grid-cols-8'
               style={{
                 background: `url('/assets/images/bonus-bar-deactive.png') no-repeat center center / cover`,
-                width: 1010,
+                width: '100%',
                 height: 12,
               }}
             >
               {tierList.map((tier, index) => {
-                const activeIndex = tierList.indexOf(tierList.find(({ code }) => code === activeTier));
-                const isActiveBar = index < activeIndex;
-                const active = tier.code === activeTier;
+                const isActiveBar = index < activeTier;
+                const active = index === activeTier;
                 const left = `${(index / (tierList.length - 1)) * 100}%`;
 
                 return (
@@ -490,7 +508,9 @@ const StakeView = () => {
                         transform: `translate(${active ? -58 : -18}px,-50%)`,
                         left,
                       }}
-                      onClick={() => setActiveTier(tier.code)}
+                      onClick={() => {
+                        sliderBonusRef.current.swiper.slideTo(index + 1);
+                      }}
                     />
                     <div
                       className='text-center absolute -bottom-20 font-semibold'

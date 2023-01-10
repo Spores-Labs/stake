@@ -317,7 +317,7 @@ const Stake = ({ poolStatus, id }) => {
     <div
       id={id}
       className='bg-color-primary p-4 md:p-8 text-color-greyish'
-      style={{ borderRadius: 10, minHeight: isMobile ? 160 : 202.5 }}
+      style={{ borderRadius: 10, minHeight: isMobile ? 160 : 216 }}
     >
       {props.isCalled && (
         <>
