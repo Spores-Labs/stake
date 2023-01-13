@@ -28,6 +28,7 @@ export const tierList = [
     reward: 2000,
     image: '/assets/stake-2/images/bonus-tier-1.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-1-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-2',
@@ -35,6 +36,7 @@ export const tierList = [
     reward: 5000,
     image: '/assets/stake-2/images/bonus-tier-2.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-2-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-3',
@@ -42,6 +44,7 @@ export const tierList = [
     reward: 10000,
     image: '/assets/stake-2/images/bonus-tier-3.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-3-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-4',
@@ -49,6 +52,7 @@ export const tierList = [
     reward: 20000,
     image: '/assets/stake-2/images/bonus-tier-4.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-4-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-5',
@@ -56,6 +60,7 @@ export const tierList = [
     reward: 40000,
     image: '/assets/stake-2/images/bonus-tier-5.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-5-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-6',
@@ -63,6 +68,7 @@ export const tierList = [
     reward: 60000,
     image: '/assets/stake-2/images/bonus-tier-6.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-6-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-7',
@@ -70,6 +76,7 @@ export const tierList = [
     reward: 80000,
     image: '/assets/stake-2/images/bonus-tier-7.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-7-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-8',
@@ -77,6 +84,7 @@ export const tierList = [
     reward: 100000,
     image: '/assets/stake-2/images/bonus-tier-8.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-8-mobile.png',
+    isBestValue: false,
   },
   {
     code: 'tier-9',
@@ -84,6 +92,7 @@ export const tierList = [
     reward: 200000,
     image: '/assets/stake-2/images/bonus-tier-9.png',
     imageMobile: '/assets/stake-2/images/bonus-tier-9-mobile.png',
+    isBestValue: true,
   },
 ];
 
@@ -381,7 +390,7 @@ const StakeView = () => {
       <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary container-page'>
         <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING POOL 2</div>
         <div
-          className='mb-6 md:mb-16'
+          className='mb-4'
           style={{
             width: isMobile ? 84 : 192,
             height: isMobile ? 25 : 38,
@@ -398,6 +407,15 @@ const StakeView = () => {
               {stakeStatus ?? ''}
             </div>
           )}
+        </div>
+        <div
+          className='mb-10 md:mb-[72px] text-sm text-center md:text-lg text-white py-2 px-14'
+          style={{
+            background:
+              'linear-gradient(90deg, rgba(209, 148, 57, 0) 0%, #CE933A 15.63%, #FF7B31 49.48%, #D8AA64 84.9%, rgba(206, 147, 59, 0) 100%)',
+          }}
+        >
+          10,000 KAB and Rarest Treasure Chests are Waiting for Level 9 Staker
         </div>
         <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-9 w-full'>
           <Stake poolStatus={poolStatus} id={componentIds[0]} />
@@ -442,11 +460,7 @@ const StakeView = () => {
             >
               {tierList.map((slide, index) => (
                 <SwiperSlide key={index}>
-                  <img
-                    src={isMobile ? slide.imageMobile : slide.image}
-                    alt='slide'
-                    className='w-full'
-                  />
+                  <img src={isMobile ? slide.imageMobile : slide.image} alt='slide' className='w-full' />
                 </SwiperSlide>
               ))}
             </CustomSwiper>
@@ -501,11 +515,13 @@ const StakeView = () => {
                       />
                     )}
                     <img
-                      src={`/assets/images/${active ? 'active' : 'deactive'}-bonus-tier.png`}
+                      src={`/assets/stake-2/images/${
+                        tier.isBestValue ? 'best' : active ? 'active' : 'deactive'
+                      }-bonus-tier.png`}
                       alt={tier.name}
-                      className={`absolute top-1/2 cursor-pointer ${active ? '' : 'h-6'}`}
+                      className={`absolute top-1/2 cursor-pointer ${tier.isBestValue || active ? '' : 'h-6'}`}
                       style={{
-                        transform: `translate(${active ? -58 : -18}px,-50%)`,
+                        transform: `translate(${tier.isBestValue ? -26.5 : active ? -58 : -18}px,-50%)`,
                         left,
                       }}
                       onClick={() => {
