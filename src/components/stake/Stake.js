@@ -260,7 +260,7 @@ const Stake = ({ poolStatus, id }) => {
   const stakeToken = () => approve();
 
   const getTierReward = () => {
-    let tierName = tierList[0].name;
+    let tierName = 'N/A';
     tierList.forEach((tier) => {
       if (yourStakedBalance * 1 >= tier.reward) {
         tierName = tier.name;
@@ -431,41 +431,41 @@ const Stake = ({ poolStatus, id }) => {
           )}
           {(poolStatus === poolStatuses[2] || poolStatus === poolStatuses[3]) && (
             <>
-              <div className='grid grid-cols-3 gap-3 mb-4'>
-                <GroupInfo
-                  title='Staked Amount (OKG)'
-                  value={
-                    Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : yourStakedBalance.toLocaleString('en-EN')
-                  }
-                  border
-                />
-                <GroupInfo
-                  title={
-                    <div className='flex gap-0.5 items-center'>
-                      Est. Maturity Rewards {isMobile ? <AlterTooltip isClickable /> : <AlterTooltip />}
-                    </div>
-                  }
-                  value={
-                    Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
-                      ? '-'
-                      : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))
-                  }
-                  border
-                />
-                <GroupInfo
-                  title='Reward to receive'
-                  value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : getTierReward()}
-                />
-              </div>
-              {/* {Number(yourStakedBalance) === 0 ? (
+              {Number(yourStakedBalance) === 0 ? (
                 <div className='mb-4 h-16 font-black' style={{ color: '#A74908' }}>
                   You have missed this staking pool.
                   <br />
                   Stay tuned for more rewards from others.
                 </div>
               ) : (
-                
-              )} */}
+                <div className='grid grid-cols-3 gap-3 mb-4'>
+                  <GroupInfo
+                    title='Staked Amount (OKG)'
+                    value={
+                      Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : yourStakedBalance.toLocaleString('en-EN')
+                    }
+                    border
+                  />
+                  <GroupInfo
+                    title={
+                      <div className='flex gap-0.5 items-center'>
+                        Est. Maturity Rewards {isMobile ? <AlterTooltip isClickable /> : <AlterTooltip />}
+                      </div>
+                    }
+                    value={
+                      Number(getOKGReward()) === 0 || isNaN(Number(getOKGReward())) || !isLoggedIn
+                        ? '-'
+                        : Number(getOKGReward().toFixed(2).toLocaleString('en-EN'))
+                    }
+                    border
+                  />
+                  <GroupInfo
+                    title='Reward to receive'
+                    value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : getTierReward()}
+                  />
+                </div>
+              )}
+
               <div className='flex flex-col md:flex-row items-center gap-2 justify-center md:justify-start'>
                 {isLoggedIn ? (
                   poolStatus === poolStatuses[2] || Number(yourStakedBalance) === 0 ? (
