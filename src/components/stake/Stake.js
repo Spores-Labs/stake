@@ -199,7 +199,7 @@ const Stake = ({ poolStatus, id }) => {
   const stakeToken = () => approve();
 
   const getTierReward = () => {
-    let tierName = tierList[0].name;
+    let tierName = 'N/A';
     tierList.forEach((tier) => {
       if (yourStakedBalance * 1 >= tier.reward) {
         tierName = tier.name;
