@@ -259,15 +259,10 @@ const Stake = ({ poolStatus, id }) => {
 
   const stakeToken = () => approve();
 
-  const getTierReward = () => {
-    let tierName = 'N/A';
-    tierList.forEach((tier) => {
-      if (yourStakedBalance * 1 >= tier.reward) {
-        tierName = tier.name;
-      }
-    });
-    return tierName;
-  };
+  const tierReward = useMemo(() => {
+    const stakedBalance = yourStakedBalance * 1;
+    return tierList.reduce((tierName, tier) => (stakedBalance >= tier.reward ? tier.name : tierName), 'N/A');
+  }, [yourStakedBalance]);
 
   const getOKGReward = () => {
     return (maturityRewardAPR / 100 / 365) * Number(daysTillMaturity) * (yourStakedBalance * 1);
@@ -461,7 +456,7 @@ const Stake = ({ poolStatus, id }) => {
                   />
                   <GroupInfo
                     title='Reward to receive'
-                    value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : getTierReward()}
+                    value={Number(yourStakedBalance) === 0 || !isLoggedIn ? '-' : tierReward}
                   />
                 </div>
               )}
