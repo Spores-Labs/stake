@@ -15,7 +15,7 @@ import Header from '../header/header';
 
 const CustomDialog = styled(Dialog)`
   & .MuiDialog-paper {
-    background: url('/assets/images/background-dialog.png');
+    background: url('assets/images/background-dialog.png');
     background-size: 100% 100%;
     color: #f1e9dc;
   }
@@ -24,18 +24,18 @@ const CustomDialog = styled(Dialog)`
 const APP_NETWORK =
   Number(process.env.REACT_APP_NETWORK_VERSION) === 97
     ? {
-        chainName: 'BSC Testnet',
-        chainId: '0x61',
-        rpcUrls: ['https://data-seed-prebsc-2-s2.binance.org:8545'],
-        blockExplorerUrls: ['https://testnet.bscscan.com/'],
-        nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-      }
+      chainName: 'BSC Testnet',
+      chainId: '0x61',
+      rpcUrls: ['https://data-seed-prebsc-2-s2.binance.org:8545'],
+      blockExplorerUrls: ['https://testnet.bscscan.com/'],
+      nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+    }
     : {
-        chainName: 'Binance Smart Chain',
-        chainId: '0x38',
-        rpcUrls: ['https://bsc-dataseed.binance.org/'],
-        nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-      };
+      chainName: 'Binance Smart Chain',
+      chainId: '0x38',
+      rpcUrls: ['https://bsc-dataseed.binance.org/'],
+      nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+    };
 
 const PublicLayout = () => {
   const [isReady, setIsReady] = useState(false);
@@ -61,7 +61,7 @@ const PublicLayout = () => {
 
   useEffect(() => {
     firstLoad();
-  }, [firstLoad]);
+  }, []);
 
   useEffect(() => {
     secondLoad();

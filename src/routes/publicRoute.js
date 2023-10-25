@@ -2,13 +2,13 @@ import StakeView from '../components/StakeView/StakeView';
 
 const publicRoute = {
   stakeView: {
-    path: '/stake-2',
-    url: () => `/stake-2`,
+    path: '/stake-3',
+    url: () => `/stake-3`,
     element: <StakeView />,
   },
   // leaderBoard: {
-  //   path: '/stake-2/leader-board',
-  //   url: () => `/stake-2/leader-board`,
+  //   path: '/stake-3/leader-board',
+  //   url: () => `/stake-3/leader-board`,
   //   element: <LeaderBoard />,
   // },
 };

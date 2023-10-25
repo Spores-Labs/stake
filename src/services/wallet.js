@@ -6,13 +6,21 @@ import { updateInfosProfileService } from './profile';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
 
-export const connectProvider = async () => {
+const connectProviderWithoutMetaMask = () => {
+  const provider =
+    process.env.REACT_APP_NETWORK_VERSION === '97'
+      ? 'https://data-seed-prebsc-2-s2.binance.org:8545'
+      : 'https://bscrpc.com/';
+  web3.setProvider(provider);
+}
+
+const connectProviderWithMetaMask = async () => {
   try {
     const providerOptions = {
       walletconnect: {
         package: WalletConnectProvider,
         options: {
-          rpc: { 97: 'https://data-seed-prebsc-2-s2.binance.org:8545', 56: 'https://bsc-dataseed1.binance.org' },
+          rpc: { 97: 'https://data-seed-prebsc-2-s2.binance.org:8545', 56: 'https://bscrpc.com' },
         },
       },
     };
@@ -36,11 +44,16 @@ export const connectProvider = async () => {
     web3.setProvider(provider);
   } catch (e) {
     console.log(e);
-    const provider =
-      process.env.REACT_APP_NETWORK_VERSION === '97'
-        ? 'https://data-seed-prebsc-2-s2.binance.org:8545'
-        : 'https://bsc-dataseed1.binance.org';
-    web3.setProvider(provider);
+    connectProviderWithoutMetaMask()
+  }
+}
+
+export const connectProvider = async () => {
+  if (window.ethereum?.isMetaMask) {
+    await connectProviderWithMetaMask()
+  }
+  else {
+    connectProviderWithoutMetaMask()
   }
 };
 

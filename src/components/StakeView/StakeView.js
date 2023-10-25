@@ -26,72 +26,72 @@ export const tierList = [
     code: 'tier-1',
     name: 'TIER 1',
     reward: 2000,
-    image: '/assets/stake-2/images/bonus-tier-1.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-1-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-1.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-1-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-2',
     name: 'TIER 2',
     reward: 5000,
-    image: '/assets/stake-2/images/bonus-tier-2.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-2-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-2.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-2-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-3',
     name: 'TIER 3',
     reward: 10000,
-    image: '/assets/stake-2/images/bonus-tier-3.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-3-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-3.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-3-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-4',
     name: 'TIER 4',
     reward: 20000,
-    image: '/assets/stake-2/images/bonus-tier-4.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-4-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-4.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-4-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-5',
     name: 'TIER 5',
     reward: 40000,
-    image: '/assets/stake-2/images/bonus-tier-5.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-5-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-5.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-5-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-6',
     name: 'TIER 6',
     reward: 60000,
-    image: '/assets/stake-2/images/bonus-tier-6.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-6-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-6.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-6-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-7',
     name: 'TIER 7',
     reward: 80000,
-    image: '/assets/stake-2/images/bonus-tier-7.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-7-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-7.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-7-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-8',
     name: 'TIER 8',
     reward: 100000,
-    image: '/assets/stake-2/images/bonus-tier-8.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-8-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-8.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-8-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-9',
     name: 'TIER 9',
     reward: 200000,
-    image: '/assets/stake-2/images/bonus-tier-9.png',
-    imageMobile: '/assets/stake-2/images/bonus-tier-9-mobile.png',
+    image: 'assets/stake-3/images/bonus-tier-9.png',
+    imageMobile: 'assets/stake-3/images/bonus-tier-9-mobile.png',
     isBestValue: true,
   },
 ];
@@ -216,9 +216,9 @@ const accordContents = [
 ];
 
 const slides = [
-  '/assets/images/slide-image-1.png',
-  '/assets/images/slide-image-2.png',
-  '/assets/images/slide-image-3.png',
+  'assets/images/slide-image-1.png',
+  'assets/images/slide-image-2.png',
+  'assets/images/slide-image-3.png',
 ];
 
 const SingleAccord = ({ title, description }) => (
@@ -367,7 +367,7 @@ const StakeView = () => {
               disableTouchListener: true,
             }
           : {})}
-        title={<img src='/assets/stake-2/images/bonus-tooltip.png' alt='bonus-tooltip' />}
+        title={<img src='assets/stake-3/images/bonus-tooltip.png' alt='bonus-tooltip' />}
         placement={`${isClickable ? 'left' : 'right'}-start`}
       >
         <div
@@ -384,11 +384,11 @@ const StakeView = () => {
   return (
     <div
       style={{
-        background: `url('/assets/images/background-staking.png') no-repeat center top ${isMobile ? '' : '/ 100%'}`,
+        background: `url('assets/images/background-staking.png') no-repeat center top ${isMobile ? '' : '/ 100%'}`,
       }}
     >
       <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary container-page'>
-        <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING POOL 2</div>
+        <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING POOL 3</div>
         <div
           className='mb-4'
           style={{
@@ -415,7 +415,7 @@ const StakeView = () => {
               'linear-gradient(90deg, rgba(209, 148, 57, 0) 0%, #CE933A 15.63%, #FF7B31 49.48%, #D8AA64 84.9%, rgba(206, 147, 59, 0) 100%)',
           }}
         >
-          10,000 KAB and Rarest Treasure Chests are Waiting for Level 9 Staker
+          30,000 KAB and 40 Treasure Chests are Waiting for Level 9 Staker
         </div>
         <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-4 md:gap-5 mb-8 md:mb-9 w-full'>
           <Stake poolStatus={poolStatus} id={componentIds[0]} />
@@ -426,7 +426,7 @@ const StakeView = () => {
           id={componentIds[1]}
           style={{
             background: `url('${
-              isMobile ? '/assets/stake-2/images/background-bonus-mobile.png' : '/assets/images/background-bonus.png'
+              isMobile ? 'assets/stake-3/images/background-bonus-mobile.png' : 'assets/images/background-bonus.png'
             }') no-repeat center top / 100% 100%`,
             height: isMobile ? 'auto' : 743,
             width: '100%',
@@ -437,7 +437,7 @@ const StakeView = () => {
             BONUS REWARDS
           </div>
           <div className='text-center mb-3 md:mb-4 text-xs md:text-base'>
-            Stake OKG Token to receive Genesis Cocoons, NFT Heroes, KAB token & valuable ingame items
+            Stake OKG Token to receive Genesis Cocoons, KAB token & valuable ingame items
           </div>
           <div className='relative mb-12'>
             <CustomSwiper
@@ -469,21 +469,21 @@ const StakeView = () => {
               style={{ background: 'rgba(183, 162, 132, 0.2)' }}
               onClick={handlePrevTier}
             >
-              <img src='/assets/images/prev-arrow.png' alt='prev-arrow' className='w-3' />
+              <img src='assets/images/prev-arrow.png' alt='prev-arrow' className='w-3' />
             </IconButton>
             <IconButton
               className='flex justify-end items-center md:hidden absolute top-28 right-3 h-8 w-8 z-50'
               style={{ background: 'rgba(183, 162, 132, 0.2)' }}
               onClick={handleNextTier}
             >
-              <img src='/assets/images/next-arrow.png' alt='next-arrow' className='w-3' />
+              <img src='assets/images/next-arrow.png' alt='next-arrow' className='w-3' />
             </IconButton>
           </div>
           <div className='hidden md:flex justify-center items-center px-6'>
             <div
               className='relative grid grid-cols-8'
               style={{
-                background: `url('/assets/images/bonus-bar-deactive.png') no-repeat center center / cover`,
+                background: `url('assets/images/bonus-bar-deactive.png') no-repeat center center / cover`,
                 width: '100%',
                 height: 12,
               }}
@@ -498,14 +498,14 @@ const StakeView = () => {
                     key={index}
                     style={{
                       background: isActiveBar
-                        ? `url('/assets/images/bonus-bar-active.png') no-repeat center center / cover`
+                        ? `url('assets/images/bonus-bar-active.png') no-repeat center center / cover`
                         : '',
                       height: 12,
                     }}
                   >
                     {active && (
                       <img
-                        src={`/assets/images/bonus-arrow-down.png`}
+                        src={`assets/images/bonus-arrow-down.png`}
                         alt={tier.name}
                         className='absolute -top-12'
                         style={{
@@ -515,7 +515,7 @@ const StakeView = () => {
                       />
                     )}
                     <img
-                      src={`/assets/stake-2/images/${
+                      src={`assets/stake-3/images/${
                         tier.isBestValue ? 'best' : active ? 'active' : 'deactive'
                       }-bonus-tier.png`}
                       alt={tier.name}
@@ -571,13 +571,13 @@ const StakeView = () => {
             ))}
           </Swiper>
           <img
-            src='/assets/images/prev-arrow.png'
+            src='assets/images/prev-arrow.png'
             alt='prev-arrow'
             className='hidden md:block absolute top-1/2 -translate-y-1/2 -left-14 cursor-pointer'
             onClick={handlePrev}
           />
           <img
-            src='/assets/images/next-arrow.png'
+            src='assets/images/next-arrow.png'
             alt='next-arrow'
             className='hidden md:block absolute top-1/2 -translate-y-1/2 -right-14 cursor-pointer'
             onClick={handleNext}

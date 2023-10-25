@@ -51,7 +51,7 @@ const AmountField = styled(TextField)`
 
 const CustomDialog = styled(Dialog)`
   & .MuiDialog-paper {
-    background: url('/assets/images/background-dialog.png');
+    background: url('assets/images/background-dialog.png');
     background-size: 100% 100%;
     width: 512px;
     padding: 45px 60px 40px 60px;
@@ -593,7 +593,7 @@ const Stake = ({ poolStatus, id }) => {
       <CustomDialog fullWidth open={openPopupUnstakeSuccess}>
         <div className='text-color-secondary'>
           <div className='flex justify-center mb-7 md:mb-8'>
-            <img src='/assets/icons/icon-success.png' alt='Success' style={{ height: isMobile ? 95 : 'auto' }} />
+            <img src='assets/icons/icon-success.png' alt='Success' style={{ height: isMobile ? 95 : 'auto' }} />
           </div>
           <div className='font-skadi text-center text-xl md:text-3xl mb-4 md:mb-3'>UNSTAKING SUCCEEDED</div>
           <div className='text-center text-xs md:text-xl mb-6 md:mb-12'>You have successfull unstaked OKG token</div>

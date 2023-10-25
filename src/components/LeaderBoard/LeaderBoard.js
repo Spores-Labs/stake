@@ -38,7 +38,7 @@ const TopStakerInfo = ({ address, amount, bottom }) => (
   >
     <div style={{ color: '#FDE4BF' }}>{address}</div>
     <div style={{ color: '#E8CB9F' }} className='flex gap-1'>
-      <img src='/assets/icons/OKG-token.png' alt='OKG' className='h-2.5 md:h-6' />
+      <img src='assets/icons/OKG-token.png' alt='OKG' className='h-2.5 md:h-6' />
       {Number(amount).toLocaleString()}
     </div>
   </div>
@@ -58,7 +58,7 @@ const LeaderBoard = () => {
   return list.length > 3 ? (
     <div
       style={{
-        background: `url('/assets/images/background-leaderBoard.png') no-repeat center top / 100%`,
+        background: `url('assets/images/background-leaderBoard.png') no-repeat center top / 100%`,
         minHeight: 'calc(100vh - 64px)',
       }}
     >
@@ -67,39 +67,39 @@ const LeaderBoard = () => {
         <div className='grid grid-cols-3 md:gap-5 w-full mb-8 md:mb-32'>
           <div className='col-span-1 relative flex items-end justify-end'>
             <img
-              src='/assets/images/leaderBoard-hero-1.png'
+              src='assets/images/leaderBoard-hero-1.png'
               alt='hero-1'
               className='hidden md:block absolute'
               style={{ top: '20%', left: '-75%' }}
             />
             <div className='relative'>
-              <img src='/assets/images/leaderBoard-top-2.png' alt='top-2' />
+              <img src='assets/images/leaderBoard-top-2.png' alt='top-2' />
               <TopStakerInfo address={list[1].wallet_address} amount={list[1].total} bottom={isMobile ? 30 : 110} />
             </div>
             <img
-              src='/assets/images/leaderBoard-gold-1.png'
+              src='assets/images/leaderBoard-gold-1.png'
               alt='gold-1'
               className='hidden md:block absolute'
               style={{ bottom: '-15%', left: '-60%' }}
             />
           </div>
           <div className='col-span-1 relative flex items-end'>
-            <img src='/assets/images/leaderBoard-top-1.png' alt='top-1' />
+            <img src='assets/images/leaderBoard-top-1.png' alt='top-1' />
             <TopStakerInfo address={list[0].wallet_address} amount={list[0].total} bottom={isMobile ? 60 : 190} />
           </div>
           <div className='col-span-1 relative flex items-end justify-start'>
             <img
-              src='/assets/images/leaderBoard-hero-2.png'
+              src='assets/images/leaderBoard-hero-2.png'
               alt='hero-2'
               className='hidden md:block absolute'
               style={{ top: '25%', right: '-65%' }}
             />
             <div className='relative'>
-              <img src='/assets/images/leaderBoard-top-3.png' alt='top-3' />
+              <img src='assets/images/leaderBoard-top-3.png' alt='top-3' />
               <TopStakerInfo address={list[2].wallet_address} amount={list[2].total} bottom={isMobile ? 10 : 60} />
             </div>
             <img
-              src='/assets/images/leaderBoard-gold-2.png'
+              src='assets/images/leaderBoard-gold-2.png'
               alt='gold-2'
               className='hidden md:block absolute'
               style={{ bottom: '-20%', right: '-60%' }}
@@ -109,7 +109,7 @@ const LeaderBoard = () => {
         <div
           className='bg-color-dark w-full flex flex-col items-center px-8 md:px-24'
           style={{
-            background: `url('/assets/images/frame-leaderBoard.png') no-repeat center top`,
+            background: `url('assets/images/frame-leaderBoard.png') no-repeat center top`,
             backgroundSize: '100% 100%',
             height: isMobile ? 700 : 860,
             maxWidth: 1240,
@@ -117,7 +117,7 @@ const LeaderBoard = () => {
         >
           <div
             style={{
-              background: `url('/assets/components/yellow_trapezium.png') no-repeat center top`,
+              background: `url('assets/components/yellow_trapezium.png') no-repeat center top`,
               backgroundSize: '100% 100%',
               fontSize: isMobile ? 14 : 35,
             }}

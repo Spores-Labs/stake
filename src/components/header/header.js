@@ -69,7 +69,7 @@ const Header = () => {
     <AppBar style={{ background: '#3C2C19CC', borderBottom: '1px solid #6C6C6C', backdropFilter: 'blur(8px)' }}>
       <Toolbar component={Container} className='custom-container'>
         <MuiLink href='https://ookeenga.io/' underline='none'>
-          <img src='/assets/images/logo-header.png' alt='logo' className='h-8 md:h-12' />
+          <img src='assets/images/logo-header.png' alt='logo' className='h-8 md:h-12' />
         </MuiLink>
         {isMobile ? (
           <>
@@ -166,7 +166,7 @@ const Header = () => {
                     backgroundColor: '#423429',
                     border: '1px solid #B7A284',
                     marginTop: 0,
-                    width: 153,
+                    width: 250,
                     '&:before': {
                       display: 'none',
                     },
@@ -179,18 +179,28 @@ const Header = () => {
                 onClick={onCloseStaking}
               >
                 <MenuItem
+                  className='flex flex-row justify-between items-center'
                   onClick={() => {
                     window.open('https://staking.ookeenga.io/stake', '_blank');
                   }}
                 >
-                  <DropdownItem text='Staking Pool 1' />
+                  <DropdownItem text='Staking Pool 1' /><div className="text-white flex items-center gap-1 text-xs">Closed <span className="h-2 w-2 rounded-full inline-block bg-[#f53c5b]"></span></div>
                 </MenuItem>
                 <MenuItem
+                  className='flex flex-row justify-between items-center'
+                  onClick={() => {
+                    window.open('https://staking.ookeenga.io/stake-2', '_blank');
+                  }}
+                >
+                  <DropdownItem text='Staking Pool 2' /><div className="text-white flex items-center gap-1 text-xs">Closed <span className="h-2 w-2 rounded-full inline-block bg-[#f53c5b]"></span></div>
+                </MenuItem>
+                <MenuItem
+                  className='flex flex-row justify-between items-center'
                   onClick={() => {
                     window.location.reload();
                   }}
                 >
-                  <DropdownItem text='Staking Pool 2' />
+                  <DropdownItem text='Staking Pool 3' /><div className="text-white flex items-center gap-1 text-xs">Open <span className="h-2 w-2 rounded-full inline-block bg-[#51de3a]"></span></div>
                 </MenuItem>
               </Menu>
               <HeaderItem href='https://marketplace.ookeenga.io/'>Marketplace</HeaderItem>

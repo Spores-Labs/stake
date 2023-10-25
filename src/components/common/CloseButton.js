@@ -5,7 +5,7 @@ const CloseButton = (props) => {
   return (
     <IconButton
       sx={{
-        background: `url('/assets/components/gray_square.png') no-repeat center/contain`,
+        background: `url('assets/components/gray_square.png') no-repeat center/contain`,
         borderRadius: 0,
         position: 'absolute',
         top: 0,
