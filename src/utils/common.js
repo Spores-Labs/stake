@@ -9,6 +9,6 @@ export const getBase64 = (file, callback) => {
   reader.readAsDataURL(file);
 };
 
-export const earlyRewardAPR = 25;
+export const earlyRewardAPR = 40;
 
-export const maturityRewardAPR = 50;
+export const maturityRewardAPR = 90;

@@ -25,73 +25,73 @@ export const tierList = [
   {
     code: 'tier-1',
     name: 'TIER 1',
-    reward: 2000,
-    image: 'assets/stake-3/images/bonus-tier-1.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-1-mobile.png',
+    reward: 2500,
+    image: 'assets/stake-4/images/bonus-tier-1.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-1-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-2',
     name: 'TIER 2',
     reward: 5000,
-    image: 'assets/stake-3/images/bonus-tier-2.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-2-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-2.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-2-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-3',
     name: 'TIER 3',
     reward: 10000,
-    image: 'assets/stake-3/images/bonus-tier-3.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-3-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-3.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-3-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-4',
     name: 'TIER 4',
     reward: 20000,
-    image: 'assets/stake-3/images/bonus-tier-4.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-4-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-4.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-4-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-5',
     name: 'TIER 5',
     reward: 40000,
-    image: 'assets/stake-3/images/bonus-tier-5.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-5-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-5.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-5-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-6',
     name: 'TIER 6',
     reward: 60000,
-    image: 'assets/stake-3/images/bonus-tier-6.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-6-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-6.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-6-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-7',
     name: 'TIER 7',
     reward: 80000,
-    image: 'assets/stake-3/images/bonus-tier-7.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-7-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-7.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-7-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-8',
     name: 'TIER 8',
     reward: 100000,
-    image: 'assets/stake-3/images/bonus-tier-8.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-8-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-8.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-8-mobile.png',
     isBestValue: false,
   },
   {
     code: 'tier-9',
     name: 'TIER 9',
     reward: 200000,
-    image: 'assets/stake-3/images/bonus-tier-9.png',
-    imageMobile: 'assets/stake-3/images/bonus-tier-9-mobile.png',
+    image: 'assets/stake-4/images/bonus-tier-9.png',
+    imageMobile: 'assets/stake-4/images/bonus-tier-9-mobile.png',
     isBestValue: true,
   },
 ];
@@ -367,7 +367,7 @@ const StakeView = () => {
               disableTouchListener: true,
             }
           : {})}
-        title={<img src='assets/stake-3/images/bonus-tooltip.png' alt='bonus-tooltip' />}
+        title={<img src='assets/stake-4/images/bonus-tooltip.png' alt='bonus-tooltip' />}
         placement={`${isClickable ? 'left' : 'right'}-start`}
       >
         <div
@@ -388,7 +388,7 @@ const StakeView = () => {
       }}
     >
       <Container className='flex flex-col items-center py-20 md:py-28 text-color-secondary container-page'>
-        <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING POOL 3</div>
+        <div className='font-skadi text-xl md:text-giant mb-2 md:mb-0'>OKG STAKING POOL 4</div>
         <div
           className='mb-4'
           style={{
@@ -426,7 +426,7 @@ const StakeView = () => {
           id={componentIds[1]}
           style={{
             background: `url('${
-              isMobile ? 'assets/stake-3/images/background-bonus-mobile.png' : 'assets/images/background-bonus.png'
+              isMobile ? 'assets/stake-4/images/background-bonus-mobile.png' : 'assets/images/background-bonus.png'
             }') no-repeat center top / 100% 100%`,
             height: isMobile ? 'auto' : 743,
             width: '100%',
@@ -515,7 +515,7 @@ const StakeView = () => {
                       />
                     )}
                     <img
-                      src={`assets/stake-3/images/${
+                      src={`assets/stake-4/images/${
                         tier.isBestValue ? 'best' : active ? 'active' : 'deactive'
                       }-bonus-tier.png`}
                       alt={tier.name}
