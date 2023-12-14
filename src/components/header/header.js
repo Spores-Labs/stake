@@ -200,7 +200,7 @@ const Header = () => {
                     window.location.reload();
                   }}
                 >
-                  <DropdownItem text='Staking Pool 3' /><div className="text-white flex items-center gap-1 text-xs">Open <span className="h-2 w-2 rounded-full inline-block bg-[#51de3a]"></span></div>
+                  <DropdownItem text='Staking Pool 3' /><div className="text-white flex items-center gap-1 text-xs">Closed <span className="h-2 w-2 rounded-full inline-block bg-[#f53c5b]"></span></div>
                 </MenuItem>
               </Menu>
               <HeaderItem href='https://marketplace.ookeenga.io/'>Marketplace</HeaderItem>
